@@ -4,16 +4,13 @@ package-lock.json
 yarn.lock
 pnpm-lock.yaml
 
-# FORGE active state (use git to track history/)
-# Solo mode
-.forge/current.md
+# FORGE working state
+.forge/*.md           # All session/working files
+.forge/current/       # Team mode active cycles  
+!.forge/history/      # Except history - always track completed cycles
 
-# Team mode - active cycles
-.forge/current/
-
-# Team assignments and temporary files
-.forge/team/assignments.md
-.forge/team/temp/
+# Team files
+.forge/team/
 
 # Local agent customizations (project-specific)
 agents/local/
