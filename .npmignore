@@ -1,32 +1,33 @@
-# FORGE's own files (not needed in package)
+# Development and build files
+.git/
+.github/
+.forge/
+node_modules/
+*.log
+*.backup
+test-release.sh
+
+# Documentation site (not needed in npm package)
+website/
+docs/
+
+# Specs and development documentation
 specs/
+
+# Configuration files
 forge.yaml
 forge-team.yaml
-.forge/
+.gitignore
+.gitignore.*
 CLAUDE.md
 
-# Git files
-.git/
-.gitignore
-.gitignore.team-example
-
-# Documentation for future microsite
-docs/*
-!docs/QUICK_START.md
-
-# Development files
-*.log
-.DS_Store
-node_modules/
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
-
-# IDE files
+# Local editor files
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
+.DS_Store
 
 # Test files
 test/
@@ -34,14 +35,59 @@ tests/
 *.test.js
 *.spec.js
 
-# Build files
+# CI/CD files
+.travis.yml
+.gitlab-ci.yml
+.circleci/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Build artifacts
 dist/
 build/
+coverage/
 
-# Environment files
+# Package lock files (users should generate their own)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Development notes
+TODO.md
+NOTES.md
+
+# Examples that aren't core to the package
+examples/
+agents/examples/
+
+# Template subdirectories that are specialized
+templates/docs/
+templates/specs/
+templates/test-scenarios-*.md
+
+# Any local configuration
 .env
-.env.*
+.env.local
+.env.*.local
 
-# Mac files
-.DS_Store
+# OS files
 Thumbs.db
+Desktop.ini
+
+# IDE specific
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# vim
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
