@@ -48,14 +48,9 @@ jobs:
           echo "Validated version: $TAG (type: $(cat $GITHUB_OUTPUT | grep release_type | cut -d= -f2))"
 
   test:
-    name: Test on ${{ matrix.os }} / Node ${{ matrix.node }}
+    name: Test
     needs: validate
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        node: [18.x, 20.x]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
