@@ -173,7 +173,7 @@ jobs:
           $(git log ${PREVIOUS_TAG:+$PREVIOUS_TAG..}HEAD --pretty=format:"- %s (%h)" --grep="BREAKING CHANGE" 2>/dev/null | grep -v '^$' || echo "- No breaking changes")
           
           ### Contributors
-          $(git log ${PREVIOUS_TAG:+$PREVIOUS_TAG..}HEAD --pretty=format:"- @%an" 2>/dev/null | sort -u | grep -v '^$')
+          $(git log ${PREVIOUS_TAG:+$PREVIOUS_TAG..}HEAD --pretty=format:"%an" 2>/dev/null | sort -u | sed 's/^/- /' | grep -v '^$' || echo "- Scott Feltham")
           
           **Full Changelog**: https://github.com/${{ github.repository }}/compare/${PREVIOUS_TAG}...${CURRENT_TAG}
           EOF
