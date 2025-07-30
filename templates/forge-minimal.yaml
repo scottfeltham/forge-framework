@@ -1,0 +1,9 @@
+# FORGE Framework Configuration
+project: {{PROJECT_NAME}}
+description: AI-powered development with FORGE
+
+# AI-driven mode
+mode: conversational
+
+# Let AI analyze and expand this configuration
+# Just ask: "Analyze my project and update forge.yaml"

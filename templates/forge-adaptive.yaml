@@ -1,0 +1,69 @@
+# FORGE Framework Configuration
+project: {{PROJECT_NAME}}
+description: {{PROJECT_DESCRIPTION}}
+
+# AI-driven mode
+mode: conversational
+
+# AI configuration with model selection
+ai:
+  primary: claude
+  model: sonnet              # Default model (fast, cost-effective)
+  
+  # Model selection strategy
+  model_strategy: adaptive   # Options: fixed, adaptive, cost_optimized, quality_first
+  
+  # Available models
+  models:
+    default: sonnet          # For routine tasks
+    complex: opus            # For complex reasoning
+    fallback: sonnet         # When preferred model unavailable
+  
+  # Task complexity hints (optional - AI decides)
+  task_hints:
+    # High complexity - consider Opus
+    architecture_design: prefer_opus
+    security_analysis: prefer_opus
+    performance_optimization: prefer_opus
+    debugging_complex: prefer_opus
+    distributed_systems: prefer_opus
+    algorithm_design: prefer_opus
+    
+    # Medium complexity - Sonnet usually fine
+    api_design: prefer_sonnet
+    refactoring: prefer_sonnet
+    integration_work: prefer_sonnet
+    
+    # Low complexity - Sonnet optimal
+    documentation: prefer_sonnet
+    crud_operations: prefer_sonnet
+    formatting: prefer_sonnet
+    simple_tests: prefer_sonnet
+
+# Agent configuration
+agents:
+  dynamic: true
+  auto_detect: true
+  
+  # Model preferences by agent (optional)
+  model_preferences:
+    architect: adaptive      # Switch based on complexity
+    developer: sonnet_default # Mostly Sonnet, Opus for algorithms
+    tester: sonnet_default   # Sonnet for tests, Opus for security
+    reviewer: adaptive       # Based on review type
+    documentor: sonnet_only  # Always Sonnet
+
+# Learning configuration
+learning:
+  memory_integration: true
+  claude_md: true
+  track_model_effectiveness: true  # Learn which model works best
+
+# Cost management (optional)
+cost_management:
+  track_usage: true
+  monthly_budget: {{BUDGET_IF_ANY}}
+  opus_percentage_limit: 20  # Limit Opus to 20% of requests
+  
+# Let AI analyze project and refine these settings
+# Ask: "Analyze my project and optimize model selection settings"

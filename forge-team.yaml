@@ -1,0 +1,70 @@
+# FORGE Framework Configuration - Team Mode Example
+project: team-project
+description: Multi-developer collaborative project
+
+# Team collaboration mode
+mode: collaborative
+
+# AI preferences
+ai:
+  primary: claude
+  model: sonnet
+
+# Agent configuration
+agents:
+  dynamic: true
+  auto_detect: true
+  
+  # Team-specific agents
+  specializations:
+    - product-owner
+    - qa-engineer
+    - tech-lead
+    - scrum-master
+
+# Team configuration
+team:
+  # Team members and their typical focus areas
+  members:
+    - name: Alice Anderson
+      role: product-owner
+      email: alice@example.com
+      focus: [focus, evaluate]
+      agents: [product-owner, architect]
+    
+    - name: Bob Builder
+      role: senior-developer
+      email: bob@example.com
+      focus: [orchestrate, refine]
+      agents: [developer, api-developer]
+    
+    - name: Charlie Chen
+      role: qa-engineer
+      email: charlie@example.com
+      focus: [refine, generate]
+      agents: [qa-engineer, security-tester]
+    
+    - name: Diana Davis
+      role: devops-engineer
+      email: diana@example.com
+      focus: [generate]
+      agents: [devops, cloud-engineer]
+  
+  # Workflow configuration
+  workflow:
+    parallel_features: true      # Allow multiple active cycles
+    phase_handoffs: true        # Enable phase ownership tracking
+    require_approval: true      # Phase completion needs approval
+    merge_strategy: manual      # How to handle conflicts
+    
+  # Communication
+  notifications:
+    phase_complete: true        # Notify on phase completion
+    blockers: true             # Notify on blockers
+    mentions: true             # Notify on @mentions
+    
+  # Integration
+  integrations:
+    git: true                  # Git branch per feature
+    slack: false               # Slack notifications (future)
+    jira: false               # Jira integration (future)
