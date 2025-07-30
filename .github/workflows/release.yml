@@ -219,6 +219,13 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
+          # List downloaded files
+          ls -la
+          
+          # Find the package file
+          PACKAGE_FILE=$(find . -name "forge-framework-*.tgz" -type f | head -1)
+          echo "Found package: $PACKAGE_FILE"
+          
           # Determine npm tag
           if [[ "${{ needs.validate.outputs.release_type }}" == "prerelease" ]]; then
             NPM_TAG="beta"
@@ -233,7 +240,7 @@ jobs:
           for i in $(seq 1 $MAX_ATTEMPTS); do
             echo "Publish attempt $i of $MAX_ATTEMPTS"
             
-            if npm publish forge-framework-${{ needs.validate.outputs.version }}.tgz --tag $NPM_TAG; then
+            if npm publish "$PACKAGE_FILE" --tag $NPM_TAG; then
               echo "✅ Published to npm with tag: $NPM_TAG"
               break
             else
