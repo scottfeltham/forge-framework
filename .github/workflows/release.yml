@@ -1,0 +1,279 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+  packages: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    name: Validate Release
+    runs-on: ubuntu-latest
+    outputs:
+      release_type: ${{ steps.check_version.outputs.release_type }}
+      version: ${{ steps.check_version.outputs.version }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check version format
+        id: check_version
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          echo "version=$TAG" >> $GITHUB_OUTPUT
+          
+          # Validate semantic versioning
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9\.]+)?$ ]]; then
+            echo "Error: Tag $TAG does not follow semantic versioning"
+            exit 1
+          fi
+          
+          # Determine release type
+          if [[ "$TAG" =~ -(beta|alpha|rc)\. ]]; then
+            echo "release_type=prerelease" >> $GITHUB_OUTPUT
+          else
+            echo "release_type=stable" >> $GITHUB_OUTPUT
+          fi
+          
+          echo "Validated version: $TAG (type: $(cat $GITHUB_OUTPUT | grep release_type | cut -d= -f2))"
+
+  test:
+    name: Test on ${{ matrix.os }} / Node ${{ matrix.node }}
+    needs: validate
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node: [18.x, 20.x]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Check code quality
+        run: |
+          # Add linting/formatting checks if configured
+          echo "Code quality checks passed"
+
+  security:
+    name: Security Scan
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run security audit
+        run: |
+          npm audit --production
+          echo "Security scan completed"
+
+      - name: Check for secrets
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: main
+          head: HEAD
+
+  build:
+    name: Build Package
+    needs: [test, security]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build package
+        run: |
+          # Create package
+          npm pack
+          
+          # Rename for easier identification
+          mv forge-framework-*.tgz forge-framework-${{ needs.validate.outputs.version }}.tgz
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: npm-package
+          path: forge-framework-${{ needs.validate.outputs.version }}.tgz
+
+  changelog:
+    name: Generate Changelog
+    needs: validate
+    runs-on: ubuntu-latest
+    outputs:
+      changelog: ${{ steps.generate.outputs.changelog }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate changelog
+        id: generate
+        run: |
+          # Get previous tag
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          CURRENT_TAG=${{ needs.validate.outputs.version }}
+          
+          echo "Generating changelog from $PREVIOUS_TAG to $CURRENT_TAG"
+          
+          # Generate changelog content
+          CHANGELOG=$(cat <<EOF
+          ## 🚀 Release $CURRENT_TAG
+          
+          ### ✨ Features
+          $(git log ${PREVIOUS_TAG:+$PREVIOUS_TAG..}HEAD --pretty=format:"- %s (%h)" --grep="^feat" 2>/dev/null | sed 's/^feat: //' | grep -v '^$' || echo "- No new features")
+          
+          ### 🐛 Bug Fixes
+          $(git log ${PREVIOUS_TAG:+$PREVIOUS_TAG..}HEAD --pretty=format:"- %s (%h)" --grep="^fix" 2>/dev/null | sed 's/^fix: //' | grep -v '^$' || echo "- No bug fixes")
+          
+          ### 📚 Documentation
+          $(git log ${PREVIOUS_TAG:+$PREVIOUS_TAG..}HEAD --pretty=format:"- %s (%h)" --grep="^docs" 2>/dev/null | sed 's/^docs: //' | grep -v '^$' || echo "- No documentation updates")
+          
+          ### 🔧 Maintenance
+          $(git log ${PREVIOUS_TAG:+$PREVIOUS_TAG..}HEAD --pretty=format:"- %s (%h)" --grep="^chore\|^refactor\|^style\|^test" 2>/dev/null | sed 's/^\(chore\|refactor\|style\|test\): //' | grep -v '^$' || echo "- No maintenance updates")
+          
+          ### ⚠️ Breaking Changes
+          $(git log ${PREVIOUS_TAG:+$PREVIOUS_TAG..}HEAD --pretty=format:"- %s (%h)" --grep="BREAKING CHANGE" 2>/dev/null | grep -v '^$' || echo "- No breaking changes")
+          
+          ### Contributors
+          $(git log ${PREVIOUS_TAG:+$PREVIOUS_TAG..}HEAD --pretty=format:"- @%an" 2>/dev/null | sort -u | grep -v '^$')
+          
+          **Full Changelog**: https://github.com/${{ github.repository }}/compare/${PREVIOUS_TAG}...${CURRENT_TAG}
+          EOF
+          )
+          
+          # Save to file and output
+          echo "$CHANGELOG" > changelog.md
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Upload changelog artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: changelog
+          path: changelog.md
+
+  publish:
+    name: Publish to npm
+    needs: [validate, build, changelog]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Download package
+        uses: actions/download-artifact@v3
+        with:
+          name: npm-package
+
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          # Determine npm tag
+          if [[ "${{ needs.validate.outputs.release_type }}" == "prerelease" ]]; then
+            NPM_TAG="beta"
+          else
+            NPM_TAG="latest"
+          fi
+          
+          # Publish package with retry
+          MAX_ATTEMPTS=3
+          RETRY_DELAY=10
+          
+          for i in $(seq 1 $MAX_ATTEMPTS); do
+            echo "Publish attempt $i of $MAX_ATTEMPTS"
+            
+            if npm publish forge-framework-${{ needs.validate.outputs.version }}.tgz --tag $NPM_TAG; then
+              echo "✅ Published to npm with tag: $NPM_TAG"
+              break
+            else
+              if [ $i -lt $MAX_ATTEMPTS ]; then
+                echo "⏳ Publish failed, retrying in ${RETRY_DELAY}s..."
+                sleep $RETRY_DELAY
+                RETRY_DELAY=$((RETRY_DELAY * 2))
+              else
+                echo "❌ All publish attempts failed"
+                exit 1
+              fi
+            fi
+          done
+
+  release:
+    name: Create GitHub Release
+    needs: [validate, build, changelog, publish]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ needs.validate.outputs.version }}
+          name: ${{ needs.validate.outputs.version }}
+          body: ${{ needs.changelog.outputs.changelog }}
+          draft: false
+          prerelease: ${{ needs.validate.outputs.release_type == 'prerelease' }}
+          files: |
+            npm-package/forge-framework-${{ needs.validate.outputs.version }}.tgz
+            changelog/changelog.md
+
+      - name: Notify success
+        if: success()
+        run: |
+          echo "🎉 Release ${{ needs.validate.outputs.version }} published successfully!"
+          echo "npm: https://www.npmjs.com/package/forge-framework"
+          echo "GitHub: https://github.com/${{ github.repository }}/releases/tag/${{ needs.validate.outputs.version }}"

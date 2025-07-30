@@ -1,0 +1,46 @@
+name: 'Retry Action'
+description: 'Retry a command with exponential backoff'
+inputs:
+  command:
+    description: 'Command to run'
+    required: true
+  max_attempts:
+    description: 'Maximum number of attempts'
+    required: false
+    default: '3'
+  retry_wait_seconds:
+    description: 'Initial wait time between retries'
+    required: false
+    default: '10'
+runs:
+  using: 'composite'
+  steps:
+    - name: Execute with retry
+      shell: bash
+      run: |
+        attempt=1
+        max_attempts=${{ inputs.max_attempts }}
+        wait_seconds=${{ inputs.retry_wait_seconds }}
+        
+        while [ $attempt -le $max_attempts ]; do
+          echo "Attempt $attempt of $max_attempts"
+          
+          if ${{ inputs.command }}; then
+            echo "✅ Command succeeded"
+            exit 0
+          else
+            exit_code=$?
+            echo "❌ Command failed with exit code $exit_code"
+            
+            if [ $attempt -lt $max_attempts ]; then
+              echo "⏳ Waiting ${wait_seconds}s before retry..."
+              sleep $wait_seconds
+              wait_seconds=$((wait_seconds * 2))
+            fi
+          fi
+          
+          attempt=$((attempt + 1))
+        done
+        
+        echo "❌ All attempts failed"
+        exit 1
