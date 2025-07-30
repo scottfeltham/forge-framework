@@ -1,4 +1,20 @@
-# MCP (Model Context Protocol) Integration
+---
+layout: default
+title: MCP Integration
+parent: Advanced Topics
+nav_order: 2
+---
+
+# MCP Integration
+{: .no_toc }
+
+## Table of contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview
 

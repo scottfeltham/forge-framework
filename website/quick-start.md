@@ -1,4 +1,20 @@
-# FORGE Quick Start
+---
+layout: default
+title: Quick Start
+parent: Getting Started
+nav_order: 1
+---
+
+# Quick Start
+{: .no_toc }
+
+## Table of contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 Get up and running with FORGE in under 5 minutes.
 

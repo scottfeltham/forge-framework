@@ -1,4 +1,20 @@
-# Claude Code Integration Guide
+---
+layout: default
+title: Claude Code Integration
+parent: Advanced Topics
+nav_order: 4
+---
+
+# Claude Code Integration
+{: .no_toc }
+
+## Table of contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview
 

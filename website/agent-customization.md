@@ -1,4 +1,20 @@
-# Agent Customization Guide
+---
+layout: default
+title: Agent Customization
+parent: Core Concepts
+nav_order: 1
+---
+
+# Agent Customization
+{: .no_toc }
+
+## Table of contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview
 

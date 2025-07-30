@@ -1,4 +1,20 @@
-# Dynamic Agent System
+---
+layout: default
+title: Dynamic Agents
+parent: Core Concepts
+nav_order: 2
+---
+
+# Dynamic Agents
+{: .no_toc }
+
+## Table of contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview
 

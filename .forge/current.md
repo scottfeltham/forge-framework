@@ -1,0 +1,337 @@
+# Feature: microsite for github pages
+
+**Started**: 2025-07-30  
+**Status**: Focus Phase  
+**Owner**: {{OWNER}}  
+**Team**: {{TEAM_MEMBERS}}
+
+## 📋 Progress
+
+### Phase 1: Focus 🎯 [Complete]
+- [x] Gather requirements
+- [x] Define test scenarios (MANDATORY)
+- [x] Create/Update PRD in specs/
+- [ ] Parallel Analysis (if complex):
+  - [ ] Technical feasibility (subagent)
+  - [ ] Security implications (subagent)
+  - [ ] Performance impact (subagent)
+- [x] Design architecture
+- [x] Identify risks
+
+### Phase 2: Orchestrate 📝 [Complete]
+- [x] Break down tasks
+- [x] Assign priorities
+- [x] Plan dependencies
+
+### Phase 3: Refine 🔨 [Complete]
+- [x] Implement features
+  - [x] Consider parallel implementation for independent components
+- [x] Write tests
+  - [x] Consider parallel test types (unit, integration, e2e)
+- [x] Code review
+
+### Phase 4: Generate 🚀 [Complete]
+- [x] Build artifacts
+- [x] Prepare deployment
+- [x] Update documentation
+
+### Phase 5: Evaluate 📊 [Pending]
+- [ ] Measure success metrics
+- [ ] Gather stakeholder feedback
+- [ ] Conduct retrospective
+- [ ] Document learnings
+- [ ] Update knowledge base
+- [ ] Plan improvements
+
+## 📝 Notes
+
+### Requirements
+- Static documentation website for GitHub Pages
+- Convert all markdown docs to navigable web pages
+- Professional design reflecting FORGE's simplicity
+- Search functionality across all documentation
+- Mobile responsive design
+- Fast page loads (< 2 seconds)
+- SEO optimized for discoverability
+- Version support for future releases
+
+### Test Scenarios [MANDATORY - Must be completed in Focus phase]
+Link to test scenarios: [templates/test-scenarios-microsite.md](../templates/test-scenarios-microsite.md)
+<!-- Test scenarios MUST be defined before any code is written -->
+<!-- Use templates/test-scenarios.md as a guide -->
+<!-- NO IMPLEMENTATION WITHOUT TEST SCENARIOS -->
+
+### PRD Reference
+Link to PRD: [specs/prd-github-pages-microsite.md](../specs/prd-github-pages-microsite.md)
+<!-- PRDs are stored in specs/ directory -->
+<!-- Naming convention: prd-{{feature-name}}.md -->
+
+### Architecture Decisions
+
+1. **Technology Stack**: Jekyll with GitHub Pages
+   - Native GitHub Pages support
+   - No build process needed
+   - Automatic deployment
+   - Markdown support built-in
+
+2. **Design Approach**: Mobile-first responsive
+   - Clean, minimal design matching FORGE philosophy
+   - Focus on readability and navigation
+   - Fast loading with minimal JavaScript
+
+3. **Search Implementation**: Lunr.js client-side search
+   - No server required
+   - Fast indexing
+   - Works offline
+
+4. **Documentation Structure**:
+   - `/docs` folder for GitHub Pages
+   - Hierarchical organization
+   - Automated navigation from folder structure
+
+5. **Performance Strategy**:
+   - Minimal dependencies
+   - Lazy loading for images
+   - CSS-first animations
+   - Service worker for offline support
+
+### Risks Identified
+1. **GitHub Pages Limitations** (Medium)
+   - Limited Jekyll plugins
+   - No server-side processing
+   - Mitigation: Use supported plugins only, client-side search
+
+2. **Documentation Sync** (Low)
+   - Keeping website in sync with repo docs
+   - Mitigation: Automated build process, single source of truth
+
+3. **Performance on Large Docs** (Low)
+   - Search index size might grow
+   - Mitigation: Optimize search index, lazy load content
+
+4. **Browser Compatibility** (Low)
+   - Older browsers might have issues
+   - Mitigation: Progressive enhancement, fallbacks
+
+### Success Metrics
+- Page Load Time: < 2 seconds
+- Lighthouse Score: > 95
+- Mobile Usability: 100%
+- Search Response: < 100ms
+- Documentation Coverage: 100%
+- Zero broken links
+- SEO visibility improvement
+
+### Parallel Task Opportunities
+For Orchestrate phase:
+- Component development (navigation, search, layouts)
+- Documentation conversion (different sections in parallel)
+- Asset optimization (CSS, JS, images)
+- Testing tasks (accessibility, performance, cross-browser)
+
+### Tasks
+
+#### Phase 1: Foundation Setup (High Priority)
+1. **Initialize Jekyll Structure** [2 hours]
+   - Create `docs` folder with `_config.yml`
+   - Set up Jekyll directory structure
+   - Configure GitHub Pages settings
+   - Dependencies: None
+   - Can parallelize: No
+
+2. **Create Base Layouts** [3 hours]
+   - Design and implement `default.html` layout
+   - Create `home.html` for landing page
+   - Create `docs.html` for documentation pages
+   - Dependencies: Task 1
+   - Can parallelize: Yes (each layout)
+
+3. **Design System & Styling** [4 hours]
+   - Create CSS variables for theming
+   - Implement responsive grid system
+   - Design typography scale
+   - Create component styles
+   - Dependencies: Task 2
+   - Can parallelize: Yes (with Task 4)
+
+4. **Navigation Components** [3 hours]
+   - Build main navigation header
+   - Create sidebar navigation for docs
+   - Implement mobile hamburger menu
+   - Add breadcrumb navigation
+   - Dependencies: Task 2
+   - Can parallelize: Yes (with Task 3)
+
+#### Phase 2: Core Features (High Priority)
+5. **Search Implementation** [4 hours]
+   - Integrate Lunr.js
+   - Build search index from content
+   - Create search UI component
+   - Implement instant search results
+   - Dependencies: Tasks 1-4
+   - Can parallelize: Yes
+
+6. **Documentation Converter** [3 hours]
+   - Set up Jekyll collections for docs
+   - Add front matter to markdown files
+   - Create automated navigation from folder structure
+   - Configure permalinks
+   - Dependencies: Task 1
+   - Can parallelize: Yes
+
+7. **Code Highlighting** [2 hours]
+   - Configure Prism.js or Rouge
+   - Style code blocks
+   - Add copy-to-clipboard functionality
+   - Create language-specific highlighting
+   - Dependencies: Task 3
+   - Can parallelize: Yes
+
+#### Phase 3: Content Migration (Medium Priority)
+8. **Homepage Creation** [2 hours]
+   - Design hero section
+   - Create feature grid
+   - Add quick start section
+   - Include testimonials/examples
+   - Dependencies: Tasks 2, 3
+   - Can parallelize: No
+
+9. **Documentation Organization** [3 hours]
+   - Organize docs into logical sections
+   - Create section landing pages
+   - Build automated TOC generation
+   - Add next/previous navigation
+   - Dependencies: Task 6
+   - Can parallelize: Yes (by section)
+
+10. **Asset Optimization** [2 hours]
+    - Optimize images and icons
+    - Minify CSS/JS
+    - Set up asset pipeline
+    - Configure caching headers
+    - Dependencies: Tasks 3, 4, 5
+    - Can parallelize: Yes
+
+#### Phase 4: Polish & Deploy (Medium Priority)
+11. **Responsive Testing** [2 hours]
+    - Test on various devices
+    - Fix responsive issues
+    - Optimize touch interactions
+    - Verify mobile navigation
+    - Dependencies: All UI tasks
+    - Can parallelize: Yes
+
+12. **SEO & Metadata** [2 hours]
+    - Add meta descriptions
+    - Configure Open Graph tags
+    - Generate sitemap.xml
+    - Add robots.txt
+    - Dependencies: Task 9
+    - Can parallelize: Yes
+
+13. **Performance Optimization** [3 hours]
+    - Implement service worker
+    - Add offline support
+    - Optimize search index
+    - Enable lazy loading
+    - Dependencies: All tasks
+    - Can parallelize: No
+
+14. **GitHub Actions Setup** [2 hours]
+    - Create build workflow
+    - Set up automated deployment
+    - Configure custom domain
+    - Add build status badges
+    - Dependencies: Task 1
+    - Can parallelize: Yes
+
+#### Phase 5: Testing & Launch (Low Priority)
+15. **Cross-browser Testing** [2 hours]
+    - Test on Chrome, Firefox, Safari
+    - Verify mobile browsers
+    - Fix compatibility issues
+    - Dependencies: All tasks
+    - Can parallelize: Yes
+
+16. **Accessibility Audit** [2 hours]
+    - Run WAVE/axe tools
+    - Fix accessibility issues
+    - Test keyboard navigation
+    - Verify screen reader support
+    - Dependencies: All UI tasks
+    - Can parallelize: Yes
+
+17. **Documentation Review** [1 hour]
+    - Verify all links work
+    - Check for missing content
+    - Update any outdated information
+    - Dependencies: Task 9
+    - Can parallelize: Yes
+
+18. **Launch Preparation** [1 hour]
+    - Update README with site link
+    - Announce in discussions
+    - Create launch checklist
+    - Dependencies: All tasks
+    - Can parallelize: No
+
+### Task Dependencies Graph
+```
+1 (Jekyll Init)
+├── 2 (Layouts) ──┬── 3 (Styling)
+│   │             └── 4 (Navigation)
+│   └── 8 (Homepage)
+├── 6 (Converter) ──── 9 (Doc Organization)
+├── 14 (GitHub Actions)
+└── All UI Tasks ──┬── 11 (Responsive Test)
+                   ├── 15 (Browser Test)
+                   └── 16 (Accessibility)
+
+5 (Search) ← Dependencies: 1-4
+7 (Code Highlighting) ← Dependencies: 3
+10 (Assets) ← Dependencies: 3,4,5
+12 (SEO) ← Dependencies: 9
+13 (Performance) ← Dependencies: All
+17 (Doc Review) ← Dependencies: 9
+18 (Launch) ← Dependencies: All
+```
+
+### Parallel Execution Opportunities
+1. **UI Development** (Tasks 3, 4 can run in parallel)
+2. **Feature Development** (Tasks 5, 6, 7 can run in parallel)
+3. **Content Work** (Task 9 sections can be parallelized)
+4. **Testing** (Tasks 11, 15, 16 can run in parallel)
+5. **Optimization** (Tasks 10, 12, 14 can run in parallel)
+
+### Estimated Timeline
+- **Total Serial Time**: ~45 hours
+- **With Parallelization**: ~25-30 hours
+- **Calendar Time**: 1-2 weeks with focused development
+
+## 📊 Evaluation Results
+
+### Success Metrics
+| Metric | Target | Actual | Status |
+|--------|--------|--------|--------|
+| Page Load Time | < 2 seconds | - | Pending |
+| Lighthouse Score | > 95 | - | Pending |
+| Mobile Usability | 100% | - | Pending |
+| Search Response | < 100ms | - | Pending |
+| Documentation Coverage | 100% | - | Pending |
+| Broken Links | 0 | - | Pending |
+| Browser Support | Last 2 versions | - | Pending |
+
+### What Worked Well
+*To be filled during Evaluate phase*
+
+### What Didn't Work
+*To be filled during Evaluate phase*
+
+### Key Learnings
+*To be filled during Evaluate phase*
+
+### Recommendations for Next Cycle
+*To be filled during Evaluate phase*
+
+## 🤖 Next Action
+Ask Claude to analyze requirements for microsite for github pages

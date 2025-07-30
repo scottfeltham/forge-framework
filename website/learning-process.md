@@ -1,4 +1,20 @@
-# FORGE Learning Process
+---
+layout: default
+title: Learning Process
+parent: Core Concepts
+nav_order: 3
+---
+
+# Learning Process
+{: .no_toc }
+
+## Table of contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview
 

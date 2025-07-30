@@ -1,4 +1,20 @@
-# Team Collaboration Guide
+---
+layout: default
+title: Team Collaboration
+parent: Advanced Topics
+nav_order: 1
+---
+
+# Team Collaboration
+{: .no_toc }
+
+## Table of contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview
 

@@ -1,0 +1,115 @@
+# Jekyll Configuration for FORGE Framework Documentation
+
+# Site settings
+title: FORGE Framework
+email: scott@outdoorsphere.co.uk
+description: >-
+  A conversational AI-driven development framework that puts AI at the center 
+  of software development. Just 88 lines of code that unlock unlimited potential.
+baseurl: "/forge-framework" # the subpath of your site, e.g. /blog
+url: "https://scottfeltham.github.io" # the base hostname & protocol
+twitter_username: scottfeltham
+github_username:  scottfeltham
+
+# Build settings
+markdown: kramdown
+theme: just-the-docs
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# Just the Docs settings
+color_scheme: light
+
+# Logo and favicon
+# logo: "/assets/images/forge-logo.png"
+favicon_ico: "/assets/images/favicon.ico"
+
+# Search
+search_enabled: true
+search:
+  heading_level: 2
+  previews: 3
+  preview_words_before: 5
+  preview_words_after: 10
+  tokenizer_separator: /[\s\-_]+/
+  rel_url: true
+  button: false
+
+# Aux links
+aux_links:
+  "FORGE on GitHub":
+    - "https://github.com/scottfeltham/forge-framework"
+
+# Footer
+footer_content: "Copyright &copy; 2025 Scott Feltham. Distributed by an <a href=\"https://github.com/scottfeltham/forge-framework/blob/main/LICENSE\">MIT license.</a>"
+
+# Back to top
+back_to_top: true
+back_to_top_text: "Back to top"
+
+# Last edit
+last_edit_timestamp: true
+last_edit_time_format: "%b %e %Y at %I:%M %p"
+
+# Code copy button
+enable_copy_code_button: true
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - .gitignore
+
+# Collections for documentation
+collections:
+  docs:
+    output: true
+    permalink: /:path/
+
+# Default values
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+      nav_enabled: true
+      search_enabled: true
+
+# Just the Docs Navigation
+just_the_docs:
+  # Define the main navigation structure
+  collections:
+    docs:
+      name: Documentation
+      nav_fold: false
+
+# Syntax highlighting
+highlighter: rouge
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: 'highlight'
+    block:
+      line_numbers: false
+
+# SEO
+tagline: AI-driven development through natural conversation
+author:
+  name: Scott Feltham
+  url: https://github.com/scottfeltham
+
+# Social
+social:
+  name: FORGE Framework
+  links:
+    - https://github.com/scottfeltham/forge-framework
+
+# Analytics (optional - add your Google Analytics ID)
+# google_analytics: UA-XXXXXXXXX-X

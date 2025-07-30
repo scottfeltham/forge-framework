@@ -6,6 +6,7 @@ A conversational AI-driven development framework that puts AI at the center of s
 
 [![npm version](https://img.shields.io/npm/v/forge-framework.svg)](https://www.npmjs.com/package/forge-framework)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Documentation](https://img.shields.io/badge/docs-website-blue.svg)](https://scottfeltham.github.io/forge-framework/)
 
 ## Quick Start
 

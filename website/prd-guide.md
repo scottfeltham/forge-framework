@@ -1,4 +1,20 @@
-# PRD Guide for FORGE Framework
+---
+layout: default
+title: PRD Guide
+parent: Reference
+nav_order: 1
+---
+
+# PRD Guide
+{: .no_toc }
+
+## Table of contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview
 

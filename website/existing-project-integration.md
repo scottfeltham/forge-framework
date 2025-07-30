@@ -1,4 +1,20 @@
-# Integrating FORGE into Existing Projects
+---
+layout: default
+title: Existing Project Integration
+parent: Advanced Topics
+nav_order: 3
+---
+
+# Existing Project Integration
+{: .no_toc }
+
+## Table of contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview
 

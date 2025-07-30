@@ -41,3 +41,11 @@ npm-debug.log*
 # Build outputs
 dist/
 build/
+
+# Jekyll
+website/_site/
+website/.sass-cache/
+website/.jekyll-cache/
+website/.jekyll-metadata
+website/vendor/
+website/.bundle/
