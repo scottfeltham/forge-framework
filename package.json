@@ -2,7 +2,7 @@
   "name": "forge-framework",
   "version": "0.1.0-beta",
   "description": "AI-driven development framework - conversational, simple, powerful",
-  "author": "FORGE Contributors",
+  "author": "Scott Feltham <scott@outdoorsphere.co.uk>",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/scottfeltham/forge-framework.git"

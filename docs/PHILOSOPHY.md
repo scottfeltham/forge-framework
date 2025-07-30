@@ -1,5 +1,7 @@
 # The FORGE Philosophy
 
+*Created by Scott Feltham*
+
 ## Origins and Inspiration
 
 FORGE draws inspiration from proven software engineering principles and modern AI-driven approaches:

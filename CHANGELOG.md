@@ -62,9 +62,13 @@ This is a beta release! We'd love your feedback:
 - Issues: https://github.com/scottfeltham/forge-framework/issues
 - Discussions: https://github.com/scottfeltham/forge-framework/discussions
 
+### Author
+
+FORGE Framework created by Scott Feltham.
+
 ### Contributors
 
-Initial development by the FORGE team with special thanks to Claude for being an excellent development partner.
+Special thanks to Claude for being an excellent development partner.
 
 ---
 

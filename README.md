@@ -212,6 +212,10 @@ FORGE includes several templates to help structure your work:
 
 You can use these templates manually or let AI agents reference them during conversation.
 
+## Author
+
+FORGE Framework was created by [Scott Feltham](https://github.com/scottfeltham).
+
 ## Contributing
 
 FORGE is designed to be simple enough that anyone can contribute. Edit the markdown templates or add new agent prompts to extend functionality.
@@ -220,7 +224,7 @@ See [CONTRIBUTING.md](https://github.com/scottfeltham/forge-framework/blob/main/
 
 ## Credits
 
-FORGE is inspired by Modern Software Engineering principles, the BMAD Method, and Agent-OS architecture. See [Credits](docs/CREDITS.md) for detailed acknowledgments.
+FORGE Framework was created by Scott Feltham, inspired by Modern Software Engineering principles, the BMAD Method, and Agent-OS architecture. See [Credits](docs/CREDITS.md) for detailed acknowledgments.
 
 ## Beta Feedback
 
