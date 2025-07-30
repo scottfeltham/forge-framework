@@ -1,0 +1,98 @@
+#!/usr/bin/env node
+/**
+ * FORGE Framework - AI-driven development through natural conversation
+ * Created by Scott Feltham - https://github.com/scottfeltham/forge-framework
+ */
+const fs = require('fs'), path = require('path'), yaml = require('js-yaml');
+const [,, cmd, ...args] = process.argv, log = console.log;
+const tpl = n => fs.readFileSync(path.join(__dirname, 'templates', n), 'utf8');
+const write = (p, c) => fs.writeFileSync(p, c), exists = fs.existsSync;
+const timestamp = () => new Date().toISOString().replace(/[:.]/g, '-');
+
+// Ensure .forge directory exists
+exists('.forge') || fs.mkdirSync('.forge/history', {recursive: true});
+
+const commands = {
+  init() {
+    if (exists('forge.yaml')) return log('⚠️  Already initialized');
+    write('forge.yaml', `# FORGE Configuration
+project: ${path.basename(process.cwd())}
+mode: conversational
+ai: {primary: claude, model: sonnet}`);
+    write('.forge/INIT_ANALYSIS.md', tpl('init-prompt.md'));
+    log('🔨 FORGE initialized! Claude will analyze your project...');
+  },
+
+  new(name) {
+    if (!name) return log('Usage: forge new <feature>');
+    const cycle = tpl('cycle.md').replace(/{{FEATURE}}/g, name)
+      .replace(/{{DATE}}/g, new Date().toISOString().split('T')[0]);
+    
+    const isTeam = exists('forge.yaml') && 
+      fs.readFileSync('forge.yaml', 'utf8').includes('collaborative');
+    
+    if (isTeam) {
+      const dir = '.forge/current';
+      exists(dir) || fs.mkdirSync(dir, {recursive: true});
+      const file = `${name.toLowerCase().replace(/\s+/g, '-')}.md`;
+      write(`${dir}/${file}`, cycle);
+      log(`✨ Started: ${name} (${dir}/${file})`);
+    } else {
+      write('.forge/current.md', cycle);
+      log(`✨ Started: ${name}`);
+    }
+  },
+
+  status() {
+    if (exists('.forge/current') && fs.lstatSync('.forge/current').isDirectory()) {
+      const cycles = fs.readdirSync('.forge/current').filter(f => f.endsWith('.md'));
+      log(cycles.length ? `📊 Active: ${cycles.join(', ')}` : 'No active cycles');
+    } else {
+      log(exists('.forge/current.md') 
+        ? fs.readFileSync('.forge/current.md', 'utf8') 
+        : 'No active cycle');
+    }
+  },
+
+  complete(file) {
+    const archive = p => fs.renameSync(p, `.forge/history/${path.basename(p, '.md')}-${timestamp()}.md`);
+    if (file && exists(`.forge/current/${file}`)) archive(`.forge/current/${file}`);
+    else if (exists('.forge/current.md')) archive('.forge/current.md');
+    else return log('No cycle to complete');
+    log('✅ Completed');
+  },
+
+  learn(action) {
+    const lpath = '.forge/LEARNINGS.md';
+    const actions = {
+      retrospective: () => log(tpl('retrospective.md')),
+      pattern: () => log(tpl('pattern.md')),
+      claude: () => (write('CLAUDE.md', tpl('CLAUDE.md')), log('📝 Created CLAUDE.md'))
+    };
+    
+    if (action) actions[action]?.() || log('Options: retrospective|pattern|claude');
+    else exists(lpath) ? log(fs.readFileSync(lpath, 'utf8'))
+      : (write(lpath, tpl('LEARNINGS.md')), log('📚 Created learnings'));
+  },
+
+  document: () => (write('.forge/DOCUMENT_SESSION.md', tpl('document-session.md')), 
+    log('📚 Documentation session started')),
+
+  uninstall: () => args[0] === '--confirm'
+    ? (['forge.yaml','.forge'].forEach(p => exists(p) && fs.rmSync(p, {recursive:true})), log('✅ Done'))
+    : log('Add --confirm to uninstall')
+};
+
+// Execute command or show help
+commands[cmd]?.(...args) || log(`🔨 FORGE Framework
+
+Commands:
+  init         Initialize FORGE
+  new <name>   Start feature cycle  
+  status       Show current cycle
+  complete     Archive cycle
+  learn        View/manage learnings
+  document     Start documentation
+  uninstall    Remove FORGE
+
+Learn: retrospective | pattern | claude`);

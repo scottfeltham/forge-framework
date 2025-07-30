@@ -1,0 +1,354 @@
+#!/usr/bin/env node
+
+/**
+ * FORGE Framework
+ * Created by Scott Feltham
+ * https://github.com/scottfeltham/forge-framework
+ * 
+ * AI-driven development through natural conversation
+ */
+
+const fs = require('fs');
+const path = require('path');
+const yaml = require('js-yaml');
+
+const command = process.argv[2];
+const args = process.argv.slice(3);
+
+// Ensure .forge directory exists
+if (!fs.existsSync('.forge')) {
+  fs.mkdirSync('.forge', { recursive: true });
+  fs.mkdirSync('.forge/history', { recursive: true });
+}
+
+const commands = {
+  init: () => {
+    // Check if FORGE already exists
+    if (fs.existsSync('forge.yaml')) {
+      console.log('⚠️  FORGE is already initialized in this project');
+      console.log('   To reinitialize, remove forge.yaml first');
+      return;
+    }
+    
+    // Create minimal default config - let AI analyze and customize
+    const minimalConfig = `# FORGE Framework Configuration
+project: ${path.basename(process.cwd())}
+description: AI-powered development with FORGE
+
+# AI-driven mode - let Claude handle complexity
+mode: conversational
+
+# AI configuration
+ai:
+  primary: claude
+  model: sonnet  # or opus for complex tasks
+
+# Learning configuration
+learning:
+  memory_integration: true
+  claude_md: true
+
+# Let AI analyze project and suggest configuration
+# Run this after init: "Please analyze my project and update forge.yaml appropriately"
+`;
+    
+    // Write minimal configuration
+    fs.writeFileSync('forge.yaml', minimalConfig);
+    
+    // Create .forge directory structure
+    if (!fs.existsSync('.forge')) {
+      fs.mkdirSync('.forge', { recursive: true });
+      fs.mkdirSync('.forge/history', { recursive: true });
+    }
+    
+    // Copy init prompt for AI to execute
+    const initPrompt = fs.readFileSync(
+      path.join(__dirname, 'templates/init-prompt.md'), 
+      'utf8'
+    );
+    fs.writeFileSync('.forge/INIT_ANALYSIS.md', initPrompt);
+    
+    console.log('🔨 FORGE initialized!\n');
+    console.log('📋 Created:');
+    console.log('   - forge.yaml (minimal configuration)');
+    console.log('   - .forge/ (working directory)');
+    console.log('   - .forge/INIT_ANALYSIS.md (analysis request)\n');
+    console.log('🤖 AI Project Analysis Triggered\n');
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
+    console.log('Claude will now:');
+    console.log('  1. Analyze your project structure');
+    console.log('  2. Detect frameworks and tools');
+    console.log('  3. Configure FORGE appropriately');
+    console.log('  4. Create necessary files\n');
+    console.log('The analysis will begin automatically...\n');
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
+  },
+
+  new: (featureName) => {
+    if (!featureName) {
+      console.log('Usage: forge new <feature-name>');
+      return;
+    }
+    
+    // Support for team collaboration
+    const isTeamMode = fs.existsSync('forge.yaml') && 
+      fs.readFileSync('forge.yaml', 'utf8').includes('collaborative');
+    
+    const template = fs.readFileSync(
+      path.join(__dirname, 'templates/cycle.md'), 
+      'utf8'
+    );
+    
+    const cycleContent = template
+      .replace(/{{FEATURE}}/g, featureName)
+      .replace(/{{DATE}}/g, new Date().toISOString().split('T')[0]);
+    
+    // In team mode, create in current/ directory
+    if (isTeamMode) {
+      if (!fs.existsSync('.forge/current')) {
+        fs.mkdirSync('.forge/current', { recursive: true });
+      }
+      const filename = featureName.toLowerCase().replace(/\s+/g, '-');
+      fs.writeFileSync(`.forge/current/${filename}.md`, cycleContent);
+      console.log(`✨ Started new cycle: ${featureName}`);
+      console.log(`📁 Created: .forge/current/${filename}.md`);
+    } else {
+      // Solo mode - single current.md file
+      fs.writeFileSync('.forge/current.md', cycleContent);
+      console.log(`✨ Started new cycle: ${featureName}`);
+    }
+    
+    console.log('📋 Current phase: Focus');
+    console.log('🤖 Claude will guide you through each phase');
+  },
+
+  status: () => {
+    // Check for team mode (multiple cycles)
+    if (fs.existsSync('.forge/current') && fs.lstatSync('.forge/current').isDirectory()) {
+      const cycles = fs.readdirSync('.forge/current').filter(f => f.endsWith('.md'));
+      
+      if (cycles.length === 0) {
+        console.log('No active cycles. Run: forge new <feature>');
+        return;
+      }
+      
+      console.log(`📊 Active Cycles (${cycles.length}):\n`);
+      
+      cycles.forEach(file => {
+        const content = fs.readFileSync(`.forge/current/${file}`, 'utf8');
+        const featureName = content.match(/# Feature: (.+)/)?.[1] || 'Unknown';
+        const status = content.match(/\*\*Status\*\*: (.+)/)?.[1] || 'Unknown';
+        console.log(`📁 ${file}`);
+        console.log(`   Feature: ${featureName}`);
+        console.log(`   Status: ${status}\n`);
+      });
+      
+      console.log('💡 Use "cat .forge/current/<filename>" to see full details');
+    } 
+    // Solo mode (single cycle)
+    else if (fs.existsSync('.forge/current.md')) {
+      const current = fs.readFileSync('.forge/current.md', 'utf8');
+      console.log(current);
+    } else {
+      console.log('No active cycle. Run: forge new <feature>');
+    }
+  },
+
+  complete: (cycleFile) => {
+    // Team mode - complete specific cycle
+    if (cycleFile && fs.existsSync(`.forge/current/${cycleFile}`)) {
+      const current = fs.readFileSync(`.forge/current/${cycleFile}`, 'utf8');
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const featureName = current.match(/# Feature: (.+)/)?.[1] || 'unknown';
+      const archiveName = `${featureName.toLowerCase().replace(/\s+/g, '-')}-${timestamp}.md`;
+      
+      fs.writeFileSync(`.forge/history/${archiveName}`, current);
+      fs.unlinkSync(`.forge/current/${cycleFile}`);
+      console.log(`✅ Cycle completed and archived: ${archiveName}`);
+    }
+    // Solo mode - complete single cycle
+    else if (fs.existsSync('.forge/current.md')) {
+      const current = fs.readFileSync('.forge/current.md', 'utf8');
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      fs.writeFileSync(`.forge/history/cycle-${timestamp}.md`, current);
+      fs.unlinkSync('.forge/current.md');
+      console.log('✅ Cycle completed and archived');
+    }
+    else {
+      console.log('No active cycle to complete.');
+      if (fs.existsSync('.forge/current')) {
+        console.log('In team mode, specify the cycle file: forge complete <filename>');
+      }
+    }
+  },
+
+  learn: (action) => {
+    const learningsPath = '.forge/LEARNINGS.md';
+    
+    if (!action) {
+      // Display current learnings
+      if (fs.existsSync(learningsPath)) {
+        const learnings = fs.readFileSync(learningsPath, 'utf8');
+        console.log('📚 Current Learnings:\n');
+        console.log(learnings);
+      } else {
+        console.log('No learnings documented yet. Starting new learnings file...');
+        const template = fs.readFileSync(
+          path.join(__dirname, 'templates/LEARNINGS.md'), 
+          'utf8'
+        );
+        fs.writeFileSync(learningsPath, template);
+        console.log('✨ Created .forge/LEARNINGS.md');
+        console.log('📝 Document learnings throughout your project');
+      }
+    } else if (action === 'retrospective') {
+      // Create retrospective template
+      const template = fs.readFileSync(
+        path.join(__dirname, 'templates/retrospective.md'), 
+        'utf8'
+      );
+      const timestamp = new Date().toISOString().split('T')[0];
+      const filename = `retrospective-${timestamp}.md`;
+      fs.writeFileSync(`.forge/${filename}`, template);
+      console.log(`📋 Created: .forge/${filename}`);
+      console.log('✏️  Fill out the retrospective, then run "forge learn update" to incorporate insights');
+    } else if (action === 'pattern') {
+      // Create pattern template
+      const template = fs.readFileSync(
+        path.join(__dirname, 'templates/pattern.md'), 
+        'utf8'
+      );
+      if (!fs.existsSync('patterns')) {
+        fs.mkdirSync('patterns', { recursive: true });
+      }
+      console.log('📝 Creating new pattern template...');
+      console.log('📁 Save to: patterns/your-pattern-name.md');
+      console.log(template);
+    } else if (action === 'update') {
+      console.log('💡 Update LEARNINGS.md by:');
+      console.log('   1. Running retrospectives after cycles');
+      console.log('   2. Documenting patterns that emerge');
+      console.log('   3. Recording what worked and what didn\'t');
+      console.log('   4. Agents will automatically reference and update learnings');
+    } else if (action === 'claude') {
+      // Create CLAUDE.md template
+      if (fs.existsSync('CLAUDE.md')) {
+        console.log('CLAUDE.md already exists. Current contents:');
+        console.log(fs.readFileSync('CLAUDE.md', 'utf8'));
+      } else {
+        const template = fs.readFileSync(
+          path.join(__dirname, 'templates/CLAUDE.md'), 
+          'utf8'
+        );
+        fs.writeFileSync('CLAUDE.md', template);
+        console.log('📝 Created CLAUDE.md for AI memory context');
+        console.log('✏️  Fill out the template with your project specifics');
+        console.log('🧠 Claude will use this for persistent context across sessions');
+      }
+    } else {
+      console.log('Usage: forge learn [retrospective|pattern|update|claude]');
+    }
+  },
+
+  document: () => {
+    console.log('📚 Starting documentation session...\n');
+    console.log('🤖 Claude will help you:');
+    console.log('   • Create new documentation');
+    console.log('   • Update existing docs');
+    console.log('   • Fix misplaced files (PRDs → specs/, docs → docs/)');
+    console.log('   • Generate from code or cycles\n');
+    
+    // Create session file for AI context
+    const sessionTemplate = fs.readFileSync(
+      path.join(__dirname, 'templates/document-session.md'), 
+      'utf8'
+    );
+    fs.writeFileSync('.forge/DOCUMENT_SESSION.md', sessionTemplate);
+    
+    console.log('📋 Session created: .forge/DOCUMENT_SESSION.md');
+    console.log('💬 Ask Claude to help with your documentation needs!');
+  },
+
+  uninstall: () => {
+    console.log('🔍 Checking FORGE installation...\n');
+    
+    const hasForge = fs.existsSync('forge.yaml');
+    const hasForgeDir = fs.existsSync('.forge');
+    const hasAgents = fs.existsSync('agents');
+    const hasPatterns = fs.existsSync('patterns');
+    
+    if (!hasForge && !hasForgeDir) {
+      console.log('❌ No FORGE installation found in this directory');
+      return;
+    }
+    
+    console.log('⚠️  This will remove FORGE from your project:');
+    if (hasForge) console.log('   - forge.yaml');
+    if (hasForgeDir) console.log('   - .forge/ directory (including history)');
+    if (hasAgents) console.log('   - agents/ directory (if created by FORGE)');
+    if (hasPatterns) console.log('   - patterns/ directory (if created by FORGE)');
+    
+    console.log('\n✅ This will NOT affect:');
+    console.log('   - Your source code');
+    console.log('   - .claude/ directory');
+    console.log('   - CLAUDE.md file');
+    console.log('   - Any other project files');
+    
+    console.log('\n❓ To confirm uninstall, run:');
+    console.log('   forge uninstall --confirm');
+    
+    // Check for --confirm flag
+    if (process.argv.includes('--confirm')) {
+      console.log('\n🗑️  Uninstalling FORGE...');
+      
+      try {
+        if (hasForge) {
+          fs.unlinkSync('forge.yaml');
+          console.log('   ✓ Removed forge.yaml');
+        }
+        
+        if (hasForgeDir) {
+          fs.rmSync('.forge', { recursive: true, force: true });
+          console.log('   ✓ Removed .forge/ directory');
+        }
+        
+        // Only remove agents/patterns if they appear to be FORGE-created
+        if (hasAgents && fs.readdirSync('agents').length === 0) {
+          fs.rmdirSync('agents');
+          console.log('   ✓ Removed empty agents/ directory');
+        }
+        
+        if (hasPatterns && fs.readdirSync('patterns').length === 0) {
+          fs.rmdirSync('patterns');
+          console.log('   ✓ Removed empty patterns/ directory');
+        }
+        
+        console.log('\n✅ FORGE has been uninstalled');
+        console.log('💡 Your project is unchanged - you can continue as before');
+      } catch (error) {
+        console.error('\n❌ Error during uninstall:', error.message);
+      }
+    }
+  }
+};
+
+// Execute command
+if (commands[command]) {
+  commands[command](...args);
+} else {
+  console.log('🔨 FORGE - AI-Driven Development Framework');
+  console.log('\nCommands:');
+  console.log('  forge init          Initialize FORGE (works for new or existing projects)');
+  console.log('  forge new <name>    Start a new feature cycle');
+  console.log('  forge status        Show current cycle status');
+  console.log('  forge complete      Archive current cycle');
+  console.log('  forge learn         View/manage project learnings');
+  console.log('  forge document      AI-powered documentation management');
+  console.log('  forge uninstall     Remove FORGE from project');
+  console.log('\nLearning commands:');
+  console.log('  forge learn                 View current learnings');
+  console.log('  forge learn retrospective   Create retrospective template');
+  console.log('  forge learn pattern         Show pattern template');
+  console.log('  forge learn claude          Create CLAUDE.md for AI memory');
+  console.log('\n✨ Just run "forge init" - it handles everything automatically!');
+}

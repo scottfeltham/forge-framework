@@ -5,6 +5,16 @@ All notable changes to FORGE Framework will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1-beta] - 2025-07-30
+
+### Fixed
+- **NPM Package Size** - Reduced from multiple MB to 34.6KB
+- **Package Contents** - Removed unnecessary files from npm distribution
+- **Release Notes** - Fixed contributor name format in GitHub releases
+
+### Added
+- **.npmignore** - Properly excludes development files, website, docs, and specs
+
 ## [0.3.0-beta] - 2025-07-30
 
 ### Changed
