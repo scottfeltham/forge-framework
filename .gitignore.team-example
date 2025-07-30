@@ -1,0 +1,89 @@
+# Example .gitignore for team collaboration
+# Uncomment sections based on your team's workflow
+
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# FORGE Framework
+# =================
+
+# Option 1: Track active cycles in git (recommended for transparency)
+# Comment out these lines to track active work
+# .forge/current.md        # Solo mode
+# .forge/current/          # Team mode
+
+# Option 2: Ignore active cycles (for teams using other tools)
+# Uncomment these lines to ignore active work
+.forge/current.md          # Solo mode
+.forge/current/            # Team mode
+
+# Always track completed cycles
+# .forge/history/ is tracked by default
+
+# Team-specific files
+.forge/team/assignments.md    # Often tracked, but can be ignored
+.forge/team/temp/            # Always ignore temporary files
+.forge/team/*.tmp
+.forge/team/drafts/
+
+# Agent customizations
+agents/local/                # Local overrides not shared
+agents/*.local.md           # Personal agent customizations
+agents/generated/           # Auto-generated agents (optional to track)
+agents/personal/            # Personal specialized agents
+
+# PRDs - Usually tracked, but drafts might not be
+prds/drafts/
+prds/*.draft.md
+prds/archive/               # Old PRDs moved out of active use
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+logs/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+dist/
+build/
+out/
+
+# Testing
+coverage/
+.nyc_output/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Backup files
+*.backup
+*.bak
+*.orig
+
+# Merge conflict files
+*.orig
+*_BACKUP_*
+*_BASE_*
+*_LOCAL_*
+*_REMOTE_*

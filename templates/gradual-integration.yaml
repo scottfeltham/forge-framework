@@ -1,0 +1,107 @@
+# FORGE Framework - Gradual Integration Configuration
+# This template is for existing projects that want to adopt FORGE gradually
+
+project: {{PROJECT_NAME}}
+description: Gradual FORGE integration for existing project
+
+# Start with adaptive mode - FORGE adapts to your workflow
+mode: adaptive
+
+# Preserve existing Claude setup if present
+claude_integration:
+  existing_setup: true
+  preserve_existing: true
+  
+# AI configuration - minimal disruption
+ai:
+  primary: claude
+  model: sonnet
+  respect_existing_patterns: true
+
+# Detected existing setup
+detected:
+  # {{AUTO_DETECTED_FRAMEWORKS}}
+  - framework: {{FRAMEWORK}}
+  - language: {{LANGUAGE}}
+  - testing: {{TEST_FRAMEWORK}}
+  - ci: {{CI_SYSTEM}}
+
+# Learning configuration - leverage existing knowledge
+learning:
+  memory_integration: true
+  claude_md: true
+  import_existing_docs: true
+  
+  # Start by documenting what already exists
+  initial_focus:
+    - document_existing_patterns
+    - capture_team_conventions
+    - identify_successful_approaches
+
+# Minimal agent setup - create only as needed
+agents:
+  dynamic: true
+  on_demand: true
+  start_with: none  # Don't pre-create any agents
+  
+# Gradual phase adoption
+phases:
+  # Start with just documentation and learning
+  focus: true        # Understand and document
+  orchestrate: false # Enable when ready for planning
+  refine: false      # Enable when ready for guided development
+  generate: false    # Enable when ready for deployment integration
+  evaluate: true     # Always learn from what happens
+  
+# Integration with existing tools
+compatibility:
+  prefer_existing: true
+  
+  # Map FORGE concepts to your existing workflow
+  workflow_mapping:
+    # Examples - customize for your project
+    planning: "existing-planning-tool"
+    testing: "npm test"
+    linting: "npm run lint"
+    building: "npm run build"
+    deploying: "existing-ci-cd"
+    
+# Gradual adoption strategy
+adoption:
+  phase_1:
+    - Use FORGE for documentation only
+    - Run `forge learn` commands
+    - Create CLAUDE.md for context
+    
+  phase_2:
+    - Try `forge new` for one small feature
+    - Use Focus and Evaluate phases only
+    - Document learnings
+    
+  phase_3:
+    - Enable more phases as comfortable
+    - Create specialized agents as needed
+    - Integrate with existing CI/CD
+    
+  phase_4:
+    - Full FORGE workflow
+    - Team collaboration features
+    - Automated learning system
+
+# Notes for team
+team_notes: |
+  FORGE has been added in "gradual adoption" mode.
+  
+  Start with:
+  1. `forge learn claude` - Create AI context file
+  2. `forge new "small-feature"` - Try on low-risk feature
+  3. `forge learn retrospective` - After first feature
+  
+  FORGE will not interfere with existing workflow.
+  Use what helps, ignore what doesn't.
+  
+# Rollback plan
+rollback:
+  - Simply remove forge.yaml and .forge/ directory
+  - All existing code and processes remain unchanged
+  - No dependencies on FORGE for critical operations

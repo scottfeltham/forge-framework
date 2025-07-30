@@ -1,0 +1,43 @@
+{
+  "name": "forge-framework",
+  "version": "0.1.0-beta",
+  "description": "AI-driven development framework - conversational, simple, powerful",
+  "author": "FORGE Contributors",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scottfeltham/forge-framework.git"
+  },
+  "homepage": "https://github.com/scottfeltham/forge-framework#readme",
+  "bugs": {
+    "url": "https://github.com/scottfeltham/forge-framework/issues"
+  },
+  "bin": {
+    "forge": "./forge"
+  },
+  "main": "forge",
+  "scripts": {
+    "test": "echo \"No tests needed - AI handles validation\""
+  },
+  "keywords": [
+    "ai",
+    "development",
+    "framework",
+    "claude",
+    "llm",
+    "automation",
+    "forge",
+    "markdown",
+    "conversational",
+    "tdd",
+    "agents",
+    "ai-driven",
+    "claude-code"
+  ],
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "license": "MIT"
+}

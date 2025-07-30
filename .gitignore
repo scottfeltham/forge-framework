@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# FORGE active state (use git to track history/)
+# Solo mode
+.forge/current.md
+
+# Team mode - active cycles
+.forge/current/
+
+# Team assignments and temporary files
+.forge/team/assignments.md
+.forge/team/temp/
+
+# Local agent customizations (project-specific)
+agents/local/
+agents/*.local.md
+
+# Generated agents (if not wanting to track)
+# agents/generated/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+dist/
+build/

@@ -1,0 +1,56 @@
+# FORGE Framework Configuration
+project: forge-framework
+description: The FORGE framework itself - AI-powered development framework
+
+# AI-driven mode
+mode: conversational
+
+# Project type
+type: framework
+language: javascript
+platform: node
+
+# Detected configuration
+detected:
+  - node.js
+  - npm package
+  - js-yaml dependency
+  - cli tool
+  - markdown-based
+  - git repository
+
+# AI configuration
+ai:
+  primary: claude
+  model: sonnet
+
+# Agent configuration
+agents:
+  dynamic: true
+  specialized:
+    - project-analyzer
+    - architect
+    - developer
+    - tester
+    - devops
+    - reviewer
+
+# Learning configuration
+learning:
+  memory_integration: true
+  claude_md: true
+  learnings_path: .forge/LEARNINGS.md
+
+# Development configuration
+development:
+  type: open-source
+  license: MIT
+  repository: https://github.com/forge-framework/forge
+  
+# Project structure
+structure:
+  cli: ./forge
+  templates: ./templates/
+  agents: ./agents/
+  docs: ./docs/
+  examples: ./agents/examples/
