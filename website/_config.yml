@@ -5,7 +5,7 @@ title: FORGE Framework
 email: scott@outdoorsphere.co.uk
 description: >-
   A conversational AI-driven development framework that puts AI at the center 
-  of software development. Just 88 lines of code that unlock unlimited potential.
+  of software development. Just 99 lines of code that unlock unlimited potential.
 baseurl: "/forge-framework" # the subpath of your site, e.g. /blog
 url: "https://scottfeltham.github.io" # the base hostname & protocol
 twitter_username: scottfeltham

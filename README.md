@@ -2,7 +2,7 @@
 
 > **Beta Release**: v0.3.1-beta - We're gathering feedback! Please report issues and share your experience.
 
-A conversational AI-driven development framework that puts AI at the center of software development. Just 88 lines of code that unlock unlimited potential through natural dialogue.
+A conversational AI-driven development framework that puts AI at the center of software development. Just 99 lines of code that unlock unlimited potential through natural dialogue.
 
 [![npm version](https://img.shields.io/npm/v/forge-framework.svg)](https://www.npmjs.com/package/forge-framework)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)

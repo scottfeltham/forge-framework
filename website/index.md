@@ -9,7 +9,7 @@ permalink: /
 # AI-Driven Development, Radically Simple
 {: .fs-9 }
 
-Just 88 lines of code that unlock unlimited potential through natural dialogue.
+Just 99 lines of code that unlock unlimited potential through natural dialogue.
 {: .fs-6 .fw-300 }
 
 [Get started now](#getting-started){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
