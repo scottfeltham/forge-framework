@@ -1,6 +1,6 @@
 # 🔨 FORGE Framework
 
-> **Beta Release**: v0.2.0-beta - We're gathering feedback! Please report issues and share your experience.
+> **Beta Release**: v0.3.0-beta - We're gathering feedback! Please report issues and share your experience.
 
 A conversational AI-driven development framework that puts AI at the center of software development. Just 88 lines of code that unlock unlimited potential through natural dialogue.
 
