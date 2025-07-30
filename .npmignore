@@ -1,0 +1,47 @@
+# FORGE's own files (not needed in package)
+specs/
+forge.yaml
+forge-team.yaml
+.forge/
+CLAUDE.md
+
+# Git files
+.git/
+.gitignore
+.gitignore.team-example
+
+# Documentation for future microsite
+docs/*
+!docs/QUICK_START.md
+
+# Development files
+*.log
+.DS_Store
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Test files
+test/
+tests/
+*.test.js
+*.spec.js
+
+# Build files
+dist/
+build/
+
+# Environment files
+.env
+.env.*
+
+# Mac files
+.DS_Store
+Thumbs.db

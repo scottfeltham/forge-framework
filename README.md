@@ -1,24 +1,24 @@
 # 🔨 FORGE Framework
 
-A conversational AI-driven development framework designed for Claude Code.
+> **Beta Release**: v0.1.0-beta - We're gathering feedback! Please report issues and share your experience.
 
-Inspired by Modern Software Engineering principles, the BMAD method, and Agent-OS architecture.
+A conversational AI-driven development framework that puts AI at the center of software development. Just 88 lines of code that unlock unlimited potential through natural dialogue.
+
+[![npm version](https://img.shields.io/npm/v/forge-framework.svg)](https://www.npmjs.com/package/forge-framework)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Quick Start
 
 ```bash
-# Install globally
-npm install -g forge-framework
+# Install the beta
+npm install -g forge-framework@beta
 
-# Initialize in any project (new or existing)
+# Initialize in any project
 cd your-project
 forge init
 
-# Start a new feature
+# Start building with AI
 forge new "user authentication"
-
-# Check status
-forge status
 ```
 
 After running `forge init`, ask Claude to:
@@ -216,10 +216,42 @@ You can use these templates manually or let AI agents reference them during conv
 
 FORGE is designed to be simple enough that anyone can contribute. Edit the markdown templates or add new agent prompts to extend functionality.
 
+See [CONTRIBUTING.md](https://github.com/scottfeltham/forge-framework/blob/main/CONTRIBUTING.md) for guidelines.
+
 ## Credits
 
 FORGE is inspired by Modern Software Engineering principles, the BMAD Method, and Agent-OS architecture. See [Credits](docs/CREDITS.md) for detailed acknowledgments.
 
+## Beta Feedback
+
+🚧 **This is a beta release!** We're actively seeking feedback to improve FORGE.
+
+- **Report Issues**: [GitHub Issues](https://github.com/scottfeltham/forge-framework/issues)
+- **Join Discussions**: [GitHub Discussions](https://github.com/scottfeltham/forge-framework/discussions)
+- **Share Examples**: Show us what you build!
+
+## Roadmap
+
+### v0.1.0-beta (Current)
+- ✅ Core 5-phase cycle
+- ✅ AI agent system
+- ✅ TDD enforcement
+- ✅ Documentation management
+- ✅ Team collaboration
+- ✅ Learning system
+
+### v0.2.0 (Planned)
+- Enhanced MCP integration
+- Agent marketplace
+- Performance metrics
+- Extended templates
+
+### v1.0.0 (Future)
+- Stable API
+- Plugin system
+- Enterprise features
+- Full documentation site
+
 ## License
 
-MIT License - Use freely in your projects!
+[MIT License](LICENSE) - Use freely in your projects!
