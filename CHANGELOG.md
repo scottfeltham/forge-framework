@@ -5,6 +5,22 @@ All notable changes to FORGE Framework will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2025-07-31
+
+### Added
+- **MCP Integration** - Complete Model Context Protocol support with recommended servers
+- **MCP Commands** - New `forge mcp list/suggest/add` commands for easy MCP management
+- **MCP Registry** - Updateable JSON registry of recommended MCP servers including context7 and playwright
+- **Agent MCP Awareness** - All 5 core agents updated with role-specific MCP capabilities
+- **MCP Templates** - New forge-mcp.yaml template with pre-configured servers
+
+### Changed
+- **Documentation** - Updated line count references to "under 200 lines" for accuracy
+- **Messaging** - Focus on "minimal and concise" rather than specific line counts
+
+### Fixed
+- **Auto-configure Claude Permissions** - Enhanced to include MCP commands
+
 ## [0.4.1] - 2025-07-31
 
 ### Fixed
