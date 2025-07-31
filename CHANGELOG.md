@@ -5,6 +5,11 @@ All notable changes to FORGE Framework will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.1] - 2025-07-31
+
+### Fixed
+- **Auto-configure Claude Permissions** - Installer now automatically sets up Claude settings to allow FORGE commands without reprompting
+
 ## [0.4.0-beta] - 2025-07-31
 
 ### Added
