@@ -205,23 +205,56 @@ mcp:
     web_fetch: mcp      # Prefer MCP for web operations
 ```
 
-### Custom Slash Commands
+### FORGE Slash Commands
 
-Create project-specific commands:
+FORGE now includes native slash commands for explicit action in Claude Code:
+
+#### Available Commands
+- `/forge init` - Initialize FORGE in your project
+- `/forge new <feature>` - Start a new development cycle
+- `/forge status` - Show current cycle status
+- `/forge complete [file]` - Complete and archive a cycle
+- `/forge learn [action]` - Access the learning system
+- `/forge document` - Start a documentation session
+- `/forge help [command]` - Get help on any command
+
+#### Usage Examples
+```
+User: /forge new authentication-system
+Claude: Starting new FORGE cycle...
+
+✨ Started: authentication-system
+📋 Phase: Focus
+🤖 Claude will guide you
+
+[Begins requirements gathering...]
+```
+
+```
+User: /forge status
+Claude: [Displays current cycle with progress checkboxes]
+```
+
+#### Benefits
+- **Explicit Recognition**: No ambiguity about intent
+- **Natural Language Fallback**: "forge new X" also works
+- **Discoverable**: Type `/forge` to see all commands
+- **Framework Compatible**: Other tools can add their own namespaces
+
+#### Implementation
+Commands are defined in `.claude/commands/forge/` allowing:
+- Clear pattern matching
+- Parameter validation
+- Consistent execution
+- Easy customization
+
+### Custom Project Commands
+
+You can also create project-specific commands:
 
 ```bash
-# In project root
-mkdir .claude-commands
-
-# Create command
-echo "Launch FORGE architect for system design" > .claude-commands/forge-architect
-```
-
-Usage:
-```
-User: /forge-architect design payment system
-
-Claude: [Reads command, acts as Architect Agent]
+# Add to .claude/commands/custom/
+echo "Project-specific command" > .claude/commands/custom/deploy.md
 ```
 
 ## Model Selection with Claude Code

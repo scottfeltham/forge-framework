@@ -65,7 +65,7 @@ ai: {primary: claude, model: sonnet}`);
 
   complete(file) {
     const archive = p => fs.renameSync(p, 
-      `.forge/history/${path.basename(p, '.md')}-${timestamp()}.md`);
+      `.forge/history/cycle-${timestamp()}.md`);
     
     if (file && exists(`.forge/current/${file}`)) {
       archive(`.forge/current/${file}`);

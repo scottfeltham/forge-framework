@@ -55,6 +55,17 @@ This starts a new development cycle. Your AI assistant will guide you through th
 - `forge document` - Manage documentation
 - `forge learn` - View and update learnings
 
+### Claude Code Slash Commands
+
+When using Claude Code, you can also use explicit slash commands:
+- `/forge init` - Initialize FORGE
+- `/forge new authentication` - Start new cycle
+- `/forge status` - Check progress
+- `/forge complete` - Complete cycle
+- `/forge help` - Get help
+
+Both work equally well - use whichever feels natural!
+
 ## Working with AI
 
 FORGE is designed for AI-driven development. After each command, engage with your AI assistant:

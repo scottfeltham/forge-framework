@@ -13,6 +13,7 @@ This knowledge base captures learnings from all completed cycles. It grows with 
 - **Test Scenarios First**: Writing test scenarios before implementation ensures comprehensive coverage
 - **FORGE 5-Phase Process**: Focus→Orchestrate→Refine→Generate→Evaluate provides clear structure
 - **Code Review Catches Issues**: Found regex improvements, error handling gaps, and edge cases
+- **Natural Language Commands**: FORGE commands like "forge a new X" blend so naturally into conversation that they're easy to miss - AI assistants should watch for these patterns
 
 ### Technology Choices
 - **Jekyll + GitHub Pages**: Zero-friction deployment for documentation sites
@@ -34,6 +35,8 @@ This knowledge base captures learnings from all completed cycles. It grows with 
 ### Anti-Patterns
 - **Accidental Cycle Completion**: Running `forge complete` prematurely loses context
 - **Not Checking Directory Structure**: Framework may expect specific folders (docs/guides/, etc.)
+- **Bypassing FORGE Process**: When user says "forge a new X", jumping straight to implementation instead of creating a cycle
+- **Missing Conversational Commands**: FORGE's natural language integration means commands can appear anywhere in conversation
 
 ### Technical Debt Sources
 <!-- Identify what creates debt -->
@@ -100,13 +103,53 @@ This knowledge base captures learnings from all completed cycles. It grows with 
 | 2025-07-30 | Added Jekyll documentation site | Live docs at https://scottfeltham.github.io/forge-framework/ |
 | 2025-07-30 | Implemented CI/CD release automation | Reduced release time from manual to < 2 minutes |
 | 2025-07-30 | Released v0.2.0-beta | Successfully published to npm with automated workflow |
+| 2025-07-31 | Refactored forge CLI to 99 lines | Maintains <100 line spec with better readability |
+| 2025-07-31 | Added local installation method | Projects can have visible, customizable agents/templates |
+| 2025-07-31 | Recognized meta-pattern | FORGE commands blend naturally into conversation |
+| 2025-07-31 | Implemented slash commands | Explicit commands for users who prefer clarity over natural language |
 
 ### Experiment Results
 | Experiment | Hypothesis | Result | Decision |
 |------------|------------|--------|----------|
 | *Name* | *What we thought* | *What happened* | *Keep/Discard* |
 
+## 🎮 Slash Commands Learning
+
+### Implementation Success
+The slash commands feature demonstrates several key principles:
+
+1. **User-Driven Design**: Feature came from observing actual usage patterns where FORGE commands were missed in conversation
+2. **Dual-Mode Support**: Maintaining both `/forge new` and natural language preserves flexibility
+3. **Framework Compatibility**: Namespace approach (`.claude/commands/forge/`) allows multiple tools to coexist
+4. **Documentation as Code**: Markdown command definitions work perfectly for Claude's pattern matching
+
+### Key Insights
+- **Explicit vs Natural**: Some users prefer explicit commands for clarity and predictability
+- **Discovery Matters**: `/forge` alone could show available commands for better discoverability
+- **Standards Opportunity**: Command definition format could become a standard for AI assistants
+
+### Technical Approach
+- Used markdown files for command definitions (pattern, parameters, action, examples)
+- Integrated with existing CLAUDE.md for recognition
+- Updated installer to include .claude directory
+- Maintained backward compatibility with natural language
+
 ---
-*Last Updated: 2025-07-30*
-*Total Cycles Completed: 2 (microsite, CI/CD)*
+*Last Updated: 2025-07-31*
+*Total Cycles Completed: 3 (microsite, CI/CD, slash commands) + informal cycles*
 *Contributing Team Members: Scott Feltham + Claude*
+
+## Meta-Learning: FORGE Commands in Natural Language
+
+**Key Insight**: When the user said "forge a new installer", this was actually a FORGE command embedded in natural conversation. The framework is designed to be so conversational that even its commands feel like natural language, which can lead to:
+
+1. **Missed Opportunities**: Not creating formal cycles when requested
+2. **Process Bypass**: Jumping straight to implementation
+3. **Lost Documentation**: Work done outside cycles isn't tracked
+
+**Recommendation for AI Assistants**: 
+- Watch for patterns like "forge a new X", "forge new Y"
+- Even in casual conversation, these should trigger cycle creation
+- The beauty and challenge of FORGE is that it blends seamlessly into natural dialogue
+
+This meta-observation shows FORGE working as designed - so natural that even the AI assistant didn't notice the command!

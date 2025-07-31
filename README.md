@@ -37,6 +37,18 @@ After running `forge init`, ask Claude to:
 
 The AI handles all the complex detection and configuration!
 
+### Slash Commands (Claude Code)
+
+When using Claude Code, you can use explicit slash commands:
+- `/forge init` - Initialize FORGE
+- `/forge new <feature>` - Start new cycle
+- `/forge status` - Check status
+- `/forge complete` - Complete cycle
+- `/forge learn` - Access learnings
+- `/forge help` - Get help
+
+Both slash commands and natural language work equally well!
+
 ### Team Mode
 For collaborative development:
 ```bash

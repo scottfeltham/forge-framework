@@ -120,6 +120,22 @@ When working on FORGE, remember:
 3. Documentation and agents are where intelligence lives
 4. Every line of code must justify its existence
 
+## Slash Commands
+
+FORGE supports slash commands for explicit action recognition. When you see patterns like:
+- `/forge init`
+- `/forge new <feature>`
+- `/forge status`
+- `/forge complete`
+- `/forge learn [action]`
+- `/forge document`
+- `/forge help`
+
+These are explicit commands that should be executed immediately. See `.claude/commands/forge/` for detailed command definitions.
+
+### Important: Natural Language Recognition
+Even without the slash, phrases like "forge a new installer" or "forge new authentication" should be recognized as FORGE commands and trigger the appropriate cycle creation.
+
 ---
 
 *This file helps AI assistants understand and work effectively with the FORGE framework.*

@@ -56,6 +56,7 @@ class ForgeInstaller {
       // Copy files
       this.copyTemplates();
       this.copyAgents();
+      this.copyClaudeCommands();
       
       // Create local forge script
       this.createForgeScript();
@@ -86,7 +87,10 @@ class ForgeInstaller {
       '.forge/agents',
       '.forge/agents/examples',
       '.forge/agents/templates',
-      '.forge/history'
+      '.forge/history',
+      '.claude',
+      '.claude/commands',
+      '.claude/commands/forge'
     ];
     
     dirs.forEach(dir => {
@@ -117,6 +121,16 @@ class ForgeInstaller {
     
     this.copyDirectory(agentsSource, agentsTarget);
     log.success('Agents installed');
+  }
+
+  copyClaudeCommands() {
+    log.info('Installing Claude commands...');
+    
+    const claudeSource = path.join(this.sourceDir, '.claude');
+    const claudeTarget = path.join(this.targetDir, '.claude');
+    
+    this.copyDirectory(claudeSource, claudeTarget);
+    log.success('Claude commands installed');
   }
 
   copyDirectory(source, target) {
