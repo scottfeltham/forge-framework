@@ -11,6 +11,9 @@ test-release.sh
 !install.js
 !bin/
 
+# Don't exclude slash commands
+!.claude/
+
 # Documentation site (not needed in npm package)
 website/
 docs/
