@@ -9,7 +9,7 @@ permalink: /
 # AI-Driven Development, Radically Simple
 {: .fs-9 }
 
-Just 99 lines of code that unlock unlimited potential through natural dialogue.
+A concise CLI under 200 lines that unlocks unlimited potential through natural dialogue.
 {: .fs-6 .fw-300 }
 
 [Get started now](#getting-started){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
@@ -30,7 +30,7 @@ npm install -g forge-framework@beta
 Built from the ground up for AI interpretation. No complex APIs, just natural conversation.
 
 ### ⚡ Radical Simplicity  
-Under 100 lines of code. All intelligence lives in AI agents, not in the framework.
+A concise, minimal CLI. All intelligence lives in AI agents, not in the framework.
 
 ### 🔄 5-Phase Cycle
 Focus → Orchestrate → Refine → Generate → Evaluate. Structure that enables freedom.

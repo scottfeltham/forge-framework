@@ -2,7 +2,7 @@
 
 > **Beta Release**: v0.4.0-beta - We're gathering feedback! Please report issues and share your experience.
 
-A conversational AI-driven development framework that puts AI at the center of software development. Just 99 lines of code that unlock unlimited potential through natural dialogue.
+A conversational AI-driven development framework that puts AI at the center of software development. A concise CLI under 200 lines that unlocks unlimited potential through natural dialogue.
 
 [![npm version](https://img.shields.io/npm/v/forge-framework.svg)](https://www.npmjs.com/package/forge-framework)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -170,7 +170,7 @@ See [Learning Process](docs/LEARNING_PROCESS.md) and [Memory Integration](docs/M
 
 ## Why This Approach?
 
-- **Under 100 lines** - Minimal code footprint
+- **Minimal & Concise** - Under 200 lines of focused code
 - **No compilation** - Instant changes
 - **AI-native** - Built for LLMs to understand
 - **Language agnostic** - Works with any tech stack

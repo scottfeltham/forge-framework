@@ -7,7 +7,7 @@
 
 ## Executive Summary
 
-FORGE is a radically simplified development framework that guides teams through proven software engineering practices using AI conversation rather than complex tooling. By reducing the entire framework to under 100 lines of code and using markdown for all state management, we enable developers to focus on building rather than configuring.
+FORGE is a radically simplified development framework that guides teams through proven software engineering practices using AI conversation rather than complex tooling. By keeping the CLI concise and minimal while using markdown for all state management, we enable developers to focus on building rather than configuring.
 
 Drawing from Modern Software Engineering principles, the BMAD method's structured approach, and Agent-OS's collaborative AI patterns, FORGE synthesizes these proven concepts into the simplest possible implementation.
 
@@ -43,7 +43,7 @@ Current development frameworks suffer from:
 FORGE reimagines the framework as a conversation between developers and AI, with just enough structure to maintain best practices:
 
 ### Core Components
-1. **Minimal CLI** - 4 commands, <100 lines
+1. **Minimal CLI** - Simple commands, concise implementation
 2. **Markdown State** - Human and AI readable
 3. **Agent Prompts** - Natural language templates
 4. **Cycle Management** - Simple phase progression
@@ -109,7 +109,7 @@ FORGE reimagines the framework as a conversation between developers and AI, with
 - **Daily Active Usage**: 80% of installers
 
 ### Simplicity
-- **Code Size**: <100 lines maintained
+- **Code Size**: Minimal and concise
 - **Dependencies**: ≤3 packages
 - **Documentation**: <10 pages total
 
@@ -128,7 +128,7 @@ FORGE reimagines the framework as a conversation between developers and AI, with
 | Feature | FORGE | Traditional Frameworks |
 |---------|-------|----------------------|
 | Setup Time | 30 seconds | 30+ minutes |
-| Code Size | ~88 lines | 10,000+ lines |
+| Code Size | <200 lines | 10,000+ lines |
 | Learning Curve | 5 minutes | Days/Weeks |
 | AI Integration | Native | Bolt-on |
 | Flexibility | Total | Limited |
@@ -191,7 +191,7 @@ FORGE reimagines the framework as a conversation between developers and AI, with
 ## Marketing Strategy
 
 ### Positioning
-"The 100-line framework that replaces 10,000"
+"The minimal framework that replaces complexity"
 
 ### Key Messages
 1. **Simplicity** - Start building in 30 seconds

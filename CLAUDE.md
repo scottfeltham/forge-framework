@@ -12,7 +12,7 @@ This file provides persistent context for Claude and other AI assistants working
 ## Architecture Patterns
 
 ### Overall Architecture
-- Minimal CLI (88 lines of code)
+- Minimal CLI (under 200 lines of code)
 - Markdown-based state management
 - AI-driven intelligence (no hardcoded logic)
 - Conversational interface
@@ -39,7 +39,7 @@ This file provides persistent context for Claude and other AI assistants working
 - Unix philosophy - do one thing well
 
 ### Code Quality Principles
-- Under 100 lines for main CLI
+- Under 200 lines for main CLI
 - No hardcoded project detection
 - Let AI handle all complexity
 - Markdown for all configuration
@@ -85,7 +85,7 @@ This file provides persistent context for Claude and other AI assistants working
 ## Team Conventions
 
 ### Development Workflow
-1. Keep CLI under 100 lines
+1. Keep CLI minimal and concise
 2. Put intelligence in agents/docs
 3. Test with real AI interactions
 4. Document in markdown
