@@ -61,6 +61,9 @@ class ForgeInstaller {
       // Create local forge script
       this.createForgeScript();
       
+      // Setup Claude settings
+      this.setupClaudeSettings();
+      
       // Initialize if new installation
       if (!isUpdate && !fs.existsSync('forge.yaml')) {
         this.initializeForge();
@@ -221,6 +224,57 @@ version: ${this.getVersion()}
     if (!gitignore.includes('.forge/history')) {
       gitignore += '\n# FORGE history\n.forge/history/\n';
       fs.writeFileSync(gitignorePath, gitignore);
+    }
+  }
+
+  setupClaudeSettings() {
+    log.info('Setting up Claude permissions...');
+    
+    const settingsPath = path.join(this.targetDir, '.claude', 'settings.local.json');
+    
+    let settings = {
+      permissions: {
+        allow: [],
+        deny: []
+      }
+    };
+    
+    // Read existing settings if they exist
+    if (fs.existsSync(settingsPath)) {
+      try {
+        const existingSettings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
+        settings = existingSettings;
+      } catch (error) {
+        log.warn('Could not parse existing settings.local.json, creating new one');
+      }
+    }
+    
+    // Ensure permissions structure exists
+    if (!settings.permissions) {
+      settings.permissions = { allow: [], deny: [] };
+    }
+    if (!settings.permissions.allow) {
+      settings.permissions.allow = [];
+    }
+    
+    // Add FORGE permissions if not already present
+    const forgePermissions = ['Bash(./forge *)', 'Bash(forge *)'];
+    let added = false;
+    
+    forgePermissions.forEach(permission => {
+      if (!settings.permissions.allow.includes(permission)) {
+        settings.permissions.allow.push(permission);
+        added = true;
+      }
+    });
+    
+    // Write settings back
+    fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2));
+    
+    if (added) {
+      log.success('Added FORGE permissions to Claude settings');
+    } else {
+      log.success('FORGE permissions already configured');
     }
   }
 
