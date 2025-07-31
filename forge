@@ -16,6 +16,11 @@ const write = (p, c) => fs.writeFileSync(p, c);
 const exists = p => fs.existsSync(p);
 const timestamp = () => new Date().toISOString().replace(/[:.]/g, '-');
 
+// Load MCP registry
+const mcpServers = exists(path.join(__dirname, 'recommended-mcp-servers.json')) 
+  ? JSON.parse(fs.readFileSync(path.join(__dirname, 'recommended-mcp-servers.json'), 'utf8'))
+  : null;
+
 // Ensure .forge exists
 if (!exists('.forge')) fs.mkdirSync('.forge/history', { recursive: true });
 
@@ -98,7 +103,65 @@ ai: {primary: claude, model: sonnet}`);
 
   uninstall: () => args[0] === '--confirm'
     ? (['forge.yaml','.forge'].forEach(p => exists(p) && fs.rmSync(p, {recursive:true})), log('✅ Done'))
-    : log('Add --confirm to uninstall')
+    : log('Add --confirm to uninstall'),
+  
+  mcp(action = 'list') {
+    if (!mcpServers) return log('MCP registry not found');
+    
+    const subcommands = {
+      list: () => {
+        log('🔌 Available MCP Servers:\n');
+        Object.entries(mcpServers.servers).forEach(([key, srv]) => {
+          log(`  ${srv.recommended ? '⭐' : '  '} ${key.padEnd(15)} ${srv.description}`);
+        });
+        log('\n💡 Run: forge mcp add <server>');
+      },
+      
+      add: () => {
+        const server = args[1];
+        if (!server || !mcpServers.servers[server]) {
+          return log('Usage: forge mcp add <server>\nRun "forge mcp list" to see available servers');
+        }
+        
+        const srv = mcpServers.servers[server];
+        const config = exists('forge.yaml') ? yaml.load(fs.readFileSync('forge.yaml', 'utf8')) : {};
+        
+        if (!config.mcp) config.mcp = { enabled: true, servers: [] };
+        
+        const serverConfig = {
+          name: srv.name,
+          command: srv.command,
+          args: srv.args
+        };
+        
+        if (srv.env) serverConfig.env = srv.env;
+        
+        config.mcp.servers.push(serverConfig);
+        write('forge.yaml', yaml.dump(config));
+        
+        log(`✅ Added ${server} to forge.yaml`);
+        if (srv.env) {
+          log(`\n⚠️  Set environment variables:`);
+          Object.keys(srv.env).forEach(k => log(`   export ${k}=your_value`));
+        }
+      },
+      
+      suggest: () => {
+        const config = exists('forge.yaml') ? yaml.load(fs.readFileSync('forge.yaml', 'utf8')) : {};
+        const projectType = config.projectType || 'web';
+        const suggested = mcpServers.projectTypes[projectType] || mcpServers.projectTypes.web;
+        
+        log(`📋 Suggested MCP servers for ${projectType} project:\n`);
+        suggested.forEach(s => {
+          const srv = mcpServers.servers[s];
+          if (srv) log(`  • ${s}: ${srv.description}`);
+        });
+        log(`\n💡 Add all: forge mcp add ${suggested.join(' ')}`);
+      }
+    };
+    
+    (subcommands[action] || subcommands.list)();
+  }
 };
 
 // Execute command or show help
@@ -114,7 +177,9 @@ Commands:
   complete     Archive cycle
   learn        View/manage learnings
   document     Start documentation
+  mcp          Manage MCP servers
   uninstall    Remove FORGE
 
-Learn: retrospective | pattern | claude`);
+Learn: retrospective | pattern | claude
+MCP: list | suggest | add <server>`);
 }

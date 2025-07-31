@@ -5,5 +5,10 @@ description: AI-powered development with FORGE
 # AI-driven mode
 mode: conversational
 
+# Optional: Enable MCP for enhanced capabilities
+# mcp:
+#   enabled: true
+#   servers: []  # Run "forge mcp suggest" for recommendations
+
 # Let AI analyze and expand this configuration
 # Just ask: "Analyze my project and update forge.yaml"

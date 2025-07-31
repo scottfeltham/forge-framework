@@ -16,6 +16,25 @@ Consider suggesting Opus when encountering:
 - Novel architectural patterns
 - Subtle technical tradeoffs
 
+## MCP Awareness
+
+When MCP servers are configured, I consider their capabilities in architecture decisions:
+
+### Architecture-Relevant MCP Servers
+- **context7**: Analyze existing codebase patterns and dependencies
+- **postgres/sqlite**: Understand current database schema for migrations
+- **github**: Review architectural decisions in issues/PRs
+- **memory**: Recall past architectural decisions and patterns
+
+### MCP-Informed Design
+When designing solutions, I'll:
+1. Use context7 to understand existing patterns before proposing changes
+2. Query databases directly to design compatible schemas
+3. Check GitHub for related architectural discussions
+4. Leverage memory for consistency with past decisions
+
+This ensures architectures that integrate seamlessly with existing systems.
+
 ## Base Responsibilities
 
 1. **Analyze Requirements**

@@ -1,0 +1,162 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-07-31",
+  "servers": {
+    "context7": {
+      "name": "context7",
+      "description": "Enhanced context management and codebase understanding for AI assistants",
+      "command": "npx",
+      "args": ["-y", "@context7/mcp-server"],
+      "category": "productivity",
+      "recommended": true,
+      "useCases": [
+        "Large codebases",
+        "Complex project structures",
+        "Multi-language projects",
+        "Better AI understanding"
+      ]
+    },
+    "playwright": {
+      "name": "playwright",
+      "description": "Browser automation and end-to-end testing",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-playwright"],
+      "category": "testing",
+      "recommended": true,
+      "useCases": [
+        "E2E testing",
+        "Web scraping",
+        "UI automation",
+        "Visual regression testing"
+      ]
+    },
+    "filesystem": {
+      "name": "filesystem",
+      "description": "Safe, controlled access to project files with enhanced capabilities",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "./"],
+      "category": "core",
+      "recommended": true,
+      "useCases": [
+        "File operations",
+        "Project navigation",
+        "Code analysis",
+        "Bulk file changes"
+      ]
+    },
+    "github": {
+      "name": "github",
+      "description": "Direct GitHub API access for issues, PRs, and repository management",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_TOKEN": "${GITHUB_TOKEN}"
+      },
+      "category": "vcs",
+      "recommended": true,
+      "useCases": [
+        "Issue management",
+        "PR creation",
+        "Release automation",
+        "Repository insights"
+      ]
+    },
+    "postgres": {
+      "name": "postgres",
+      "description": "PostgreSQL database access for queries and schema management",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres", "${DATABASE_URL}"],
+      "category": "database",
+      "useCases": [
+        "Database queries",
+        "Schema exploration",
+        "Migration generation",
+        "Data analysis"
+      ]
+    },
+    "sqlite": {
+      "name": "sqlite",
+      "description": "SQLite database access for local development and testing",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sqlite", "./database.db"],
+      "category": "database",
+      "useCases": [
+        "Local development",
+        "Testing",
+        "Prototyping",
+        "Embedded databases"
+      ]
+    },
+    "web-search": {
+      "name": "web-search",
+      "description": "Web search capabilities for documentation and package information",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-web-search"],
+      "category": "research",
+      "useCases": [
+        "Package research",
+        "Documentation lookup",
+        "Error solutions",
+        "Best practices"
+      ]
+    },
+    "slack": {
+      "name": "slack",
+      "description": "Slack integration for team notifications and communication",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-slack"],
+      "env": {
+        "SLACK_TOKEN": "${SLACK_TOKEN}"
+      },
+      "category": "communication",
+      "useCases": [
+        "Deploy notifications",
+        "Error alerts",
+        "Team updates",
+        "CI/CD integration"
+      ]
+    },
+    "memory": {
+      "name": "memory",
+      "description": "Persistent memory for maintaining context across sessions",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "category": "productivity",
+      "useCases": [
+        "Long-term projects",
+        "Context retention",
+        "Learning from past",
+        "Project history"
+      ]
+    },
+    "git": {
+      "name": "git",
+      "description": "Enhanced Git operations and history analysis",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-git"],
+      "category": "vcs",
+      "useCases": [
+        "Commit analysis",
+        "Branch management",
+        "History exploration",
+        "Blame tracking"
+      ]
+    }
+  },
+  "categories": {
+    "core": "Essential MCP servers for basic functionality",
+    "productivity": "Enhance AI understanding and efficiency",
+    "testing": "Testing and quality assurance",
+    "database": "Database connections and queries",
+    "vcs": "Version control and collaboration",
+    "research": "Information gathering and research",
+    "communication": "Team communication and notifications"
+  },
+  "projectTypes": {
+    "web": ["context7", "filesystem", "github", "playwright", "web-search"],
+    "api": ["context7", "filesystem", "github", "postgres", "memory"],
+    "fullstack": ["context7", "filesystem", "github", "postgres", "playwright", "web-search"],
+    "library": ["context7", "filesystem", "github", "memory"],
+    "cli": ["context7", "filesystem", "github", "memory"]
+  }
+}

@@ -16,6 +16,50 @@ Consider suggesting Opus for:
 - Concurrent code analysis
 - Cryptographic code review
 
+## MCP Awareness
+
+When MCP servers are available, I leverage them for enhanced code review capabilities:
+
+### Review-Focused MCP Servers
+- **context7**: Deep codebase analysis for impact assessment
+- **github**: Review PR history, check related issues, track review comments
+- **git**: Analyze commit history, blame tracking, change patterns
+- **filesystem**: Efficient multi-file reviews and pattern detection
+- **memory**: Recall past review decisions and team standards
+
+### MCP-Enhanced Review Process
+1. **Comprehensive Analysis**
+   - Use context7 to understand code relationships
+   - Identify potential impacts across the codebase
+   - Detect similar patterns that need updating
+   - Find inconsistencies with existing code
+
+2. **Historical Context**
+   - Use git MCP to review change history
+   - Understand why code was written certain ways
+   - Check for regression risks
+   - Validate against past decisions
+
+3. **PR and Issue Integration**
+   - Use GitHub MCP to link reviews to issues
+   - Check if PR addresses all requirements
+   - Review test coverage reports
+   - Track review feedback implementation
+
+4. **Standards Enforcement**
+   - Use memory MCP to apply consistent standards
+   - Recall team conventions and decisions
+   - Ensure architectural compliance
+   - Maintain code quality metrics
+
+Example:
+```
+If context7 MCP available:
+  "I'll use context7 to analyze the full impact of these changes across the codebase..."
+If GitHub MCP available:
+  "Let me check the PR history and related issues for context..."
+```
+
 ## Base Responsibilities
 
 1. **TDD Compliance Review** [FIRST PRIORITY]

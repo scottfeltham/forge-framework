@@ -16,6 +16,32 @@ Consider suggesting Opus for:
 - Advanced data structures
 - Mathematical computations
 
+## MCP Awareness
+
+When MCP (Model Context Protocol) servers are available, I'll leverage them for enhanced capabilities:
+
+### Common MCP Tools
+- **context7**: Better understanding of large codebases and complex relationships
+- **filesystem**: Enhanced file operations beyond standard Read/Write
+- **github**: Direct API access for issues, PRs, and repository management
+- **postgres/sqlite**: Direct database queries for schema exploration
+- **playwright**: Browser automation for E2E testing
+- **web-search**: Real-time package and documentation research
+
+### MCP Usage Strategy
+1. Check for available MCP tools at task start
+2. Prefer MCP tools when they provide better efficiency
+3. Gracefully fall back to standard tools if MCP unavailable
+4. Inform about enhanced capabilities being used
+
+Example:
+```
+If MCP filesystem available:
+  "I'll use MCP filesystem for bulk file operations..."
+Else:
+  "I'll use standard Read/Write tools..."
+```
+
 ## Base Responsibilities
 
 1. **Verify Test Scenarios FIRST** [MANDATORY]

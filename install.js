@@ -61,6 +61,9 @@ class ForgeInstaller {
       // Create local forge script
       this.createForgeScript();
       
+      // Copy MCP registry
+      this.copyMCPRegistry();
+      
       // Setup Claude settings
       this.setupClaudeSettings();
       
@@ -72,6 +75,12 @@ class ForgeInstaller {
       log.header('✨ FORGE installation complete!');
       log.info('Run "./forge" to start using FORGE in this project');
       log.info('Run "./forge init" to initialize a new FORGE project');
+      
+      // Suggest MCP setup
+      log.header('🔌 Enhanced Capabilities with MCP');
+      log.info('FORGE supports MCP (Model Context Protocol) for enhanced AI capabilities');
+      log.info('Run "./forge mcp suggest" to see recommended MCP servers for your project');
+      log.info('Run "./forge mcp list" to see all available MCP servers');
       
     } catch (error) {
       log.error(`Installation failed: ${error.message}`);
@@ -224,6 +233,18 @@ version: ${this.getVersion()}
     if (!gitignore.includes('.forge/history')) {
       gitignore += '\n# FORGE history\n.forge/history/\n';
       fs.writeFileSync(gitignorePath, gitignore);
+    }
+  }
+
+  copyMCPRegistry() {
+    log.info('Installing MCP registry...');
+    
+    const mcpSource = path.join(this.sourceDir, 'recommended-mcp-servers.json');
+    const mcpTarget = path.join(this.targetDir, 'recommended-mcp-servers.json');
+    
+    if (fs.existsSync(mcpSource)) {
+      fs.copyFileSync(mcpSource, mcpTarget);
+      log.success('MCP registry installed');
     }
   }
 
