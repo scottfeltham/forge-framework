@@ -7,6 +7,10 @@ node_modules/
 *.backup
 test-release.sh
 
+# Don't exclude the installer
+!install.js
+!bin/
+
 # Documentation site (not needed in npm package)
 website/
 docs/

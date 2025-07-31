@@ -1,0 +1,38 @@
+#!/usr/bin/env node
+
+/**
+ * FORGE Framework npx wrapper
+ * Allows: npx forge-framework install
+ */
+
+const path = require('path');
+const { spawn } = require('child_process');
+
+const command = process.argv[2];
+
+if (command === 'install') {
+  // Run the installer
+  const installer = spawn('node', [path.join(__dirname, '..', 'install.js')], {
+    stdio: 'inherit'
+  });
+  
+  installer.on('exit', (code) => {
+    process.exit(code);
+  });
+} else {
+  console.log(`
+🔨 FORGE Framework
+
+Usage:
+  npx forge-framework install    Install FORGE in current project
+  
+After installation:
+  ./forge init                   Initialize FORGE
+  ./forge new <feature>          Start new feature cycle
+  ./forge status                 Show current status
+  ./forge learn                  View learnings
+  
+For more information:
+  https://github.com/scottfeltham/forge-framework
+`);
+}

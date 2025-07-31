@@ -10,15 +10,23 @@ A conversational AI-driven development framework that puts AI at the center of s
 
 ## Quick Start
 
+### Option 1: Local Installation (Recommended)
 ```bash
-# Install the beta
+# Install FORGE directly in your project
+npx forge-framework install
+
+# Use the local forge command
+./forge init
+./forge new "user authentication"
+```
+
+### Option 2: Global Installation
+```bash
+# Install globally
 npm install -g forge-framework@beta
 
-# Initialize in any project
-cd your-project
+# Use from anywhere
 forge init
-
-# Start building with AI
 forge new "user authentication"
 ```
 
@@ -74,12 +82,23 @@ Claude: I'll guide us through FORGE. Starting Focus phase...
 Based on the requirements, here's my architectural analysis...
 ```
 
+## Why Local Installation?
+
+With local installation (`npx forge-framework install`):
+- **Visible Templates & Agents** - Customize them for your project
+- **Version Control** - Commit your customized agents with your code
+- **No Global Dependencies** - Works even without npm global installs
+- **Project-Specific** - Each project can have its own FORGE setup
+
 ## File Structure
 
 ```
 your-project/
-├── forge.yaml          # Simple configuration
-├── .forge/            # Hidden state folder
+├── forge              # Local FORGE command
+├── forge.yaml         # Simple configuration
+├── .forge/            # FORGE directory
+│   ├── templates/     # Customizable templates
+│   ├── agents/        # Your AI agents
 │   ├── current.md     # Active cycle
 │   └── history/       # Completed cycles
 ```
