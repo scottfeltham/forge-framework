@@ -5,6 +5,23 @@ All notable changes to FORGE Framework will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0-beta] - 2025-07-31
+
+### Added
+- **Claude Slash Commands** - Explicit commands like `/forge new` for clear intent
+- **Command Namespace Structure** - Organized under `.claude/commands/forge/`
+- **Dual Mode Support** - Both slash commands and natural language work seamlessly
+- **Local Installer** - Installs FORGE to project directory instead of node_modules
+- **Slash Command Documentation** - Comprehensive guides and command definitions
+
+### Fixed
+- **Archive Naming Convention** - All completed cycles now use `cycle-` prefix
+- **Natural Language Recognition** - Better detection of FORGE commands in conversation
+
+### Changed
+- **Installer Enhancement** - Now copies `.claude` directory with slash commands
+- **Documentation Updates** - Added slash command sections to all relevant docs
+
 ## [0.3.1-beta] - 2025-07-30
 
 ### Fixed
