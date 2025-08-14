@@ -56,6 +56,7 @@ temp/
 dist/
 build/
 coverage/
+*.tgz
 
 # Package lock files (users should generate their own)
 package-lock.json

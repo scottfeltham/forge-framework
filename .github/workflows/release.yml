@@ -123,14 +123,23 @@ jobs:
           # Create package
           npm pack
           
-          # Rename for easier identification
-          mv forge-framework-*.tgz forge-framework-${{ needs.validate.outputs.version }}.tgz
+          # Get the actual version from package.json
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          
+          # Ensure we have the right file
+          if [ -f "forge-framework-${PACKAGE_VERSION}.tgz" ]; then
+            echo "✅ Package created: forge-framework-${PACKAGE_VERSION}.tgz"
+          else
+            echo "❌ Expected package file not found"
+            ls -la *.tgz
+            exit 1
+          fi
 
       - name: Upload package artifact
         uses: actions/upload-artifact@v4
         with:
           name: npm-package
-          path: forge-framework-${{ needs.validate.outputs.version }}.tgz
+          path: "forge-framework-*.tgz"
 
   changelog:
     name: Generate Changelog
