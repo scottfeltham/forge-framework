@@ -1,6 +1,5 @@
 # 🔨 FORGE Framework
 
-> **Beta Release**: v0.4.0-beta - We're gathering feedback! Please report issues and share your experience.
 
 A conversational AI-driven development framework that puts AI at the center of software development. A concise CLI under 200 lines that unlocks unlimited potential through natural dialogue.
 
@@ -22,13 +21,15 @@ npx forge-framework install
 
 ### Option 2: Global Installation
 ```bash
-# Install globally
-npm install -g forge-framework@beta
+# Install globally (automatically configures Claude permissions)
+npm install -g forge-framework
 
 # Use from anywhere
 forge init
 forge new "user authentication"
 ```
+
+> **Auto-Configuration**: Global installation automatically sets up Claude Code permissions and specialized subagents for enhanced development capabilities.
 
 After running `forge init`, ask Claude to:
 - "Analyze my project and update forge.yaml"
@@ -49,6 +50,27 @@ When using Claude Code, you can use explicit slash commands:
 
 Both slash commands and natural language work equally well!
 
+## Claude Code Integration
+
+FORGE automatically configures specialized Claude Code subagents during installation:
+
+### Available Subagents
+- **forge-architect** - System architecture design and planning
+- **forge-developer** - Code implementation and feature development  
+- **forge-tester** - Testing strategies and quality assurance
+- **forge-devops** - Infrastructure and deployment automation
+- **forge-reviewer** - Code review and quality assessment
+- **forge-analyzer** - Codebase analysis and insights
+
+### Usage
+Claude Code automatically delegates tasks to appropriate subagents based on context, or you can explicitly request:
+```
+"Use the forge-architect to design the authentication system"
+"Have the forge-tester create test scenarios for the payment flow"
+```
+
+The subagents operate in separate contexts, preventing context pollution and enabling specialized expertise.
+
 ### Team Mode
 For collaborative development:
 ```bash
@@ -68,12 +90,28 @@ forge complete payment-system.md
 
 ## How It Works
 
-FORGE guides development through 5 phases:
-1. **Focus** - Understand and architect
+FORGE guides development through 5 validated phases:
+1. **Focus** - Understand and architect (with mandatory test scenarios)
 2. **Orchestrate** - Plan and organize  
 3. **Refine** - Build and test
 4. **Generate** - Deploy and deliver
 5. **Evaluate** - Measure and improve
+
+### Phase Validation System
+
+FORGE now enforces proper workflow progression:
+- **Mandatory Tasks**: Critical items must be completed before phase transitions
+- **Visual Progress**: See completion status with progress bars
+- **Smart Validation**: Can't complete cycles with unfinished phases
+- **Override Options**: Use `--force` flags when needed
+
+Example workflow:
+```bash
+forge status              # See visual progress bars
+forge phase status        # Detailed view with mandatory items
+forge phase next          # Move to next phase (validates completion)
+forge complete            # Only works when all phases are done
+```
 
 ## AI-First Design
 
@@ -117,12 +155,23 @@ your-project/
 
 ## Commands
 
+### Core Commands
 - `forge init` - Initialize FORGE in current directory
 - `forge new <feature>` - Start a new development cycle
-- `forge status` - Show current cycle progress
-- `forge complete` - Archive completed cycle
+- `forge status` - Show current cycle progress (with visual progress bars)
+- `forge complete` - Archive completed cycle (validates phase completion)
 - `forge learn` - View and manage project learnings
 - `forge document` - AI-powered documentation management
+
+### Phase Management (NEW)
+- `forge phase status` - Detailed phase progress with mandatory items
+- `forge phase next` - Move to next phase (with validation)
+- `forge phase complete` - Mark current phase as complete
+
+### Command Options
+- `forge status --detailed` - Show full cycle content
+- `forge complete --force` - Skip phase validation
+- `forge phase next --force` - Skip mandatory item validation
 
 ## Configuration
 
@@ -258,9 +307,9 @@ See [CONTRIBUTING.md](https://github.com/scottfeltham/forge-framework/blob/main/
 
 FORGE Framework was created by Scott Feltham, inspired by Modern Software Engineering principles, the BMAD Method, and Agent-OS architecture. See [Credits](docs/CREDITS.md) for detailed acknowledgments.
 
-## Beta Feedback
+## Feedback
 
-🚧 **This is a beta release!** We're actively seeking feedback to improve FORGE.
+We're actively seeking feedback to improve FORGE.
 
 - **Report Issues**: [GitHub Issues](https://github.com/scottfeltham/forge-framework/issues)
 - **Join Discussions**: [GitHub Discussions](https://github.com/scottfeltham/forge-framework/discussions)
@@ -268,7 +317,7 @@ FORGE Framework was created by Scott Feltham, inspired by Modern Software Engine
 
 ## Roadmap
 
-### v0.1.0-beta (Current)
+### v0.6.0 (Current)
 - ✅ Core 5-phase cycle
 - ✅ AI agent system
 - ✅ TDD enforcement

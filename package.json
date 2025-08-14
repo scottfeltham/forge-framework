@@ -17,7 +17,8 @@
   },
   "main": "forge",
   "scripts": {
-    "test": "echo \"No tests needed - AI handles validation\""
+    "test": "echo \"No tests needed - AI handles validation\"",
+    "postinstall": "node install.js"
   },
   "keywords": [
     "ai",

@@ -1,0 +1,63 @@
+# FORGE Framework Configuration with MCP
+project: {{PROJECT_NAME}}
+description: AI-powered development with enhanced MCP capabilities
+mode: conversational
+
+# AI Configuration
+ai:
+  primary: claude
+  model: sonnet
+
+# MCP Configuration - Enhanced AI Capabilities
+mcp:
+  enabled: true
+  
+  servers:
+    # Essential: Enhanced context understanding
+    - name: context7
+      command: "npx"
+      args: ["-y", "@context7/mcp-server"]
+      # Provides better codebase understanding for AI
+    
+    # Essential: File system access
+    - name: filesystem
+      command: "npx"
+      args: ["-y", "@modelcontextprotocol/server-filesystem", "./"]
+      # Safe, controlled access to project files
+    
+    # Testing: Browser automation
+    - name: playwright
+      command: "npx"
+      args: ["-y", "@modelcontextprotocol/server-playwright"]
+      # E2E testing and browser automation
+    
+    # Version Control: GitHub integration
+    - name: github
+      command: "npx"
+      args: ["-y", "@modelcontextprotocol/server-github"]
+      env:
+        GITHUB_TOKEN: ${GITHUB_TOKEN}
+      # Direct GitHub API access
+    
+    # Optional: Add database servers as needed
+    # - name: postgres
+    #   command: "npx"
+    #   args: ["-y", "@modelcontextprotocol/server-postgres", "${DATABASE_URL}"]
+    
+    # Optional: Web search for documentation
+    # - name: web-search
+    #   command: "npx"
+    #   args: ["-y", "@modelcontextprotocol/server-web-search"]
+  
+  # Tool preferences (optional)
+  preferences:
+    file_access: mcp      # Use MCP for file operations
+    testing: mcp          # Use playwright for browser tests
+    vcs: mcp             # Use GitHub MCP for repo operations
+    context: mcp         # Use context7 for understanding
+
+# Project Type (helps with MCP suggestions)
+projectType: {{PROJECT_TYPE}} # web, api, fullstack, library, cli
+
+# Let AI analyze and enhance this configuration
+# Ask: "Analyze my project and suggest additional MCP servers"

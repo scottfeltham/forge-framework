@@ -20,7 +20,8 @@ A concise CLI under 200 lines that unlocks unlimited potential through natural d
 ## Getting Started
 
 ```bash
-npm install -g forge-framework@beta
+# Automatically configures Claude Code subagents
+npm install -g forge-framework
 ```
 {: .fs-5 }
 
@@ -35,8 +36,8 @@ A concise, minimal CLI. All intelligence lives in AI agents, not in the framewor
 ### 🔄 5-Phase Cycle
 Focus → Orchestrate → Refine → Generate → Evaluate. Structure that enables freedom.
 
-### 🤖 Specialized Agents
-Architect, Developer, Tester, DevOps, Reviewer. Each expert in their domain.
+### 🤖 Claude Code Subagents
+Auto-configured specialists: Architect, Developer, Tester, DevOps, Reviewer, Analyzer. Each with isolated context and domain expertise.
 
 ### 📝 Markdown Everything
 All state, config, and docs in human-readable markdown. Transparency through simplicity.
@@ -47,14 +48,14 @@ AI detects your project and configures itself. No hardcoded framework detection.
 ## Quick Example
 
 ```bash
-# Install FORGE
-npm install -g forge-framework@beta
+# Install FORGE (configures Claude Code subagents automatically)
+npm install -g forge-framework
 
 # Initialize in your project
 cd your-project
 forge init
 
-# Start building with AI
+# Start building with specialized AI agents
 forge new "user authentication"
 ```
 
@@ -62,7 +63,7 @@ Then have a conversation with your AI assistant:
 
 ```
 You: Let's implement user authentication
-Claude: I'll guide us through FORGE. Starting Focus phase...
+Claude: I'll use the forge-architect to design the authentication system...
 ```
 
 ## The FORGE Philosophy

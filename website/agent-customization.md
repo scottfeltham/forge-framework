@@ -18,16 +18,24 @@ nav_order: 1
 
 ## Overview
 
-FORGE provides 5 base agents as templates that can be specialized for your project's specific needs. This guide explains how to create and use specialized agents.
+FORGE automatically configures 6 Claude Code subagents during installation, and provides documentation templates that can be specialized for your project's specific needs. This guide explains both systems.
 
-## Understanding Base Agents
+## Claude Code Subagents (Automatic)
 
-Each base agent serves as a foundation:
+FORGE installs these functional subagents in `.claude/agents/`:
 
-1. **Architect Agent** - System design and planning
-2. **Developer Agent** - Code implementation
-3. **Tester Agent** - Quality assurance
-4. **DevOps Agent** - Infrastructure and deployment
+1. **forge-architect** - System design and planning
+2. **forge-developer** - Code implementation  
+3. **forge-tester** - Quality assurance
+4. **forge-devops** - Infrastructure and deployment
+5. **forge-reviewer** - Code review and quality assessment
+6. **forge-analyzer** - Codebase analysis and insights
+
+These operate in isolated contexts and are automatically available after installation.
+
+## Documentation Agents (Templates)
+
+FORGE also provides documentation agents in `.forge/agents/` as reference templates:
 5. **Reviewer Agent** - Code and design review
 
 These are intentionally generic to serve as starting points for specialization.

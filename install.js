@@ -38,6 +38,13 @@ class ForgeInstaller {
     log.header('🔨 FORGE Framework Installer');
     
     try {
+      // Check if this is a global installation
+      const isGlobalInstall = this.isGlobalInstallation();
+      
+      if (isGlobalInstall) {
+        return this.runGlobalSetup();
+      }
+      
       // Check if .forge exists
       const isUpdate = fs.existsSync(this.forgeDir);
       
@@ -88,6 +95,61 @@ class ForgeInstaller {
     }
   }
 
+  isGlobalInstallation() {
+    // Check if we're running from a global npm installation
+    // This happens when someone runs `npm install -g forge-framework`
+    const isGlobal = this.sourceDir.includes('node_modules') && 
+                    (this.sourceDir.includes('lib/node_modules') || 
+                     this.sourceDir.includes('global/lib/node_modules'));
+    return isGlobal;
+  }
+
+  async runGlobalSetup() {
+    log.info('Detected global installation of FORGE Framework');
+    log.info('Setting up global Claude configuration...');
+    
+    // Setup global Claude settings when installed globally
+    const hasGlobalClaude = this.checkGlobalClaude();
+    
+    if (hasGlobalClaude) {
+      this.setupGlobalClaudeSettings();
+      this.setupGlobalClaudeAgents();
+      log.success('✨ Global FORGE setup complete!');
+      log.info('FORGE is now available globally as "forge"');
+      log.info('Claude subagents are now available globally');
+      log.info('Run "npx forge-framework install" in any project to install locally');
+    } else {
+      log.warn('Claude CLI not found globally');
+      log.info('Install Claude CLI to enable global configuration setup');
+      log.success('✨ Global FORGE installation complete!');
+      log.info('FORGE is now available globally as "forge"');
+    }
+    
+    return;
+  }
+
+  setupGlobalClaudeAgents() {
+    try {
+      const os = require('os');
+      const globalClaudeAgentsDir = path.join(os.homedir(), '.claude', 'agents');
+      const claudeAgentsSource = path.join(this.sourceDir, 'claude-agents');
+      
+      // Create global .claude/agents directory if it doesn't exist
+      if (!fs.existsSync(globalClaudeAgentsDir)) {
+        fs.mkdirSync(globalClaudeAgentsDir, { recursive: true });
+      }
+      
+      // Copy Claude-compatible agents globally
+      if (fs.existsSync(claudeAgentsSource)) {
+        this.copyDirectory(claudeAgentsSource, globalClaudeAgentsDir);
+        log.success('Global Claude subagents configured');
+      }
+      
+    } catch (error) {
+      log.warn(`Could not setup global Claude agents: ${error.message}`);
+    }
+  }
+
   createDirectories() {
     log.info('Creating directory structure...');
     
@@ -102,7 +164,8 @@ class ForgeInstaller {
       '.forge/history',
       '.claude',
       '.claude/commands',
-      '.claude/commands/forge'
+      '.claude/commands/forge',
+      '.claude/agents'
     ];
     
     dirs.forEach(dir => {
@@ -128,10 +191,24 @@ class ForgeInstaller {
   copyAgents() {
     log.info('Installing agents...');
     
+    // Copy FORGE documentation agents to .forge/agents
     const agentsSource = path.join(this.sourceDir, 'agents');
     const agentsTarget = path.join(this.forgeDir, 'agents');
     
     this.copyDirectory(agentsSource, agentsTarget);
+    
+    // Copy Claude-compatible agents to .claude/agents
+    const claudeAgentsSource = path.join(this.sourceDir, 'claude-agents');
+    const claudeAgentsTarget = path.join(this.targetDir, '.claude', 'agents');
+    
+    if (fs.existsSync(claudeAgentsSource)) {
+      if (!fs.existsSync(claudeAgentsTarget)) {
+        fs.mkdirSync(claudeAgentsTarget, { recursive: true });
+      }
+      this.copyDirectory(claudeAgentsSource, claudeAgentsTarget);
+      log.success('Claude subagents configured');
+    }
+    
     log.success('Agents installed');
   }
 
@@ -251,6 +328,28 @@ version: ${this.getVersion()}
   setupClaudeSettings() {
     log.info('Setting up Claude permissions...');
     
+    // Check if Claude CLI is installed globally
+    const hasGlobalClaude = this.checkGlobalClaude();
+    
+    // Setup local Claude settings
+    this.setupLocalClaudeSettings();
+    
+    // Setup global Claude settings if Claude CLI is installed
+    if (hasGlobalClaude) {
+      this.setupGlobalClaudeSettings();
+    }
+  }
+
+  checkGlobalClaude() {
+    try {
+      execSync('which claude', { stdio: 'pipe' });
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  setupLocalClaudeSettings() {
     const settingsPath = path.join(this.targetDir, '.claude', 'settings.local.json');
     
     let settings = {
@@ -293,9 +392,70 @@ version: ${this.getVersion()}
     fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2));
     
     if (added) {
-      log.success('Added FORGE permissions to Claude settings');
+      log.success('Added FORGE permissions to local Claude settings');
     } else {
-      log.success('FORGE permissions already configured');
+      log.success('Local FORGE permissions already configured');
+    }
+  }
+
+  setupGlobalClaudeSettings() {
+    try {
+      const os = require('os');
+      const globalClaudeDir = path.join(os.homedir(), '.claude');
+      const globalSettingsPath = path.join(globalClaudeDir, 'settings.json');
+      
+      // Create .claude directory if it doesn't exist
+      if (!fs.existsSync(globalClaudeDir)) {
+        fs.mkdirSync(globalClaudeDir, { recursive: true });
+      }
+      
+      let globalSettings = {
+        permissions: {
+          allow: [],
+          deny: []
+        }
+      };
+      
+      // Read existing global settings if they exist
+      if (fs.existsSync(globalSettingsPath)) {
+        try {
+          const existingSettings = JSON.parse(fs.readFileSync(globalSettingsPath, 'utf8'));
+          globalSettings = existingSettings;
+        } catch (error) {
+          log.warn('Could not parse existing global settings.json, creating new one');
+        }
+      }
+      
+      // Ensure permissions structure exists
+      if (!globalSettings.permissions) {
+        globalSettings.permissions = { allow: [], deny: [] };
+      }
+      if (!globalSettings.permissions.allow) {
+        globalSettings.permissions.allow = [];
+      }
+      
+      // Add global FORGE permissions if not already present
+      const globalForgePermissions = ['Bash(forge *)', 'Bash(./forge *)'];
+      let globalAdded = false;
+      
+      globalForgePermissions.forEach(permission => {
+        if (!globalSettings.permissions.allow.includes(permission)) {
+          globalSettings.permissions.allow.push(permission);
+          globalAdded = true;
+        }
+      });
+      
+      // Write global settings back
+      fs.writeFileSync(globalSettingsPath, JSON.stringify(globalSettings, null, 2));
+      
+      if (globalAdded) {
+        log.success('Added FORGE permissions to global Claude settings');
+      } else {
+        log.success('Global FORGE permissions already configured');
+      }
+      
+    } catch (error) {
+      log.warn(`Could not setup global Claude settings: ${error.message}`);
     }
   }
 

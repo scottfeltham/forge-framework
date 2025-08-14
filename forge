@@ -11,10 +11,90 @@ const [,, cmd, ...args] = process.argv;
 
 // Helpers
 const log = console.log;
-const tpl = n => fs.readFileSync(path.join(__dirname, 'templates', n), 'utf8');
+const tpl = n => fs.readFileSync(path.join(process.cwd(), '.forge/templates', n), 'utf8');
 const write = (p, c) => fs.writeFileSync(p, c);
 const exists = p => fs.existsSync(p);
 const timestamp = () => new Date().toISOString().replace(/[:.]/g, '-');
+
+// Phase validation helpers
+const parsePhaseProgress = (content) => {
+  const phases = {
+    'Focus': { name: 'Focus', icon: '🎯', items: [], complete: false },
+    'Orchestrate': { name: 'Orchestrate', icon: '📝', items: [], complete: false },
+    'Refine': { name: 'Refine', icon: '🔨', items: [], complete: false },
+    'Generate': { name: 'Generate', icon: '🚀', items: [], complete: false },
+    'Evaluate': { name: 'Evaluate', icon: '📊', items: [], complete: false }
+  };
+  
+  const lines = content.split('\n');
+  let currentPhase = null;
+  
+  lines.forEach(line => {
+    // Detect phase headers
+    if (line.includes('Phase 1: Focus')) currentPhase = 'Focus';
+    else if (line.includes('Phase 2: Orchestrate')) currentPhase = 'Orchestrate';
+    else if (line.includes('Phase 3: Refine')) currentPhase = 'Refine';
+    else if (line.includes('Phase 4: Generate')) currentPhase = 'Generate';
+    else if (line.includes('Phase 5: Evaluate')) currentPhase = 'Evaluate';
+    
+    // Parse checkboxes
+    if (currentPhase && line.trim().startsWith('- [')) {
+      const isChecked = line.includes('[x]') || line.includes('[X]');
+      const isMandatory = line.toLowerCase().includes('mandatory');
+      const text = line.replace(/- \[[x ]\]/i, '').trim();
+      
+      if (text && !text.includes('Consider parallel')) {
+        phases[currentPhase].items.push({ 
+          text: text.substring(0, 50), 
+          checked: isChecked,
+          mandatory: isMandatory
+        });
+      }
+    }
+  });
+  
+  // Calculate completion
+  Object.values(phases).forEach(phase => {
+    if (phase.items.length > 0) {
+      const mandatoryItems = phase.items.filter(i => i.mandatory);
+      const completedMandatory = mandatoryItems.filter(i => i.checked);
+      const completedAll = phase.items.filter(i => i.checked);
+      
+      phase.complete = mandatoryItems.length === 0 
+        ? completedAll.length === phase.items.length
+        : completedMandatory.length === mandatoryItems.length;
+      
+      phase.progress = phase.items.length > 0 
+        ? Math.round((completedAll.length / phase.items.length) * 100)
+        : 0;
+    }
+  });
+  
+  return phases;
+};
+
+const validateCycleCompletion = (content) => {
+  const phases = parsePhaseProgress(content);
+  const incompletePhases = [];
+  const incompleteTasks = [];
+  
+  Object.entries(phases).forEach(([name, phase]) => {
+    if (phase.items.length > 0 && !phase.complete) {
+      incompletePhases.push(name);
+      const incomplete = phase.items.filter(i => !i.checked && i.mandatory);
+      incomplete.forEach(task => {
+        incompleteTasks.push(`  ${phase.icon} ${name}: ${task.text}`);
+      });
+    }
+  });
+  
+  return {
+    isComplete: incompletePhases.length === 0,
+    incompletePhases,
+    incompleteTasks,
+    phases
+  };
+};
 
 // Load MCP registry
 const mcpServers = exists(path.join(__dirname, 'recommended-mcp-servers.json')) 
@@ -57,29 +137,117 @@ ai: {primary: claude, model: sonnet}`);
   },
 
   status() {
+    // Check for --detailed flag
+    const detailed = args.includes('--detailed');
+    
     const current = '.forge/current.md';
     if (exists(current)) {
-      log(fs.readFileSync(current, 'utf8'));
+      const content = fs.readFileSync(current, 'utf8');
+      
+      if (detailed) {
+        // Show full content
+        log(content);
+      } else {
+        // Show progress summary
+        const lines = content.split('\n');
+        const featureLine = lines.find(l => l.startsWith('# Feature:'));
+        const feature = featureLine ? featureLine.replace('# Feature:', '').trim() : 'Unknown';
+        
+        const validation = validateCycleCompletion(content);
+        
+        log(`\n📋 Current Cycle: ${feature}`);
+        log('─'.repeat(50));
+        
+        // Show phase progress
+        Object.entries(validation.phases).forEach(([name, phase]) => {
+          if (phase.items.length > 0) {
+            const progressBar = '█'.repeat(Math.floor(phase.progress / 10)) + 
+                               '░'.repeat(10 - Math.floor(phase.progress / 10));
+            const status = phase.complete ? '✅' : phase.progress > 0 ? '🔄' : '⏳';
+            
+            log(`${status} ${phase.icon} ${name.padEnd(12)} [${progressBar}] ${phase.progress}%`);
+          }
+        });
+        
+        // Show current status
+        const currentPhase = Object.entries(validation.phases)
+          .find(([_, p]) => p.items.length > 0 && !p.complete);
+        
+        if (currentPhase) {
+          log('\n📍 Current Phase: ' + currentPhase[0]);
+          const incomplete = currentPhase[1].items.filter(i => !i.checked);
+          if (incomplete.length > 0 && incomplete.length <= 3) {
+            log('   Next tasks:');
+            incomplete.slice(0, 3).forEach(task => {
+              log(`   • ${task.text}`);
+            });
+          }
+        } else if (validation.isComplete) {
+          log('\n✨ All phases complete! Ready to archive with "forge complete"');
+        }
+        
+        log('\n💡 Use "forge status --detailed" for full cycle view');
+      }
     } else if (exists('.forge/current')) {
       const cycles = fs.readdirSync('.forge/current').filter(f => f.endsWith('.md'));
-      log(cycles.length ? `📊 Active: ${cycles.join(', ')}` : 'No active cycles');
+      if (cycles.length) {
+        log('📊 Active cycles (team mode):');
+        cycles.forEach(c => log(`  • ${c.replace('.md', '')}`));
+        log('\nUse "forge status <cycle-name>.md" for details');
+      } else {
+        log('No active cycles');
+      }
     } else {
       log('No active cycle. Run: forge new <feature>');
     }
   },
 
   complete(file) {
-    const archive = p => fs.renameSync(p, 
-      `.forge/history/cycle-${timestamp()}.md`);
-    
+    // Determine which file to complete
+    let cyclePath;
     if (file && exists(`.forge/current/${file}`)) {
-      archive(`.forge/current/${file}`);
+      cyclePath = `.forge/current/${file}`;
     } else if (exists('.forge/current.md')) {
-      archive('.forge/current.md');
+      cyclePath = '.forge/current.md';
     } else {
       return log('No cycle to complete');
     }
-    log('✅ Completed');
+    
+    // Check for --force flag
+    const forceComplete = args.includes('--force');
+    
+    if (!forceComplete) {
+      // Validate cycle completion
+      const content = fs.readFileSync(cyclePath, 'utf8');
+      const validation = validateCycleCompletion(content);
+      
+      if (!validation.isComplete) {
+        log('⚠️  Cycle has incomplete phases!\n');
+        log('Incomplete phases:', validation.incompletePhases.join(', '));
+        
+        if (validation.incompleteTasks.length > 0) {
+          log('\nMandatory tasks not completed:');
+          validation.incompleteTasks.forEach(task => log(task));
+        }
+        
+        log('\n💡 Options:');
+        log('  1. Complete the remaining tasks');
+        log('  2. Use "forge complete --force" to archive anyway');
+        log('  3. Use "forge status" to see detailed progress');
+        return;
+      }
+    }
+    
+    // Archive the cycle
+    const archivePath = `.forge/history/cycle-${timestamp()}.md`;
+    fs.renameSync(cyclePath, archivePath);
+    
+    if (forceComplete) {
+      log('⚠️  Cycle archived (forced completion)');
+    } else {
+      log('✅ Cycle completed successfully!');
+    }
+    log(`📁 Archived to: ${archivePath}`);
   },
 
   learn(action) {
@@ -105,6 +273,152 @@ ai: {primary: claude, model: sonnet}`);
     ? (['forge.yaml','.forge'].forEach(p => exists(p) && fs.rmSync(p, {recursive:true})), log('✅ Done'))
     : log('Add --confirm to uninstall'),
   
+  phase(action) {
+    const current = '.forge/current.md';
+    if (!exists(current)) {
+      return log('No active cycle. Run: forge new <feature>');
+    }
+    
+    const content = fs.readFileSync(current, 'utf8');
+    const validation = validateCycleCompletion(content);
+    
+    const subcommands = {
+      status: () => {
+        log('\n📊 Phase Progress Overview');
+        log('─'.repeat(50));
+        
+        Object.entries(validation.phases).forEach(([name, phase]) => {
+          if (phase.items.length > 0) {
+            const progressBar = '█'.repeat(Math.floor(phase.progress / 10)) + 
+                               '░'.repeat(10 - Math.floor(phase.progress / 10));
+            const status = phase.complete ? '✅' : phase.progress > 0 ? '🔄' : '⏳';
+            
+            log(`${status} ${phase.icon} ${name.padEnd(12)} [${progressBar}] ${phase.progress}%`);
+            
+            // Show incomplete mandatory items
+            const mandatoryIncomplete = phase.items.filter(i => i.mandatory && !i.checked);
+            if (mandatoryIncomplete.length > 0) {
+              mandatoryIncomplete.forEach(item => {
+                log(`     ⚠️  ${item.text}`);
+              });
+            }
+          }
+        });
+      },
+      
+      next: () => {
+        // Find current phase
+        const phaseOrder = ['Focus', 'Orchestrate', 'Refine', 'Generate', 'Evaluate'];
+        let currentPhaseIndex = -1;
+        
+        for (let i = 0; i < phaseOrder.length; i++) {
+          const phase = validation.phases[phaseOrder[i]];
+          if (phase.items.length > 0 && !phase.complete) {
+            currentPhaseIndex = i;
+            break;
+          }
+        }
+        
+        if (currentPhaseIndex === -1) {
+          return log('✅ All phases complete! Use "forge complete" to archive.');
+        }
+        
+        const currentPhaseName = phaseOrder[currentPhaseIndex];
+        const currentPhase = validation.phases[currentPhaseName];
+        
+        // Check if current phase has mandatory incomplete items
+        const mandatoryIncomplete = currentPhase.items.filter(i => i.mandatory && !i.checked);
+        if (mandatoryIncomplete.length > 0) {
+          log(`⚠️  Cannot move to next phase. Current phase "${currentPhaseName}" has incomplete mandatory items:`);
+          mandatoryIncomplete.forEach(item => {
+            log(`   • ${item.text}`);
+          });
+          log('\n💡 Complete these items or use "forge phase next --force" to skip validation');
+          return;
+        }
+        
+        // Mark current phase as complete in the file
+        let updatedContent = content;
+        const phaseHeaders = {
+          'Focus': 'Phase 1: Focus',
+          'Orchestrate': 'Phase 2: Orchestrate',
+          'Refine': 'Phase 3: Refine',
+          'Generate': 'Phase 4: Generate',
+          'Evaluate': 'Phase 5: Evaluate'
+        };
+        
+        // Update phase status in content
+        updatedContent = updatedContent.replace(
+          `### ${phaseHeaders[currentPhaseName]} 🎯 [Active]`,
+          `### ${phaseHeaders[currentPhaseName]} ✅ [Complete]`
+        );
+        
+        // Activate next phase if available
+        if (currentPhaseIndex < phaseOrder.length - 1) {
+          const nextPhaseName = phaseOrder[currentPhaseIndex + 1];
+          const nextPhaseHeader = phaseHeaders[nextPhaseName];
+          updatedContent = updatedContent.replace(
+            new RegExp(`### ${nextPhaseHeader} .* \\[Pending\\]`),
+            `### ${nextPhaseHeader} 🎯 [Active]`
+          );
+          
+          write(current, updatedContent);
+          log(`✅ Moved from ${currentPhaseName} to ${nextPhaseName}`);
+        } else {
+          write(current, updatedContent);
+          log('✅ Final phase complete! Ready to use "forge complete"');
+        }
+      },
+      
+      complete: () => {
+        // Find and mark current active phase as complete
+        const phaseOrder = ['Focus', 'Orchestrate', 'Refine', 'Generate', 'Evaluate'];
+        let found = false;
+        
+        for (const phaseName of phaseOrder) {
+          const phase = validation.phases[phaseName];
+          if (phase.items.length > 0 && !phase.complete) {
+            // Mark all items as complete
+            let updatedContent = content;
+            const lines = updatedContent.split('\n');
+            let inPhase = false;
+            let phaseHeader = `Phase ${phaseOrder.indexOf(phaseName) + 1}: ${phaseName}`;
+            
+            for (let i = 0; i < lines.length; i++) {
+              if (lines[i].includes(phaseHeader)) {
+                inPhase = true;
+                // Mark phase as complete
+                lines[i] = lines[i].replace('[Active]', '[Complete]');
+              } else if (inPhase && lines[i].includes('Phase') && lines[i].includes(':')) {
+                inPhase = false;
+              } else if (inPhase && lines[i].trim().startsWith('- [ ]')) {
+                lines[i] = lines[i].replace('- [ ]', '- [x]');
+              }
+            }
+            
+            write(current, lines.join('\n'));
+            log(`✅ Marked ${phaseName} phase as complete`);
+            found = true;
+            break;
+          }
+        }
+        
+        if (!found) {
+          log('✅ All phases already complete!');
+        }
+      }
+    };
+    
+    if (!action || !subcommands[action]) {
+      log('Usage: forge phase [status|next|complete]');
+      log('  status   - Show detailed phase progress');
+      log('  next     - Move to next phase (with validation)');
+      log('  complete - Mark current phase as complete');
+    } else {
+      subcommands[action]();
+    }
+  },
+
   mcp(action = 'list') {
     if (!mcpServers) return log('MCP registry not found');
     
@@ -173,13 +487,15 @@ if (commands[cmd]) {
 Commands:
   init         Initialize FORGE
   new <name>   Start feature cycle  
-  status       Show current cycle
-  complete     Archive cycle
+  status       Show current cycle (--detailed for full view)
+  phase        Manage cycle phases
+  complete     Archive cycle (--force to skip validation)
   learn        View/manage learnings
   document     Start documentation
   mcp          Manage MCP servers
   uninstall    Remove FORGE
 
+Phase: status | next | complete
 Learn: retrospective | pattern | claude
 MCP: list | suggest | add <server>`);
 }

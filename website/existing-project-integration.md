@@ -23,7 +23,7 @@ FORGE seamlessly integrates into any existing project. The `forge init` command 
 ## Quick Integration
 
 ```bash
-# In your existing project root
+# In your existing project root (configures Claude subagents automatically)
 npm install -g forge-framework
 
 # Initialize FORGE - it auto-detects everything
@@ -31,6 +31,7 @@ forge init
 ```
 
 That's it! FORGE will:
+- ✓ Configure Claude Code subagents automatically
 - ✓ Detect existing Claude Code setup
 - ✓ Find and use existing CLAUDE.md
 - ✓ Identify your frameworks

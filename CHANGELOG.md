@@ -5,6 +5,30 @@ All notable changes to FORGE Framework will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- **Phase Validation System** - Enforces proper workflow progression through 5-phase cycle
+- **Visual Progress Indicators** - Progress bars and completion percentages for all phases
+- **Enhanced Status Command** - Shows visual progress with `forge status`, detailed view with `--detailed`
+- **Phase Management Commands** - New `forge phase status/next/complete` commands
+- **Mandatory Task Validation** - Blocks phase transitions and cycle completion until mandatory items done
+- **Smart Completion** - `forge complete` now validates all phases before archiving
+- **Force Flags** - `--force` option for `complete` and `phase next` to bypass validation
+- **Claude Subagent Configuration** - Automatic setup of 6 specialized Claude Code subagents during installation
+- **Global Claude Setup** - Global npm installation now configures Claude permissions and subagents
+
+### Changed
+- **Status Command Output** - Now shows visual progress bars instead of raw markdown
+- **Complete Command Behavior** - Validates phase completion by default (use `--force` to skip)
+- **Installation Process** - Enhanced to configure Claude Code subagents in `.claude/agents/`
+- **Help Text** - Updated to show new phase commands and options
+
+### Fixed
+- **Premature Cycle Completion** - Can no longer archive cycles with incomplete phases
+- **Phase Progression** - Proper validation of mandatory items before phase transitions
+- **Claude Agent Setup** - Agents now properly formatted for Claude Code subagent system
+
 ## [0.5.0] - 2025-07-31
 
 ### Added
@@ -124,13 +148,13 @@ FORGE embodies "radical simplicity" - the framework stays minimal while AI handl
 ### Getting Started
 
 ```bash
-npm install -g forge-framework@beta
+npm install -g forge-framework
 forge init
 ```
 
 ### Feedback
 
-This is a beta release! We'd love your feedback:
+We'd love your feedback:
 - Issues: https://github.com/scottfeltham/forge-framework/issues
 - Discussions: https://github.com/scottfeltham/forge-framework/discussions
 
