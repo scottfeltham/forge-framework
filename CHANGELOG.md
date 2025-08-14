@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2025-08-14
+
 ### Added
 - **Phase Validation System** - Enforces proper workflow progression through 5-phase cycle
 - **Visual Progress Indicators** - Progress bars and completion percentages for all phases
@@ -23,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Complete Command Behavior** - Validates phase completion by default (use `--force` to skip)
 - **Installation Process** - Enhanced to configure Claude Code subagents in `.claude/agents/`
 - **Help Text** - Updated to show new phase commands and options
+- **Documentation** - Removed all beta references for stable release
 
 ### Fixed
 - **Premature Cycle Completion** - Can no longer archive cycles with incomplete phases
