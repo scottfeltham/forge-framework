@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: forge
 title: Your First FORGE Cycle
 parent: Getting Started
 nav_order: 2

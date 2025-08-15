@@ -19,7 +19,7 @@ plugins:
   - jekyll-sitemap
 
 # Just the Docs settings
-color_scheme: light
+color_scheme: null  # Disable default color scheme to use our custom theme system
 
 # Logo and favicon
 # logo: "/assets/images/forge-logo.png"

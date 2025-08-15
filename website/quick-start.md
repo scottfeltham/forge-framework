@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: forge
 title: Quick Start
 parent: Getting Started
 nav_order: 1

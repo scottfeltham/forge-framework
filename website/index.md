@@ -1,5 +1,5 @@
 ---
-layout: home
+layout: forge
 title: FORGE Framework
 nav_order: 1
 description: A conversational AI-driven development framework
@@ -12,8 +12,8 @@ permalink: /
 A minimal, concise CLI that unlocks unlimited potential through natural dialogue.
 {: .fs-6 .fw-300 }
 
-[Get started now](#getting-started){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
-[View on GitHub](https://github.com/scottfeltham/forge-framework){: .btn .fs-5 .mb-4 .mb-md-0 }
+[Get started now](#getting-started){: .forge-btn .forge-btn--large }
+[View on GitHub](https://github.com/scottfeltham/forge-framework){: .forge-btn .forge-btn--secondary .forge-btn--large }
 
 ---
 
