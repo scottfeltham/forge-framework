@@ -20,10 +20,23 @@ Get up and running with FORGE in under 5 minutes.
 
 ## Installation
 
+### Global Installation (Recommended)
+
 ```bash
-# Automatically configures Claude Code subagents
+# Install FORGE globally with auto-configured Claude Code subagents
 npm install -g forge-framework
+
+# Verify installation
+forge --version  # Should output: 0.6.0
 ```
+
+### What Gets Installed
+
+The global installation automatically:
+- Installs the `forge` CLI command globally
+- Configures 6 specialized Claude Code subagents
+- Sets up the FORGE framework for immediate use
+- No additional configuration required
 
 This installs FORGE globally and automatically configures 6 specialized Claude Code subagents:
 - **forge-architect** - System architecture design and planning
@@ -55,14 +68,19 @@ This starts a new development cycle. FORGE enforces progression through 5 valida
 4. **Generate** - Prepare for deployment
 5. **Evaluate** - Learn and improve
 
-### Phase Validation
-FORGE now tracks your progress and prevents premature completion:
+### Phase Validation (v0.6.0+)
+
+FORGE enforces proper progression through validated phases:
 
 ```bash
-forge status              # Visual progress bars
-forge phase next          # Move to next phase (validates completion)
-forge complete            # Only works when all phases done
+forge status              # Visual progress bars showing phase completion
+forge phase               # Show current phase details
+forge phase next          # Move to next phase (validates requirements)
+forge complete            # Complete cycle (only when all phases done)
+forge complete --force    # Force completion (use sparingly)
 ```
+
+**Important**: You cannot skip phases or complete prematurely. Each phase has mandatory requirements (e.g., test scenarios in Focus phase).
 
 ## Core Commands
 
@@ -127,15 +145,16 @@ All agents enforce TDD. You must define test scenarios before writing code.
 Please report issues at:
 https://github.com/scottfeltham/forge-framework/issues
 
-## Learn More
+## Next Steps
 
-Full documentation coming soon at forgeframework.dev
+### Your First FORGE Cycle
+See our comprehensive [Your First FORGE Cycle](./getting-started#your-first-forge-cycle) walkthrough for a complete end-to-end example.
 
-For now, explore the included docs:
-- Philosophy and concepts
-- Agent customization
-- Team collaboration
-- Learning system
+### Learn More
+- [Core Concepts](./core-concepts) - Understand the 5-phase methodology
+- [Claude Code Integration](./claude-code-integration) - Leverage specialized AI agents
+- [Phase Validation](./phase-validation) - Master the validation system
+- [Team Collaboration](./team-collaboration) - Scale with your team
 
 ## Join the Community
 

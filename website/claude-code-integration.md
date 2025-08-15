@@ -26,21 +26,25 @@ FORGE automatically configures Claude Code subagents during installation, provid
 ```bash
 # Global installation (recommended)
 npm install -g forge-framework
-# ✓ FORGE permissions configured globally
-# ✓ Claude subagents installed to ~/.claude/agents/
 
-# Or local installation
-npx forge-framework install
-# ✓ FORGE permissions configured locally
-# ✓ Claude subagents installed to ./.claude/agents/
+# Output:
+# ✓ FORGE v0.6.0 installed globally
+# ✓ CLI available as 'forge' command
+# ✓ 6 Claude Code subagents configured:
+#   • forge-architect - System design specialist
+#   • forge-developer - Implementation expert
+#   • forge-tester - Quality assurance specialist
+#   • forge-devops - Infrastructure specialist
+#   • forge-reviewer - Code review expert
+#   • forge-analyzer - Codebase analysis specialist
+# ✓ Ready to use! Run 'forge init' in your project
 ```
 
-### Available Subagents
+### The 6 Specialized Subagents
 
-FORGE installs 6 specialized subagents:
+FORGE automatically configures 6 Claude Code subagents, each with specific expertise and tool access:
 
 | Subagent | Purpose | Key Tools |
-|----------|---------|-----------|
 | **forge-architect** | System architecture design and planning | Read, Write, Edit, Glob, Grep, Task, TodoWrite |
 | **forge-developer** | Code implementation and feature development | Read, Write, Edit, MultiEdit, Glob, Grep, Bash, Task, TodoWrite |
 | **forge-tester** | Testing strategies and quality assurance | Read, Write, Edit, Glob, Grep, Bash, Task, TodoWrite |

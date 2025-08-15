@@ -20,8 +20,11 @@ A minimal, concise CLI that unlocks unlimited potential through natural dialogue
 ## Getting Started
 
 ```bash
-# Automatically configures Claude Code subagents
+# Install globally and auto-configure Claude Code subagents
 npm install -g forge-framework
+
+# Verify installation
+forge --version  # Should show 0.6.0
 ```
 {: .fs-5 }
 
@@ -48,7 +51,7 @@ AI detects your project and configures itself. No hardcoded framework detection.
 ## Quick Example
 
 ```bash
-# Install FORGE (configures Claude Code subagents automatically)
+# Install FORGE globally (auto-configures 6 Claude Code subagents)
 npm install -g forge-framework
 
 # Initialize in your project
@@ -57,6 +60,12 @@ forge init
 
 # Start building with specialized AI agents
 forge new "user authentication"
+
+# Check your progress
+forge status
+
+# Move through validated phases
+forge phase next
 ```
 
 Then have a conversation with your AI assistant:
