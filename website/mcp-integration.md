@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: forge
 title: MCP Integration
 parent: Advanced Topics
 nav_order: 2

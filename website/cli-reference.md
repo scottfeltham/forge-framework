@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: forge
 title: CLI Reference
 parent: Reference
 nav_order: 1

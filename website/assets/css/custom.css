@@ -418,6 +418,134 @@ pre code {
 }
 
 /* ============================================================================
+   Just the Docs Theme Overrides
+   ============================================================================ */
+
+/* Override sidebar background and text colors */
+.side-bar {
+  background-color: var(--forge-background-secondary) !important;
+  border-right: 1px solid var(--forge-border) !important;
+}
+
+.site-header {
+  border-bottom: 1px solid var(--forge-border) !important;
+}
+
+.site-title {
+  color: var(--forge-text-primary) !important;
+}
+
+.site-title:hover {
+  background-image: linear-gradient(-90deg, var(--forge-background-tertiary) 0%, rgba(var(--forge-background-tertiary), 0.8) 80%, rgba(var(--forge-background-tertiary), 0) 100%) !important;
+}
+
+/* Navigation styling */
+.nav-list .nav-list-item .nav-list-link {
+  color: var(--forge-text-secondary) !important;
+}
+
+.nav-list .nav-list-item .nav-list-link:hover,
+.nav-list .nav-list-item .nav-list-link.active {
+  background-image: linear-gradient(-90deg, var(--forge-background-tertiary) 0%, rgba(var(--forge-background-tertiary), 0.8) 80%, rgba(var(--forge-background-tertiary), 0) 100%) !important;
+  color: var(--forge-text-primary) !important;
+}
+
+.nav-list .nav-list-item > .nav-list .nav-list-item .nav-list-link {
+  color: var(--forge-text-muted) !important;
+}
+
+.nav-list .nav-list-item .nav-list-expander {
+  color: var(--forge-primary) !important;
+}
+
+.nav-list .nav-list-item .nav-list-expander:hover {
+  background-image: linear-gradient(-90deg, var(--forge-background-tertiary) 0%, rgba(var(--forge-background-tertiary), 0.8) 100%) !important;
+}
+
+.nav-list .nav-list-item > .nav-list .nav-list-item .nav-list-expander {
+  color: var(--forge-text-muted) !important;
+}
+
+.nav-category {
+  color: var(--forge-text-primary) !important;
+  border-bottom: 1px solid var(--forge-border) !important;
+}
+
+/* Main header styling */
+.main-header {
+  border-bottom: 1px solid var(--forge-border) !important;
+}
+
+[data-theme="dark"] .side-bar + .main .main-header {
+  background-color: var(--forge-background) !important;
+}
+
+/* Search styling */
+.search-input {
+  background-color: var(--forge-background) !important;
+  border: 1px solid var(--forge-border) !important;
+  color: var(--forge-text-primary) !important;
+}
+
+.search-input::placeholder {
+  color: var(--forge-text-muted) !important;
+}
+
+.search-input:focus {
+  border-color: var(--forge-primary) !important;
+  box-shadow: 0 0 0 2px rgba(var(--forge-primary), 0.1) !important;
+}
+
+/* Footer styling */
+.site-footer {
+  border-top: 1px solid var(--forge-border) !important;
+  color: var(--forge-text-muted) !important;
+}
+
+/* Icon colors */
+.icon {
+  color: var(--forge-primary) !important;
+}
+
+/* Main content anchor headings */
+.main-content .anchor-heading svg {
+  color: var(--forge-primary) !important;
+}
+
+/* Blockquotes */
+blockquote {
+  border-left: 3px solid var(--forge-border) !important;
+  color: var(--forge-text-secondary) !important;
+}
+
+/* Code highlighting overrides for dark mode */
+[data-theme="dark"] .highlight,
+[data-theme="dark"] pre.highlight {
+  background: var(--forge-background-secondary) !important;
+  color: var(--forge-text-primary) !important;
+}
+
+[data-theme="dark"] .highlight pre {
+  background: var(--forge-background-secondary) !important;
+}
+
+/* Table styling */
+.main-content table {
+  background-color: var(--forge-background) !important;
+  border: 1px solid var(--forge-border) !important;
+}
+
+.main-content th,
+.main-content td {
+  border: 1px solid var(--forge-border) !important;
+  color: var(--forge-text-primary) !important;
+}
+
+.main-content th {
+  background-color: var(--forge-background-secondary) !important;
+}
+
+/* ============================================================================
    Accessibility Improvements
    ============================================================================ */
 

@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: forge
 title: Phase Validation
 parent: Core Concepts
 nav_order: 3

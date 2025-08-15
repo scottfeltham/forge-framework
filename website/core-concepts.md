@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: forge
 title: Core Concepts
 nav_order: 3
 has_children: true

@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: forge
 title: Troubleshooting
 parent: Reference
 nav_order: 3

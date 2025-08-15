@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: forge
 title: Dynamic Agents
 parent: Core Concepts
 nav_order: 2

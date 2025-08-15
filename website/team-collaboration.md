@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: forge
 title: Team Collaboration
 parent: Advanced Topics
 nav_order: 1

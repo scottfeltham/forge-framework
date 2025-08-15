@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: forge
 title: Advanced Topics
 nav_order: 4
 has_children: true

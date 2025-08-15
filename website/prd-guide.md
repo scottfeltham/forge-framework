@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: forge
 title: PRD Guide
 parent: Reference
 nav_order: 1

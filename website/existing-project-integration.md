@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: forge
 title: Existing Project Integration
 parent: Advanced Topics
 nav_order: 3

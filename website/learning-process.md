@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: forge
 title: Learning Process
 parent: Core Concepts
 nav_order: 3

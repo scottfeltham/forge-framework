@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: forge
 title: Memory Integration
 parent: Core Concepts
 nav_order: 4

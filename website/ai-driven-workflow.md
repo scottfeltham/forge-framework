@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: forge
 title: AI-Driven Workflow
 parent: Getting Started
 nav_order: 3

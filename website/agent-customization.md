@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: forge
 title: Agent Customization
 parent: Core Concepts
 nav_order: 1

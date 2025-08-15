@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: forge
 title: Claude Code Integration
 parent: Advanced Topics
 nav_order: 4
