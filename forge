@@ -19,12 +19,61 @@ const getTemplatesPath = () => {
   }
   
   // Use global templates when installed globally
-  return path.join(__dirname, 'templates');
+  return path.join(process.cwd(), '.forge/templates');
 };
+
+// Secure slug creation with validation
+const createSlug = (name) => {
+  if (!name || typeof name !== 'string') {
+    throw new Error('Feature name is required and must be a string');
+  }
+  
+  // Remove dangerous characters and normalize
+  let slug = name.toLowerCase()
+    .replace(/[^a-z0-9\s\-_]/g, '') // Remove non-alphanumeric, spaces, hyphens, underscores
+    .replace(/\s+/g, '-')          // Replace spaces with hyphens
+    .replace(/-+/g, '-')           // Remove multiple consecutive hyphens
+    .replace(/^-+|-+$/g, '');      // Remove leading/trailing hyphens
+  
+  // Validate slug
+  if (!slug) {
+    throw new Error('Feature name must contain at least one valid character');
+  }
+  
+  if (slug.length > 50) {
+    slug = slug.substring(0, 50).replace(/-+$/, '');
+  }
+  
+  // Prevent path traversal
+  if (slug.includes('..') || slug.includes('/') || slug.includes('\\')) {
+    throw new Error('Feature name contains invalid path characters');
+  }
+  
+  return slug;
+};
+
 const tpl = n => fs.readFileSync(path.join(getTemplatesPath(), n), 'utf8');
 const write = (p, c) => fs.writeFileSync(p, c);
 const exists = p => fs.existsSync(p);
 const timestamp = () => new Date().toISOString().replace(/[:.]/g, '-');
+
+// Centralized phase configuration
+const PHASES = {
+  Focus: { order: 0, icon: '🎯', header: 'Phase 1: Focus' },
+  Orchestrate: { order: 1, icon: '📝', header: 'Phase 2: Orchestrate' },
+  Refine: { order: 2, icon: '🔨', header: 'Phase 3: Refine' },
+  Generate: { order: 3, icon: '🚀', header: 'Phase 4: Generate' },
+  Evaluate: { order: 4, icon: '📊', header: 'Phase 5: Evaluate' }
+};
+
+// Get ordered phase names array
+const getPhaseOrder = () => Object.keys(PHASES).sort((a, b) => PHASES[a].order - PHASES[b].order);
+
+// Get phase by order index
+const getPhaseByIndex = (index) => {
+  const ordered = getPhaseOrder();
+  return ordered[index] || null;
+};
 
 // Phase validation helpers
 const parsePhaseProgress = (content) => {
@@ -40,8 +89,16 @@ const parsePhaseProgress = (content) => {
   let currentPhase = null;
   
   lines.forEach(line => {
-    // Detect phase headers
-    if (line.includes('Phase 1: Focus')) currentPhase = 'Focus';
+    // Use machine-readable phase markers first (new format)
+    const phaseMarkerMatch = line.match(/<!-- FORGE_PHASE:(\w+):\w+ -->/);
+    if (phaseMarkerMatch) {
+      const phaseName = phaseMarkerMatch[1];
+      if (phases[phaseName]) {
+        currentPhase = phaseName;
+      }
+    } 
+    // Fallback to legacy detection for older templates
+    else if (line.includes('Phase 1: Focus')) currentPhase = 'Focus';
     else if (line.includes('Phase 2: Orchestrate')) currentPhase = 'Orchestrate';
     else if (line.includes('Phase 3: Refine')) currentPhase = 'Refine';
     else if (line.includes('Phase 4: Generate')) currentPhase = 'Generate';
@@ -106,6 +163,151 @@ const validateCycleCompletion = (content) => {
   };
 };
 
+// Simplified phase detection using string operations
+const findActivePhase = (content) => {
+  const phaseOrder = getPhaseOrder();
+  
+  // First look for explicitly active phase
+  for (const phaseName of phaseOrder) {
+    const header = PHASES[phaseName].header;
+    const activeMarker = `### ${header} 🎯 [Active]`;
+    
+    if (content.includes(activeMarker)) {
+      return { name: phaseName, index: PHASES[phaseName].order };
+    }
+  }
+  
+  // If no active phase found, find next phase after highest completed
+  let highestCompleteIndex = -1;
+  
+  for (const phaseName of phaseOrder) {
+    const header = PHASES[phaseName].header;
+    const completeMarker = `### ${header} ✅ [Complete]`;
+    
+    if (content.includes(completeMarker)) {
+      highestCompleteIndex = PHASES[phaseName].order;
+    }
+  }
+  
+  // Return next phase after highest completed
+  const nextIndex = highestCompleteIndex + 1;
+  const nextPhaseName = getPhaseByIndex(nextIndex);
+  
+  if (nextPhaseName) {
+    return { name: nextPhaseName, index: nextIndex };
+  }
+  
+  return null; // All phases complete
+};
+
+// Check if a phase is marked complete in headers  
+const isPhaseMarkedComplete = (content, phaseName) => {
+  const header = PHASES[phaseName].header;
+  const completeMarker = `### ${header} ✅ [Complete]`;
+  return content.includes(completeMarker);
+};
+
+// Check if current phase items are all completed
+const isPhaseItemsComplete = (content, phaseName) => {
+  const phases = parsePhaseProgress(content);
+  const phase = phases[phaseName];
+  if (!phase || phase.items.length === 0) return true;
+  
+  // All items must be checked for completion
+  return phase.items.every(item => item.checked);
+};
+
+// Update phase state in content using simple string replacement
+const updatePhaseState = (content, phaseName, newState) => {
+  const header = PHASES[phaseName].header;
+  const phaseIcon = PHASES[phaseName].icon;
+  const stateEmojis = {
+    'Active': '🎯',
+    'Complete': '✅', 
+    'Pending': phaseIcon
+  };
+  
+  // Find current state and replace with new state
+  const states = ['Active', 'Complete', 'Pending'];
+  let updatedContent = content;
+  
+  for (const currentState of states) {
+    const currentEmoji = currentState === 'Pending' ? phaseIcon : stateEmojis[currentState];
+    const newEmoji = newState === 'Pending' ? phaseIcon : stateEmojis[newState];
+    
+    const currentMarker = `### ${header} ${currentEmoji} [${currentState}]`;
+    const newMarker = `### ${header} ${newEmoji} [${newState}]`;
+    
+    if (updatedContent.includes(currentMarker)) {
+      updatedContent = updatedContent.replace(currentMarker, newMarker);
+      break;
+    }
+  }
+  
+  return updatedContent;
+};
+
+// Consolidated validation logic
+const validatePhaseTransition = (content, phaseName, forceSkip = false) => {
+  if (forceSkip) return { canTransition: true };
+  
+  const isHeaderComplete = isPhaseMarkedComplete(content, phaseName);
+  const areItemsComplete = isPhaseItemsComplete(content, phaseName);
+  
+  if (isHeaderComplete || areItemsComplete) {
+    return { canTransition: true };
+  }
+  
+  // Get incomplete items for error message
+  const phases = parsePhaseProgress(content);
+  const phase = phases[phaseName];
+  const incompleteItems = phase ? phase.items.filter(i => !i.checked) : [];
+  
+  return {
+    canTransition: false,
+    incompleteItems,
+    phase: phase
+  };
+};
+
+// Format incomplete items for error messages
+const formatIncompleteItems = (incompleteItems, limit = 5) => {
+  if (!incompleteItems || incompleteItems.length === 0) return [];
+  
+  const messages = [];
+  const itemsToShow = incompleteItems.slice(0, limit);
+  
+  itemsToShow.forEach(item => {
+    const mandatory = item.mandatory ? ' (MANDATORY)' : '';
+    messages.push(`   • ${item.text}${mandatory}`);
+  });
+  
+  if (incompleteItems.length > limit) {
+    messages.push(`   ... and ${incompleteItems.length - limit} more items`);
+  }
+  
+  return messages;
+};
+
+// Mark all checkboxes as complete in a phase section
+const markPhaseItemsComplete = (content, phaseName) => {
+  const header = PHASES[phaseName].header;
+  const lines = content.split('\n');
+  let inPhase = false;
+  
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].includes(`### ${header}`)) {
+      inPhase = true;
+    } else if (inPhase && lines[i].includes('### Phase')) {
+      inPhase = false;
+    } else if (inPhase && lines[i].trim().startsWith('- [ ]')) {
+      lines[i] = lines[i].replace('- [ ]', '- [x]');
+    }
+  }
+  
+  return lines.join('\n');
+};
+
 // Load MCP registry
 const mcpServers = exists(path.join(__dirname, 'recommended-mcp-servers.json')) 
   ? JSON.parse(fs.readFileSync(path.join(__dirname, 'recommended-mcp-servers.json'), 'utf8'))
@@ -127,28 +329,102 @@ ai: {primary: claude, model: sonnet}`);
 
   new(name) {
     if (!name) return log('Usage: forge new <feature>');
-    const cycle = tpl('cycle.md')
-      .replace(/{{FEATURE}}/g, name)
-      .replace(/{{DATE}}/g, new Date().toISOString().split('T')[0]);
     
-    const isTeam = exists('forge.yaml') && 
-      fs.readFileSync('forge.yaml', 'utf8').includes('collaborative');
-    
-    if (isTeam) {
-      const dir = '.forge/current';
-      if (!exists(dir)) fs.mkdirSync(dir, { recursive: true });
-      const file = `${name.toLowerCase().replace(/\s+/g, '-')}.md`;
-      write(`${dir}/${file}`, cycle);
-      log(`✨ Started: ${name}\n📁 Created: ${dir}/${file}`);
-    } else {
-      write('.forge/current.md', cycle);
-      log(`✨ Started: ${name}\n📋 Phase: Focus\n🤖 Claude will guide you`);
+    try {
+      const slug = createSlug(name);
+      const cycle = tpl('cycle.md')
+        .replace(/{{FEATURE}}/g, name)
+        .replace(/{{DATE}}/g, new Date().toISOString().split('T')[0]);
+      
+      const isTeam = exists('forge.yaml') && 
+        fs.readFileSync('forge.yaml', 'utf8').includes('collaborative');
+      
+      if (isTeam) {
+        const dir = '.forge/current';
+        if (!exists(dir)) fs.mkdirSync(dir, { recursive: true });
+        const file = `${slug}.md`;
+        const fullPath = path.join(dir, file);
+        
+        // Ensure the resolved path is still under .forge/current
+        if (!fullPath.startsWith(path.resolve(dir))) {
+          throw new Error('Invalid feature name: path traversal detected');
+        }
+        
+        write(fullPath, cycle);
+        log(`✨ Started: ${name}\n📁 Created: ${dir}/${file}`);
+      } else {
+        write('.forge/current.md', cycle);
+        log(`✨ Started: ${name}\n📋 Phase: Focus\n🤖 Claude will guide you`);
+      }
+    } catch (error) {
+      log(`❌ Error creating cycle: ${error.message}`);
+      log('💡 Feature names should contain only letters, numbers, spaces, hyphens, and underscores');
     }
   },
 
-  status() {
+  status(cycleName) {
     // Check for --detailed flag
     const detailed = args.includes('--detailed');
+    
+    // Handle team mode cycle selection
+    if (cycleName && exists('.forge/current')) {
+      const teamCyclePath = path.join('.forge/current', cycleName);
+      if (exists(teamCyclePath)) {
+        const content = fs.readFileSync(teamCyclePath, 'utf8');
+        if (detailed) {
+          log(content);
+        } else {
+          // Show progress summary for specific team cycle
+          const lines = content.split('\n');
+          const featureLine = lines.find(l => l.startsWith('# Feature:'));
+          const feature = featureLine ? featureLine.replace('# Feature:', '').trim() : cycleName.replace('.md', '');
+          
+          const validation = validateCycleCompletion(content);
+          
+          log(`\n📋 Team Cycle: ${feature}`);
+          log('─'.repeat(50));
+          
+          // Show phase progress
+          Object.entries(validation.phases).forEach(([name, phase]) => {
+            if (phase.items.length > 0) {
+              const progressBar = '█'.repeat(Math.floor(phase.progress / 10)) + 
+                                 '░'.repeat(10 - Math.floor(phase.progress / 10));
+              const status = phase.complete ? '✅' : phase.progress > 0 ? '🔄' : '⏳';
+              
+              log(`${status} ${phase.icon} ${name.padEnd(12)} [${progressBar}] ${phase.progress}%`);
+            }
+          });
+          
+          // Show current status using header-based phase detection
+          const activePhase = findActivePhase(content);
+          
+          if (activePhase) {
+            log(`\n📍 Current Phase: ${activePhase.name}`);
+            const currentPhaseData = validation.phases[activePhase.name];
+            if (currentPhaseData && currentPhaseData.items) {
+              const incomplete = currentPhaseData.items.filter(i => !i.checked);
+              if (incomplete.length > 0 && incomplete.length <= 3) {
+                log('   Next tasks:');
+                incomplete.slice(0, 3).forEach(task => {
+                  log(`   • ${task.text}`);
+                });
+              }
+            }
+          } else {
+            log('\n✨ All phases complete! Ready to archive with "forge complete"');
+          }
+          
+          log('\n💡 Use "forge status --detailed" for full cycle view');
+        }
+        return;
+      } else {
+        log(`❌ Team cycle not found: ${cycleName}`);
+        log('Available cycles:');
+        const cycles = fs.readdirSync('.forge/current').filter(f => f.endsWith('.md'));
+        cycles.forEach(c => log(`  • ${c}`));
+        return;
+      }
+    }
     
     const current = '.forge/current.md';
     if (exists(current)) {
@@ -179,20 +455,22 @@ ai: {primary: claude, model: sonnet}`);
           }
         });
         
-        // Show current status
-        const currentPhase = Object.entries(validation.phases)
-          .find(([_, p]) => p.items.length > 0 && !p.complete);
+        // Show current status using header-based phase detection
+        const activePhase = findActivePhase(content);
         
-        if (currentPhase) {
-          log('\n📍 Current Phase: ' + currentPhase[0]);
-          const incomplete = currentPhase[1].items.filter(i => !i.checked);
-          if (incomplete.length > 0 && incomplete.length <= 3) {
-            log('   Next tasks:');
-            incomplete.slice(0, 3).forEach(task => {
-              log(`   • ${task.text}`);
-            });
+        if (activePhase) {
+          log(`\n📍 Current Phase: ${activePhase.name}`);
+          const currentPhaseData = validation.phases[activePhase.name];
+          if (currentPhaseData && currentPhaseData.items) {
+            const incomplete = currentPhaseData.items.filter(i => !i.checked);
+            if (incomplete.length > 0 && incomplete.length <= 3) {
+              log('   Next tasks:');
+              incomplete.slice(0, 3).forEach(task => {
+                log(`   • ${task.text}`);
+              });
+            }
           }
-        } else if (validation.isComplete) {
+        } else {
           log('\n✨ All phases complete! Ready to archive with "forge complete"');
         }
         
@@ -277,7 +555,7 @@ ai: {primary: claude, model: sonnet}`);
   },
 
   document: () => (write('.forge/DOCUMENT_SESSION.md', tpl('document-session.md')), 
-    log('📚 Documentation session started')),
+  log('📚 Documentation session started')),
 
   uninstall: () => args[0] === '--confirm'
     ? (['forge.yaml','.forge'].forEach(p => exists(p) && fs.rmSync(p, {recursive:true})), log('✅ Done'))
@@ -317,113 +595,107 @@ ai: {primary: claude, model: sonnet}`);
       },
       
       next: () => {
-        // Find current phase
-        const phaseOrder = ['Focus', 'Orchestrate', 'Refine', 'Generate', 'Evaluate'];
-        let currentPhaseIndex = -1;
+        const activePhase = findActivePhase(content);
+        const forceSkip = args.includes('--force');
         
-        for (let i = 0; i < phaseOrder.length; i++) {
-          const phase = validation.phases[phaseOrder[i]];
-          if (phase.items.length > 0 && !phase.complete) {
-            currentPhaseIndex = i;
-            break;
+        if (!activePhase) {
+          return log('❌ No active phase found. Cannot determine current phase.');
+        }
+        
+        const currentPhaseName = activePhase.name;
+        const currentPhaseIndex = activePhase.index;
+        const phaseOrder = getPhaseOrder();
+        
+        // Check if we're at the final phase
+        if (currentPhaseIndex === phaseOrder.length - 1) {
+          return log('✅ Already in final phase (Evaluate). Use "forge complete" to archive cycle.');
+        }
+        
+        // Validate transition
+        const validation = validatePhaseTransition(content, currentPhaseName, forceSkip);
+        
+        if (!validation.canTransition) {
+          log(`⚠️  Cannot advance from ${currentPhaseName} phase. Phase is not complete:`);
+          
+          if (validation.incompleteItems.length > 0) {
+            log('\n   Incomplete items:');
+            formatIncompleteItems(validation.incompleteItems).forEach(msg => log(msg));
           }
-        }
-        
-        if (currentPhaseIndex === -1) {
-          return log('✅ All phases complete! Use "forge complete" to archive.');
-        }
-        
-        const currentPhaseName = phaseOrder[currentPhaseIndex];
-        const currentPhase = validation.phases[currentPhaseName];
-        
-        // Check if current phase has mandatory incomplete items
-        const mandatoryIncomplete = currentPhase.items.filter(i => i.mandatory && !i.checked);
-        if (mandatoryIncomplete.length > 0) {
-          log(`⚠️  Cannot move to next phase. Current phase "${currentPhaseName}" has incomplete mandatory items:`);
-          mandatoryIncomplete.forEach(item => {
-            log(`   • ${item.text}`);
-          });
-          log('\n💡 Complete these items or use "forge phase next --force" to skip validation');
+          
+          log('\n💡 Options:');
+          log('   1. Complete remaining items in current phase');
+          log('   2. Use "forge phase complete" to manually mark phase complete');
+          log('   3. Use "forge phase next --force" to skip validation');
           return;
         }
         
-        // Mark current phase as complete in the file
-        let updatedContent = content;
-        const phaseHeaders = {
-          'Focus': 'Phase 1: Focus',
-          'Orchestrate': 'Phase 2: Orchestrate',
-          'Refine': 'Phase 3: Refine',
-          'Generate': 'Phase 4: Generate',
-          'Evaluate': 'Phase 5: Evaluate'
-        };
+        // Perform transition
+        const nextPhaseName = getPhaseByIndex(currentPhaseIndex + 1);
+        let updatedContent = updatePhaseState(content, currentPhaseName, 'Complete');
+        updatedContent = updatePhaseState(updatedContent, nextPhaseName, 'Active');
         
-        // Update phase status in content
-        updatedContent = updatedContent.replace(
-          `### ${phaseHeaders[currentPhaseName]} 🎯 [Active]`,
-          `### ${phaseHeaders[currentPhaseName]} ✅ [Complete]`
-        );
+        write(current, updatedContent);
         
-        // Activate next phase if available
-        if (currentPhaseIndex < phaseOrder.length - 1) {
-          const nextPhaseName = phaseOrder[currentPhaseIndex + 1];
-          const nextPhaseHeader = phaseHeaders[nextPhaseName];
-          updatedContent = updatedContent.replace(
-            new RegExp(`### ${nextPhaseHeader} .* \\[Pending\\]`),
-            `### ${nextPhaseHeader} 🎯 [Active]`
-          );
-          
-          write(current, updatedContent);
-          log(`✅ Moved from ${currentPhaseName} to ${nextPhaseName}`);
+        if (forceSkip) {
+          log(`⚠️  Forced transition from ${currentPhaseName} to ${nextPhaseName}`);
         } else {
-          write(current, updatedContent);
-          log('✅ Final phase complete! Ready to use "forge complete"');
+          log(`✅ Advanced from ${currentPhaseName} to ${nextPhaseName} phase`);
         }
       },
       
       complete: () => {
-        // Find and mark current active phase as complete
-        const phaseOrder = ['Focus', 'Orchestrate', 'Refine', 'Generate', 'Evaluate'];
-        let found = false;
+        const activePhase = findActivePhase(content);
+        const forceComplete = args.includes('--force');
         
-        for (const phaseName of phaseOrder) {
-          const phase = validation.phases[phaseName];
-          if (phase.items.length > 0 && !phase.complete) {
-            // Mark all items as complete
-            let updatedContent = content;
-            const lines = updatedContent.split('\n');
-            let inPhase = false;
-            let phaseHeader = `Phase ${phaseOrder.indexOf(phaseName) + 1}: ${phaseName}`;
+        if (!activePhase) {
+          return log('❌ No active phase found to complete.');
+        }
+        
+        const currentPhaseName = activePhase.name;
+        
+        // Validate completion (unless forcing)
+        if (!forceComplete) {
+          const validation = validatePhaseTransition(content, currentPhaseName, false);
+          
+          if (!validation.canTransition) {
+            log(`⚠️  Cannot complete ${currentPhaseName} phase. Items are incomplete:`);
             
-            for (let i = 0; i < lines.length; i++) {
-              if (lines[i].includes(phaseHeader)) {
-                inPhase = true;
-                // Mark phase as complete
-                lines[i] = lines[i].replace('[Active]', '[Complete]');
-              } else if (inPhase && lines[i].includes('Phase') && lines[i].includes(':')) {
-                inPhase = false;
-              } else if (inPhase && lines[i].trim().startsWith('- [ ]')) {
-                lines[i] = lines[i].replace('- [ ]', '- [x]');
-              }
+            if (validation.incompleteItems.length > 0) {
+              formatIncompleteItems(validation.incompleteItems, 3).forEach(msg => log(msg));
             }
             
-            write(current, lines.join('\n'));
-            log(`✅ Marked ${phaseName} phase as complete`);
-            found = true;
-            break;
+            log('\n💡 Options:');
+            log('   1. Complete remaining items manually');
+            log('   2. Use "forge phase complete --force" to force completion');
+            return;
           }
         }
         
-        if (!found) {
-          log('✅ All phases already complete!');
+        // Mark phase as complete
+        let updatedContent = updatePhaseState(content, currentPhaseName, 'Complete');
+        
+        // Also mark all items as complete if forcing
+        if (forceComplete) {
+          updatedContent = markPhaseItemsComplete(updatedContent, currentPhaseName);
         }
+        
+        write(current, updatedContent);
+        
+        if (forceComplete) {
+          log(`⚠️  Force completed ${currentPhaseName} phase (marked all items as done)`);
+        } else {
+          log(`✅ Completed ${currentPhaseName} phase`);
+        }
+        
+        log('\n💡 Use "forge phase next" to advance to the next phase');
       }
     };
     
     if (!action || !subcommands[action]) {
       log('Usage: forge phase [status|next|complete]');
       log('  status   - Show detailed phase progress');
-      log('  next     - Move to next phase (with validation)');
-      log('  complete - Mark current phase as complete');
+      log('  next     - Advance to next phase sequentially (--force to skip validation)');
+      log('  complete - Mark current active phase as complete (--force to mark items done)');
     } else {
       subcommands[action]();
     }

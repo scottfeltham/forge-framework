@@ -38,6 +38,9 @@ class ForgeInstaller {
     log.header('🔨 FORGE Framework Installer');
     
     try {
+      // Check if running in CI or non-interactive environment
+      const isNonInteractive = process.env.CI || process.env.npm_config_yes || !process.stdin.isTTY;
+      
       // Check if this is a global installation
       const isGlobalInstall = this.isGlobalInstallation();
       
@@ -49,11 +52,15 @@ class ForgeInstaller {
       const isUpdate = fs.existsSync(this.forgeDir);
       
       if (isUpdate) {
-        log.warn('Existing .forge directory detected');
-        const response = await this.prompt('Update FORGE installation? (y/n): ');
-        if (response.toLowerCase() !== 'y') {
-          log.info('Installation cancelled');
-          return;
+        if (isNonInteractive) {
+          log.info('Non-interactive mode: updating existing .forge directory');
+        } else {
+          log.warn('Existing .forge directory detected');
+          const response = await this.prompt('Update FORGE installation? (y/n): ');
+          if (response.toLowerCase() !== 'y') {
+            log.info('Installation cancelled');
+            return;
+          }
         }
       }
 
@@ -106,24 +113,46 @@ class ForgeInstaller {
 
   async runGlobalSetup() {
     log.info('Detected global installation of FORGE Framework');
-    log.info('Setting up global Claude Code configuration...');
     
-    // Setup global Claude Code settings when installed globally
-    const hasGlobalClaude = this.checkGlobalClaude();
+    // Check if global setup should be performed
+    const shouldSetupGlobal = process.env.FORGE_SETUP_GLOBAL_CLAUDE === '1' || 
+                             process.env.FORGE_SETUP_GLOBAL_CLAUDE === 'true';
+    const isNonInteractive = process.env.CI || process.env.npm_config_yes || !process.stdin.isTTY;
     
-    if (hasGlobalClaude) {
-      this.setupGlobalClaudeCodeSettings();
-      this.setupGlobalClaudeAgents();
-      log.success('✨ Global FORGE setup complete!');
-      log.info('FORGE is now available globally as "forge"');
-      log.info('Claude subagents are now available globally');
-      log.info('Global Claude Code settings updated for FORGE commands');
-      log.info('Run "forge install" in any project to install locally');
+    if (!shouldSetupGlobal && !isNonInteractive) {
+      log.info('Global Claude Code setup requires explicit opt-in');
+      log.info('Set FORGE_SETUP_GLOBAL_CLAUDE=1 to enable global Claude Code configuration');
+      log.info('Or run "forge install" manually in projects for local setup');
+    }
+    
+    if (shouldSetupGlobal) {
+      log.info('Setting up global Claude Code configuration...');
+      
+      // Setup global Claude Code settings when installed globally
+      const hasGlobalClaude = this.checkGlobalClaude();
+      
+      if (hasGlobalClaude) {
+        this.setupGlobalClaudeCodeSettings();
+        this.setupGlobalClaudeAgents();
+        this.setupGlobalClaudeCommands();
+        log.success('✨ Global FORGE setup complete!');
+        log.info('FORGE is now available globally as "forge"');
+        log.info('Claude subagents are now available globally');
+        log.info('Global Claude Code slash commands configured');
+        log.info('Global Claude Code settings updated for FORGE commands');
+        log.info('Run "forge install" in any project to install locally');
+      } else {
+        log.warn('Claude Code CLI not found globally');
+        log.info('Install Claude Code CLI to enable global configuration setup');
+        log.success('✨ Global FORGE installation complete!');
+        log.info('FORGE is now available globally as "forge"');
+      }
     } else {
-      log.warn('Claude Code CLI not found globally');
-      log.info('Install Claude Code CLI to enable global configuration setup');
       log.success('✨ Global FORGE installation complete!');
       log.info('FORGE is now available globally as "forge"');
+      if (!isNonInteractive) {
+        log.info('Run "forge install" in projects to set up local FORGE environments');
+      }
     }
     
     return;
@@ -148,6 +177,30 @@ class ForgeInstaller {
       
     } catch (error) {
       log.warn(`Could not setup global Claude agents: ${error.message}`);
+    }
+  }
+
+  setupGlobalClaudeCommands() {
+    try {
+      const os = require('os');
+      const globalClaudeCommandsDir = path.join(os.homedir(), '.claude', 'commands');
+      const claudeCommandsSource = path.join(this.sourceDir, '.claude', 'commands');
+      
+      // Create global .claude/commands directory if it doesn't exist
+      if (!fs.existsSync(globalClaudeCommandsDir)) {
+        fs.mkdirSync(globalClaudeCommandsDir, { recursive: true });
+      }
+      
+      // Copy Claude slash commands globally
+      if (fs.existsSync(claudeCommandsSource)) {
+        this.copyDirectory(claudeCommandsSource, globalClaudeCommandsDir);
+        log.success('Global Claude Code slash commands configured');
+      } else {
+        log.warn('Claude commands source directory not found');
+      }
+      
+    } catch (error) {
+      log.warn(`Could not setup global Claude commands: ${error.message}`);
     }
   }
 
@@ -274,7 +327,7 @@ class ForgeInstaller {
     // Replace template paths to use local .forge
     content = content.replace(
       /path\.join\(__dirname, 'templates'/g,
-      "path.join(process.cwd(), '.forge/templates'"
+      'path.join(process.cwd(), \'.forge/templates\''
     );
     
     fs.writeFileSync(forgeTarget, content);

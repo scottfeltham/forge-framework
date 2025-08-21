@@ -7,6 +7,7 @@
 
 ## 📋 Progress
 
+<!-- FORGE_PHASE:Focus:Active -->
 ### Phase 1: Focus 🎯 [Active]
 - [ ] Gather requirements
 - [ ] Define test scenarios (MANDATORY)
@@ -18,11 +19,13 @@
 - [ ] Design architecture
 - [ ] Identify risks
 
+<!-- FORGE_PHASE:Orchestrate:Pending -->
 ### Phase 2: Orchestrate 📝 [Pending]
 - [ ] Break down tasks
 - [ ] Assign priorities
 - [ ] Plan dependencies
 
+<!-- FORGE_PHASE:Refine:Pending -->
 ### Phase 3: Refine 🔨 [Pending]
 - [ ] Implement features
   - [ ] Consider parallel implementation for independent components
@@ -30,11 +33,13 @@
   - [ ] Consider parallel test types (unit, integration, e2e)
 - [ ] Code review
 
+<!-- FORGE_PHASE:Generate:Pending -->
 ### Phase 4: Generate 🚀 [Pending]
 - [ ] Build artifacts
 - [ ] Prepare deployment
 - [ ] Update documentation
 
+<!-- FORGE_PHASE:Evaluate:Pending -->
 ### Phase 5: Evaluate 📊 [Pending]
 - [ ] Measure success metrics
 - [ ] Gather stakeholder feedback

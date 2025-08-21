@@ -16,7 +16,9 @@
   },
   "main": "forge",
   "scripts": {
-    "test": "echo \"No tests needed - AI handles validation\"",
+    "test": "node test-smoke.js",
+    "lint": "eslint forge install.js test-smoke.js",
+    "lint:fix": "eslint --fix forge install.js test-smoke.js",
     "postinstall": "node install.js"
   },
   "keywords": [
@@ -37,8 +39,11 @@
   "dependencies": {
     "js-yaml": "^4.1.0"
   },
+  "devDependencies": {
+    "eslint": "^8.57.0"
+  },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=18.0.0"
   },
   "license": "MIT"
 }
