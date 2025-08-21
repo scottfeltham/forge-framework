@@ -12,8 +12,7 @@
     "url": "https://github.com/scottfeltham/forge-framework/issues"
   },
   "bin": {
-    "forge": "./forge",
-    "forge-framework": "./bin/forge-install"
+    "forge": "./forge"
   },
   "main": "forge",
   "scripts": {

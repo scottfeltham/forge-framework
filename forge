@@ -11,7 +11,17 @@ const [,, cmd, ...args] = process.argv;
 
 // Helpers
 const log = console.log;
-const tpl = n => fs.readFileSync(path.join(process.cwd(), '.forge/templates', n), 'utf8');
+const getTemplatesPath = () => {
+  // Check if running locally (with .forge directory)
+  const localTemplatesPath = path.join(process.cwd(), '.forge', 'templates');
+  if (fs.existsSync(localTemplatesPath)) {
+    return localTemplatesPath;
+  }
+  
+  // Use global templates when installed globally
+  return path.join(__dirname, 'templates');
+};
+const tpl = n => fs.readFileSync(path.join(getTemplatesPath(), n), 'utf8');
 const write = (p, c) => fs.writeFileSync(p, c);
 const exists = p => fs.existsSync(p);
 const timestamp = () => new Date().toISOString().replace(/[:.]/g, '-');
@@ -478,8 +488,11 @@ ai: {primary: claude, model: sonnet}`);
   }
 };
 
-// Execute command or show help
-if (commands[cmd]) {
+// Handle version flags
+if (cmd === '--version' || cmd === '-v') {
+  const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'), 'utf8'));
+  log(`forge v${pkg.version}`);
+} else if (commands[cmd]) {
   commands[cmd](...args);
 } else {
   log(`🔨 FORGE Framework

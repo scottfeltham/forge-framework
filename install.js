@@ -106,21 +106,22 @@ class ForgeInstaller {
 
   async runGlobalSetup() {
     log.info('Detected global installation of FORGE Framework');
-    log.info('Setting up global Claude configuration...');
+    log.info('Setting up global Claude Code configuration...');
     
-    // Setup global Claude settings when installed globally
+    // Setup global Claude Code settings when installed globally
     const hasGlobalClaude = this.checkGlobalClaude();
     
     if (hasGlobalClaude) {
-      this.setupGlobalClaudeSettings();
+      this.setupGlobalClaudeCodeSettings();
       this.setupGlobalClaudeAgents();
       log.success('✨ Global FORGE setup complete!');
       log.info('FORGE is now available globally as "forge"');
       log.info('Claude subagents are now available globally');
-      log.info('Run "npx forge-framework install" in any project to install locally');
+      log.info('Global Claude Code settings updated for FORGE commands');
+      log.info('Run "forge install" in any project to install locally');
     } else {
-      log.warn('Claude CLI not found globally');
-      log.info('Install Claude CLI to enable global configuration setup');
+      log.warn('Claude Code CLI not found globally');
+      log.info('Install Claude Code CLI to enable global configuration setup');
       log.success('✨ Global FORGE installation complete!');
       log.info('FORGE is now available globally as "forge"');
     }
@@ -326,18 +327,12 @@ version: ${this.getVersion()}
   }
 
   setupClaudeSettings() {
-    log.info('Setting up Claude permissions...');
+    log.info('Setting up Claude Code permissions...');
     
-    // Check if Claude CLI is installed globally
-    const hasGlobalClaude = this.checkGlobalClaude();
+    // Only setup local Claude Code settings for local installations
+    this.setupLocalClaudeCodeSettings();
     
-    // Setup local Claude settings
-    this.setupLocalClaudeSettings();
-    
-    // Setup global Claude settings if Claude CLI is installed
-    if (hasGlobalClaude) {
-      this.setupGlobalClaudeSettings();
-    }
+    log.success('Local Claude Code permissions configured');
   }
 
   checkGlobalClaude() {
@@ -349,7 +344,7 @@ version: ${this.getVersion()}
     }
   }
 
-  setupLocalClaudeSettings() {
+  setupLocalClaudeCodeSettings() {
     const settingsPath = path.join(this.targetDir, '.claude', 'settings.local.json');
     
     let settings = {
@@ -378,7 +373,19 @@ version: ${this.getVersion()}
     }
     
     // Add FORGE permissions if not already present
-    const forgePermissions = ['Bash(./forge *)', 'Bash(forge *)'];
+    const forgePermissions = [
+      'Bash(./forge *)', 
+      'Bash(forge *)', 
+      'Bash(./forge)', 
+      'Bash(./forge phase)', 
+      'Bash(./forge new "test validation docs")', 
+      'Bash(./forge status)', 
+      'Bash(./forge phase status)', 
+      'Bash(./forge phase next)', 
+      'Bash(./forge complete)', 
+      'Bash(./forge complete --force)', 
+      'Bash(./forge new "test accurate output")'
+    ];
     let added = false;
     
     forgePermissions.forEach(permission => {
@@ -392,13 +399,13 @@ version: ${this.getVersion()}
     fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2));
     
     if (added) {
-      log.success('Added FORGE permissions to local Claude settings');
+      log.success('Added FORGE permissions to local Claude Code settings');
     } else {
       log.success('Local FORGE permissions already configured');
     }
   }
 
-  setupGlobalClaudeSettings() {
+  setupGlobalClaudeCodeSettings() {
     try {
       const os = require('os');
       const globalClaudeDir = path.join(os.homedir(), '.claude');
@@ -435,7 +442,20 @@ version: ${this.getVersion()}
       }
       
       // Add global FORGE permissions if not already present
-      const globalForgePermissions = ['Bash(forge *)', 'Bash(./forge *)'];
+      const globalForgePermissions = [
+        'Bash(forge *)', 
+        'Bash(./forge *)',
+        'Bash(forge)',
+        'Bash(forge init)',
+        'Bash(forge new *)',
+        'Bash(forge status)',
+        'Bash(forge phase *)',
+        'Bash(forge complete)',
+        'Bash(forge complete --force)',
+        'Bash(forge learn)',
+        'Bash(forge document)',
+        'Bash(forge mcp *)'
+      ];
       let globalAdded = false;
       
       globalForgePermissions.forEach(permission => {
@@ -449,13 +469,13 @@ version: ${this.getVersion()}
       fs.writeFileSync(globalSettingsPath, JSON.stringify(globalSettings, null, 2));
       
       if (globalAdded) {
-        log.success('Added FORGE permissions to global Claude settings');
+        log.success('Added FORGE permissions to global Claude Code settings');
       } else {
         log.success('Global FORGE permissions already configured');
       }
       
     } catch (error) {
-      log.warn(`Could not setup global Claude settings: ${error.message}`);
+      log.warn(`Could not setup global Claude Code settings: ${error.message}`);
     }
   }
 
