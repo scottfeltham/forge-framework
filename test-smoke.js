@@ -58,9 +58,13 @@ try {
       fs.copyFileSync(packageJson, path.join(testDir, 'package.json'));
     }
     
-    // Copy templates directory
+    // Copy templates directory (both locations for compatibility)
     if (fs.existsSync(templateDir)) {
       fs.cpSync(templateDir, path.join(testDir, 'templates'), { recursive: true });
+      
+      // Also create .forge/templates for local development
+      fs.mkdirSync(path.join(testDir, '.forge'), { recursive: true });
+      fs.cpSync(templateDir, path.join(testDir, '.forge', 'templates'), { recursive: true });
     }
     
     // Copy node_modules for dependencies

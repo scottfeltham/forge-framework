@@ -18,8 +18,8 @@ const getTemplatesPath = () => {
     return localTemplatesPath;
   }
   
-  // Use global templates when installed globally
-  return path.join(process.cwd(), '.forge/templates');
+  // Use templates relative to forge script location
+  return path.join(__dirname, 'templates');
 };
 
 // Secure slug creation with validation
@@ -527,7 +527,11 @@ ai: {primary: claude, model: sonnet}`);
     }
     
     // Archive the cycle
-    const archivePath = `.forge/history/cycle-${timestamp()}.md`;
+    const historyDir = '.forge/history';
+    if (!fs.existsSync(historyDir)) {
+      fs.mkdirSync(historyDir, { recursive: true });
+    }
+    const archivePath = `${historyDir}/cycle-${timestamp()}.md`;
     fs.renameSync(cyclePath, archivePath);
     
     if (forceComplete) {
