@@ -1,52 +1,77 @@
 # Feature: {{FEATURE}}
 
-**Started**: {{DATE}}  
-**Status**: Focus Phase  
-**Owner**: {{OWNER}}  
+**Started**: {{DATE}}
+**Status**: Focus Phase
+**Owner**: {{OWNER}}
 **Team**: {{TEAM_MEMBERS}}
+**Priority**: {{PRIORITY}}
 
 ## 📋 Progress
 
 <!-- FORGE_PHASE:Focus:Active -->
 ### Phase 1: Focus 🎯 [Active]
+**Lead Agents**: Architect, Security, Documentation
 - [ ] Gather requirements
 - [ ] Define test scenarios (MANDATORY)
 - [ ] Create/Update PRD in specs/
+- [ ] **Commit PRD and test scenarios**
 - [ ] Parallel Analysis (if complex):
-  - [ ] Technical feasibility (subagent)
-  - [ ] Security implications (subagent)
-  - [ ] Performance impact (subagent)
-- [ ] Design architecture
-- [ ] Identify risks
+  - [ ] Technical feasibility (Architect Agent)
+  - [ ] Security implications (Security Agent)
+  - [ ] Performance impact (Architect Agent)
+- [ ] Design architecture (Architect Agent)
+- [ ] Identify risks (Security Agent)
+- [ ] **Commit architecture decisions and risk assessment**
+- [ ] **Push all Focus phase artifacts**
 
 <!-- FORGE_PHASE:Orchestrate:Pending -->
 ### Phase 2: Orchestrate 📝 [Pending]
-- [ ] Break down tasks
+**Lead Agents**: Architect, DevOps, Tester
+- [ ] Break down tasks (Architect Agent)
 - [ ] Assign priorities
 - [ ] Plan dependencies
+- [ ] Design test strategy (Tester Agent)
+- [ ] Plan CI/CD pipeline (DevOps Agent)
+- [ ] **Commit task breakdown and planning documents**
+- [ ] **Push Orchestrate phase artifacts**
 
 <!-- FORGE_PHASE:Refine:Pending -->
 ### Phase 3: Refine 🔨 [Pending]
-- [ ] Implement features
+**Lead Agents**: Developer, Tester, Code Reviewer
+- [ ] Implement features (Developer Agent)
   - [ ] Consider parallel implementation for independent components
-- [ ] Write tests
+  - [ ] **Commit after each completed feature/task**
+- [ ] Write tests (Tester Agent)
   - [ ] Consider parallel test types (unit, integration, e2e)
-- [ ] Code review
+  - [ ] **Commit tests with corresponding implementation**
+- [ ] Code review (Code Reviewer Agent)
+- [ ] Security validation (Security Agent)
+- [ ] **Push commits regularly (at least daily)**
+- [ ] **Push after completing major milestones**
 
 <!-- FORGE_PHASE:Generate:Pending -->
 ### Phase 4: Generate 🚀 [Pending]
-- [ ] Build artifacts
-- [ ] Prepare deployment
-- [ ] Update documentation
+**Lead Agents**: DevOps, Documentation, Tester
+- [ ] Build artifacts (DevOps Agent)
+- [ ] Prepare deployment (DevOps Agent)
+- [ ] Update documentation (Documentation Agent)
+- [ ] Final testing (Tester Agent)
+- [ ] **Commit build configurations and deployment scripts**
+- [ ] **Commit updated documentation**
+- [ ] **Push all Generate phase artifacts**
 
 <!-- FORGE_PHASE:Evaluate:Pending -->
 ### Phase 5: Evaluate 📊 [Pending]
+**All Agents Contribute**
 - [ ] Measure success metrics
 - [ ] Gather stakeholder feedback
-- [ ] Conduct retrospective
-- [ ] Document learnings
+- [ ] Conduct retrospective (All Agents)
+- [ ] Document learnings (Documentation Agent)
 - [ ] Update knowledge base
 - [ ] Plan improvements
+- [ ] **Commit retrospective and learnings**
+- [ ] **Push final cycle artifacts**
+- [ ] **Tag release if applicable**
 
 ## 📝 Notes
 
@@ -99,5 +124,17 @@
 ### Recommendations for Next Cycle
 *To be filled during Evaluate phase*
 
+## 🤖 Agent Assignments
+
+### Active Agents This Phase
+*Automatically determined based on current phase and task type*
+
+### Agent Recommendations
+*AI assistant will suggest appropriate agents based on:*
+- Current development phase
+- Feature complexity and type
+- Identified risks and requirements
+- Project configuration
+
 ## 🤖 Next Action
-Ask Claude to analyze requirements for {{FEATURE}}
+Ask AI assistant to analyze requirements for {{FEATURE}} with appropriate specialist agents

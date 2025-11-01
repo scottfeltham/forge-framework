@@ -1,7 +1,8 @@
 # 🔨 FORGE Framework
 
-
 A conversational AI-driven development framework that puts AI at the center of software development. A concise CLI under 200 lines that unlocks unlimited potential through natural dialogue.
+
+> **💡 Best Used With**: FORGE is designed for AI-powered development tools like Claude Code, Cursor, Continue, and other AI coding assistants. While it can be used standalone, it shines when paired with AI that understands context and guides you through structured workflows.
 
 [![npm version](https://img.shields.io/npm/v/forge-framework.svg)](https://www.npmjs.com/package/forge-framework)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -241,17 +242,26 @@ The framework provides minimal scaffolding - just enough to maintain best practi
 
 ## Documentation
 
+### Core Concepts
 - **[Philosophy](docs/PHILOSOPHY.md)** - Core principles and beliefs
 - **[AI-Driven Workflow](docs/AI_DRIVEN_WORKFLOW.md)** - How AI handles all complexity
+- **[Conversational PRD Workflow](docs/conversational-prd-workflow.md)** - Interactive requirements gathering
+- **[Agent Usage Guide](docs/AGENT_USAGE_GUIDE.md)** - How to work with FORGE agents
+
+### Integration & Usage
+- **[Claude Code Integration](docs/CLAUDE_CODE_INTEGRATION.md)** - Using with Claude Code
+- **[MCP Integration](docs/MCP_INTEGRATION.md)** - Model Context Protocol support
+- **[Existing Project Integration](docs/EXISTING_PROJECT_INTEGRATION.md)** - Add FORGE to existing projects
+
+### Advanced Topics
 - **[Agent Customization](docs/AGENT_CUSTOMIZATION.md)** - Creating specialized agents
 - **[Dynamic Agents](docs/DYNAMIC_AGENTS.md)** - How agents are created on-the-fly
-- **[Claude Code Integration](docs/CLAUDE_CODE_INTEGRATION.md)** - Using with Claude Code
-- **[Existing Project Integration](docs/EXISTING_PROJECT_INTEGRATION.md)** - Add FORGE to existing projects
 - **[PRD Guide](docs/PRD_GUIDE.md)** - Product Requirements Documents in Focus phase
 - **[Team Collaboration](docs/TEAM_COLLABORATION.md)** - Multi-developer workflows
 - **[Learning Process](docs/LEARNING_PROCESS.md)** - Continuous improvement system
 - **[Memory Integration](docs/MEMORY_INTEGRATION.md)** - AI memory system support
-- **[MCP Integration](docs/MCP_INTEGRATION.md)** - Model Context Protocol support
+
+### Reference
 - **[Credits](docs/CREDITS.md)** - Acknowledgments and inspirations
 
 ## Example Workflow

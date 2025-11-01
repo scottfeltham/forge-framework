@@ -136,6 +136,125 @@ These are explicit commands that should be executed immediately. See `.claude/co
 ### Important: Natural Language Recognition
 Even without the slash, phrases like "forge a new installer" or "forge new authentication" should be recognized as FORGE commands and trigger the appropriate cycle creation.
 
+## Conversational PRD Building
+
+FORGE uses an **interactive, conversational approach** when creating new development cycles:
+
+### Starting a New Cycle
+
+When `forge new <feature>` is called with minimal information, AI assistants should:
+
+1. **Ask clarifying questions** about the feature requirements
+2. **Guide through PRD creation** with structured prompts
+3. **Validate completeness** before proceeding
+4. **Request confirmation** showing what will be created
+
+**Example Flow:**
+```bash
+forge new "user-authentication"
+
+# AI should respond with questions about:
+# - What authentication methods?
+# - Security requirements?
+# - Integration points?
+# - Success criteria?
+```
+
+### PRD Requirements
+
+A comprehensive PRD should include:
+
+- **User Context**: Who needs this and why?
+- **Acceptance Criteria**: What defines success?
+- **Technical Details**: System components and integrations
+- **Security & Compliance**: Requirements and standards
+- **Success Metrics**: Measurable outcomes
+
+See [docs/conversational-prd-workflow.md](docs/conversational-prd-workflow.md) for detailed examples.
+
+## Command Safety and Destructive Operations
+
+**CRITICAL: AI assistants must enforce safety checks for all destructive operations.**
+
+### Protected Command Patterns
+
+AI assistants must require human approval before executing:
+
+**File Deletion:**
+- `rm -rf` - Recursive deletion
+- `rm /path/` - Directory deletion
+- Any `rm` with wildcards (`rm *`)
+
+**Git Operations:**
+- `git push --force` - Force push (suggest --force-with-lease instead)
+- `git reset --hard` - Hard reset (loses changes)
+- `git clean -fd` - Cleaning untracked files
+- `git branch -D` - Force delete branch
+
+**System Modifications:**
+- `sudo rm` - Elevated deletion
+- `sudo shutdown/reboot` - System control
+- `kill -9` - Force kill processes
+- Package removal operations
+
+**Database Operations:**
+- `DROP DATABASE` - Database deletion
+- `DROP TABLE` - Table deletion
+- `TRUNCATE` - Data truncation
+
+### AI Assistant Guidelines
+
+When working with FORGE, AI assistants MUST:
+
+1. **NEVER execute destructive commands without explicit human approval**
+2. **ALWAYS suggest safer alternatives first**
+3. **REQUIRE confirmation for any command matching destructive patterns**
+4. **EXPLAIN the risks before requesting approval**
+5. **LOG all destructive operations for audit trail**
+
+### Safety Workflow
+
+```
+1. AI detects potentially destructive command
+2. AI presents WARNING with:
+   - Command and risk level
+   - What could go wrong
+   - Safer alternatives
+   - Approval requirement
+3. Human reviews and approves/rejects
+4. Command executes only after confirmation
+```
+
+### Example: Safe vs Unsafe
+
+❌ **UNSAFE - Require approval:**
+```bash
+rm -rf node_modules/
+git push --force
+chmod 777 -R .
+```
+
+✅ **SAFE - Recommended alternatives:**
+```bash
+# Instead of rm -rf, use package manager
+npm ci  # Reinstalls cleanly
+
+# Instead of force push
+git push --force-with-lease
+
+# Instead of 777
+chmod 755 file.sh  # Specific, appropriate permissions
+```
+
+## Agent Specialization
+
+FORGE includes base AI agent templates that guide different aspects of development. See [docs/AGENT_USAGE_GUIDE.md](docs/AGENT_USAGE_GUIDE.md) for:
+
+- Phase-based agent selection
+- Task-based agent mapping
+- Agent collaboration patterns
+- Best practices for working with agents
+
 ---
 
 *This file helps AI assistants understand and work effectively with the FORGE framework.*
