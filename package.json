@@ -1,8 +1,8 @@
 {
   "name": "forge-framework",
-  "version": "0.7.0",
+  "version": "2.0.0",
   "description": "AI-driven development framework - conversational, simple, powerful",
-  "author": "Scott Feltham <scott@outdoorsphere.co.uk>",
+  "author": "Scott Feltham <scott@neoforge.co>",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/scottfeltham/forge-framework.git"

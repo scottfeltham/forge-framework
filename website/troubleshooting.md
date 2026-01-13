@@ -16,7 +16,7 @@ nav_order: 3
 
 ---
 
-Common issues and solutions for FORGE Framework v0.6.0.
+Common issues and solutions for FORGE Framework v2.0.0.
 
 ## Installation Issues
 
@@ -445,7 +445,7 @@ forge --version
 **A**: FORGE is designed for AI-driven development. While you can manually edit cycle files, you'll miss the core benefits.
 
 ### Q: How do I migrate from older versions?
-**A**: v0.6.0 is backward compatible. Just update and enjoy new features like phase validation.
+**A**: v2.0.0 is backward compatible. Just update and enjoy new features like phase validation and IDD methodology alignment.
 
 ### Q: Can multiple people work on same cycle?
 **A**: Use team mode in forge.yaml for parallel cycles. For same cycle, coordinate through your version control system.

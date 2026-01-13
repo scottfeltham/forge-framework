@@ -27,7 +27,7 @@ Get up and running with FORGE in under 5 minutes.
 npm install -g forge-framework
 
 # Verify installation
-forge --version  # Should output: 0.6.0
+forge --version  # Should output: 2.0.0
 ```
 
 ### What Gets Installed
@@ -61,14 +61,14 @@ This creates a minimal `forge.yaml` configuration. Ask your AI assistant (Claude
 forge new "user authentication"
 ```
 
-This starts a new development cycle. FORGE enforces progression through 5 validated phases:
-1. **Focus** - Understand requirements and design (mandatory test scenarios)
-2. **Orchestrate** - Plan tasks and dependencies
-3. **Refine** - Implement with TDD
-4. **Generate** - Prepare for deployment
-5. **Evaluate** - Learn and improve
+This starts a new development cycle. FORGE implements Intent-Driven Development through 5 validated phases:
+1. **Focus** 🎯 - Clarity: What & Why (problem statement, success criteria, C4 L1)
+2. **Orchestrate** 📋 - Planning: Break It Down (C4 L2-L3, dependency map, session-sized tasks)
+3. **Refine** ✏️ - Precision: Define "Done" (acceptance criteria, interfaces, edge cases - NO CODE)
+4. **Generate** ⚡ - Creation: TDD Code (RED → GREEN → REFACTOR)
+5. **Evaluate** ✅ - Verification (criteria check, security review, disposition)
 
-### Phase Validation (v0.6.0+)
+### Phase Validation (v2.0.0+)
 
 FORGE enforces proper progression through validated phases:
 

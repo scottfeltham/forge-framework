@@ -211,9 +211,11 @@ Dependencies:
 Let me update the cycle documentation...
 ```
 
-## Step 7: Refine Phase - Implementation
+## Step 7: Refine Phase - Specifications
 
-Move to implementation:
+**CRITICAL: No code is written in this phase - specifications only.**
+
+Move to Refine phase:
 
 ```bash
 forge phase next
@@ -221,93 +223,140 @@ forge phase next
 
 ### You:
 ```
-Let's implement the user registration feature with TDD
+Let's define the acceptance criteria and edge cases for user authentication
 ```
 
-### Claude:
+### Claude (using forge-tester):
 ```
 [forge-tester activated]
 
-Starting with tests first (TDD approach). Creating the test file:
+Defining specifications for user authentication:
 
-[Creates auth.test.js with comprehensive tests]
+**Acceptance Criteria (Given-When-Then):**
 
+1. User Registration:
+   Given a new user with valid email and password
+   When they submit the registration form
+   Then a new account is created and confirmation email sent
+
+2. Login:
+   Given an existing user with valid credentials
+   When they submit the login form
+   Then they receive a JWT token and are authenticated
+
+**Interface Specifications:**
+- POST /api/auth/register - accepts {email, password}, returns {userId, token}
+- POST /api/auth/login - accepts {email, password}, returns {token, refreshToken}
+- Error contract: {error: string, code: number}
+
+**Edge Cases by Category:**
+| Category | Cases |
+|----------|-------|
+| Empty/null | Empty email, empty password, null values |
+| Boundary | Password min/max length, email format |
+| Invalid | Malformed email, weak password, SQL injection |
+| Timing | Expired tokens, rate limiting |
+| Failure | Database down, email service unavailable |
+
+Ready to move to Generate phase for implementation?
+```
+
+## Step 8: Generate Phase - TDD Implementation
+
+```bash
+forge phase next
+```
+
+### You:
+```
+Let's implement user authentication with TDD
+```
+
+### Claude (using forge-developer):
+```
 [forge-developer activated]
 
-Now implementing to make tests pass:
+Following TDD: RED → GREEN → REFACTOR
 
-[Creates implementation files with actual code]
+**RED Phase - Writing failing tests first:**
 
-Running tests to verify:
+[Creates auth.test.js with tests based on acceptance criteria]
+
 npm test
+❌ 12 tests failing (as expected)
 
-✅ All tests passing!
-```
+**GREEN Phase - Minimal implementation to pass:**
 
-## Step 8: Generate Phase - Deployment Prep
+[Creates auth.controller.js, auth.service.js, auth.model.js]
 
-```bash
-forge phase next
-```
+npm test
+✅ 12 tests passing!
 
-### You:
-```
-Prepare for deployment
-```
+**REFACTOR Phase - Improve while green:**
 
-### Claude (using forge-devops):
-```
-[forge-devops activated]
+[Extracts password validation, adds input sanitization]
 
-Preparing deployment artifacts:
+npm test
+✅ 12 tests passing, code coverage: 94%
 
-1. Creating Dockerfile
-2. Setting up environment variables
-3. Adding production configs
-4. Creating deployment scripts
-5. Updating documentation
-
-[Creates all necessary deployment files]
-```
-
-## Step 9: Evaluate Phase - Review & Learn
-
-```bash
-forge phase next
-```
-
-### You:
-```
-Let's evaluate what we built
-```
-
-### Claude (using forge-reviewer):
-```
 [forge-reviewer activated]
 
-Conducting comprehensive review:
+Code review completed:
+- Clean separation of concerns ✅
+- Input validation present ✅
+- Password hashing secure ✅
+- Ready for evaluation
+```
 
-### What Worked Well:
-- Clean separation of concerns
-- Comprehensive test coverage (95%)
-- Secure password handling
-- Well-structured JWT implementation
+## Step 9: Evaluate Phase - Verification
 
-### Areas for Improvement:
-- Could add email verification
-- Consider OAuth integration
-- Add password reset functionality
+```bash
+forge phase next
+```
 
-### Metrics:
-- Code coverage: 95%
-- Security score: A
-- Performance: <100ms response time
-- Documentation: Complete
+### You:
+```
+Let's verify the implementation against our acceptance criteria
+```
+
+### Claude (using forge-tester + forge-security):
+```
+[forge-tester activated]
+
+**Verification against Acceptance Criteria:**
+
+1. User Registration ✅
+   ✓ Given/When/Then criteria verified
+   ✓ Confirmation email sent
+   ✓ Account created in database
+
+2. Login ✅
+   ✓ Valid credentials return JWT
+   ✓ Invalid credentials rejected
+   ✓ Refresh token generated
+
+**Edge Cases Tested:**
+- Empty/null inputs: ✅ Proper error messages
+- Boundary conditions: ✅ Min/max password length enforced
+- Invalid inputs: ✅ SQL injection blocked, weak passwords rejected
+- Timing: ✅ Token expiration working, rate limiting active
+- Failure modes: ✅ Graceful degradation tested
+
+[forge-security activated]
+
+**Security Review:**
+- Password hashing: bcrypt with 10 rounds ✅
+- JWT implementation: Secure signing ✅
+- Input validation: Sanitization present ✅
+- No injection vulnerabilities detected ✅
+
+**Disposition Decision:**
+✅ ACCEPT - All acceptance criteria met, edge cases handled, security verified.
 
 ### Learnings Captured:
-- JWT refresh pattern effective
-- Bcrypt rounds (10) balance security/performance
-- Rate limiting prevents brute force
+- JWT refresh pattern effective for session management
+- Bcrypt rounds (10) balance security/performance well
+- Rate limiting essential for brute force prevention
 
 Ready to complete the cycle?
 ```
@@ -399,9 +448,10 @@ forge status --detailed
 ```
 
 Common missing items:
-- Test scenarios not created (Focus phase)
-- Tasks not broken down (Orchestrate phase)
-- Tests not written (Refine phase)
+- Problem statement/success criteria not defined (Focus phase)
+- Tasks not broken down into sessions (Orchestrate phase)
+- Acceptance criteria/edge cases not specified (Refine phase)
+- Tests not passing or coverage below 80% (Generate phase)
 
 ### Issue: "Subagents not responding"
 

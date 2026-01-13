@@ -92,11 +92,16 @@ forge complete payment-system.md
 ## How It Works
 
 FORGE guides development through 5 validated phases:
-1. **Focus** - Understand and architect (with mandatory test scenarios)
-2. **Orchestrate** - Plan and organize  
-3. **Refine** - Build and test
-4. **Generate** - Deploy and deliver
-5. **Evaluate** - Measure and improve
+
+| Phase | Purpose | Key Output |
+|-------|---------|------------|
+| **Focus** 🎯 | Clarity: What & Why | Problem statement, success criteria, C4 L1 |
+| **Orchestrate** 📋 | Planning: Break It Down | C4 L2-L3, dependency map, session-sized tasks |
+| **Refine** ✏️ | Precision: Define "Done" | Acceptance criteria, interfaces, edge cases |
+| **Generate** ⚡ | Creation: TDD Code | RED → GREEN → REFACTOR |
+| **Evaluate** ✅ | Verification | Criteria check, security review, disposition |
+
+**Key Rule**: No code in Refine phase - specifications only.
 
 ### Phase Validation System
 
@@ -325,23 +330,37 @@ We're actively seeking feedback to improve FORGE.
 - **Join Discussions**: [GitHub Discussions](https://github.com/scottfeltham/forge-framework/discussions)
 - **Share Examples**: Show us what you build!
 
+## Integration Options
+
+FORGE offers multiple ways to integrate with your development workflow:
+
+| Option | Best For | Setup |
+|--------|----------|-------|
+| **CLI** (forge-framework) | Quick start, any AI assistant | `npm install -g forge-framework` |
+| **Skill** (forge-skill) | Claude Code, natural language | Copy to `~/.claude/skills/` |
+| **MCP** (forge-mcp) | Automation, team environments | Configure in Claude settings |
+
+All options implement the same IDD methodology and produce compatible `.forge/` state files.
+
 ## Roadmap
 
-### v0.6.0 (Current)
-- ✅ Core 5-phase cycle
-- ✅ AI agent system
-- ✅ TDD enforcement
-- ✅ Documentation management
+### v2.0.0 (Current)
+- ✅ Core 5-phase IDD cycle
+- ✅ AI agent system with subagents
+- ✅ TDD enforcement (RED-GREEN-REFACTOR)
+- ✅ Phase validation system
 - ✅ Team collaboration
 - ✅ Learning system
+- ✅ Aligned with Intent-Driven Development book
+- ✅ Version alignment across all FORGE implementations
 
-### v0.2.0 (Planned)
+### v2.1.0 (Planned)
 - Enhanced MCP integration
 - Agent marketplace
 - Performance metrics
 - Extended templates
 
-### v1.0.0 (Future)
+### v3.0.0 (Future)
 - Stable API
 - Plugin system
 - Enterprise features

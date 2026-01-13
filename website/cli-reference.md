@@ -18,7 +18,7 @@ nav_order: 1
 
 ## Overview
 
-The FORGE CLI (v0.6.0) provides a minimal yet powerful interface for AI-driven development with built-in phase validation, progress tracking, and automatic Claude Code subagent configuration.
+The FORGE CLI (v2.0.0) provides a minimal yet powerful interface for AI-driven development with built-in phase validation, progress tracking, and automatic Claude Code subagent configuration.
 
 ## Core Commands
 
@@ -54,7 +54,7 @@ forge new "user authentication"
 ---
 
 ### forge status
-Display cycle progress with visual indicators (v0.6.0 feature).
+Display cycle progress with visual indicators.
 
 ```bash
 forge status              # Visual progress summary
@@ -314,6 +314,6 @@ project/
 
 ## Version Information
 
-Current Version: 0.6.0
+Current Version: 2.0.0
 
 For updates: [GitHub Repository](https://github.com/scottfeltham/forge-framework)

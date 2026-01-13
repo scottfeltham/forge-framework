@@ -28,7 +28,7 @@ FORGE automatically configures Claude Code subagents during installation, provid
 npm install -g forge-framework
 
 # Output:
-# ✓ FORGE v0.6.0 installed globally
+# ✓ FORGE v2.0.0 installed globally
 # ✓ CLI available as 'forge' command
 # ✓ 6 Claude Code subagents configured:
 #   • forge-architect - System design specialist
@@ -129,27 +129,29 @@ Finally, forge-tester will validate the improvements:
 
 ### Phase-Based Subagent Usage
 
-Each FORGE phase naturally aligns with specific subagents:
+Each FORGE phase naturally aligns with specific subagents (following IDD methodology):
 
 ```yaml
-Focus Phase:
-  - forge-architect: Requirements analysis and system design
+Focus Phase (Clarity: What & Why):
+  - forge-architect: Problem statement, success criteria, C4 L1 diagrams
   - forge-analyzer: Codebase understanding and impact assessment
 
-Orchestrate Phase:
-  - forge-architect: Task breakdown and dependency planning
-  - forge-developer: Implementation planning
+Orchestrate Phase (Planning: Break It Down):
+  - forge-architect: C4 L2-L3 architecture, dependency mapping
+  - forge-developer: Session-sized task breakdown
 
-Refine Phase:
-  - forge-developer: Code implementation
-  - forge-tester: Test creation and execution
-  - forge-reviewer: Code quality assessment
+Refine Phase (Precision: Define "Done" - NO CODE):
+  - forge-tester: Acceptance criteria (Given-When-Then), edge cases
+  - forge-architect: Interface specifications (inputs, outputs, errors)
+  - forge-reviewer: Specification review
 
-Generate Phase:
-  - forge-devops: Build and deployment automation
-  - forge-developer: Final implementation touches
+Generate Phase (Creation: TDD Code):
+  - forge-developer: RED-GREEN-REFACTOR implementation
+  - forge-tester: Test execution and coverage
+  - forge-reviewer: Code review
 
-Evaluate Phase:
+Evaluate Phase (Verification):
+  - forge-tester: Verify against acceptance criteria
   - forge-reviewer: Final quality assessment
   - forge-analyzer: Success metrics and learning capture
 ```
@@ -328,8 +330,69 @@ Subagents complement your IDE:
 - forge-architect creates system documentation
 - All subagents contribute to learning capture
 
+## FORGE Skill (Alternative Integration)
+
+For users who prefer not to use MCP, FORGE provides a **Claude Code Skill** that enables the same IDD workflow through natural conversation.
+
+### What is the FORGE Skill?
+
+The FORGE Skill is a lightweight alternative to the MCP server that:
+- Requires no MCP configuration
+- Works through natural language commands
+- Auto-invokes when you mention FORGE or development cycles
+- Uses Python tools (via uv) under the hood
+
+### Installation
+
+```bash
+# Clone the forge-skill repository
+git clone https://github.com/scottfeltham/forge-skill.git
+
+# The skill auto-configures when placed in your Claude Code skills directory
+cp -r forge-skill/.claude/skills/forge ~/.claude/skills/
+```
+
+### Usage
+
+Just talk to Claude naturally:
+
+```
+"Initialize FORGE in this project"
+"Start a new cycle for user authentication"
+"What's my current cycle status?"
+"Advance to the next phase"
+"Add a learning about our API patterns"
+```
+
+The skill automatically detects FORGE-related requests and executes the appropriate commands.
+
+### Skill vs MCP Comparison
+
+| Feature | FORGE Skill | FORGE MCP |
+|---------|-------------|-----------|
+| Installation | Copy skill directory | Configure MCP server |
+| Invocation | Natural language | MCP tool calls |
+| Dependencies | Python + uv | Node.js |
+| Best for | Quick setup, single user | Team environments, automation |
+
+### When to Use Each
+
+**Use the Skill when:**
+- You want the simplest possible setup
+- You're working solo on a project
+- You prefer natural language over explicit commands
+
+**Use MCP when:**
+- You need programmatic access to FORGE state
+- You're building automation around FORGE
+- You want integration with other MCP tools
+
+Both implement the same IDD methodology and produce compatible `.forge/` state files.
+
 ## Conclusion
 
 FORGE's Claude Code subagent integration provides specialized AI expertise exactly when you need it, with isolated contexts that prevent confusion and maintain focus. The automatic configuration during installation means you get powerful AI assistance with zero setup effort.
+
+Whether you choose the MCP server or the FORGE Skill, you get the full power of Intent-Driven Development with Claude Code's specialized subagents.
 
 The combination of FORGE's structured development process and Claude Code's subagent capabilities creates an intelligent development environment that scales from simple features to complex system architecture.

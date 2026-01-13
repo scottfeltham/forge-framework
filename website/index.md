@@ -24,7 +24,7 @@ A minimal, concise CLI that unlocks unlimited potential through natural dialogue
 npm install -g forge-framework
 
 # Verify installation
-forge --version  # Should show 0.6.0
+forge --version  # Should show 2.0.0
 ```
 {: .fs-5 }
 
