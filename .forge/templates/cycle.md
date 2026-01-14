@@ -1,103 +1,129 @@
-# Feature: {{FEATURE}}
+# Cycle: {{FEATURE}}
 
-**Started**: {{DATE}}  
-**Status**: Focus Phase  
-**Owner**: {{OWNER}}  
-**Team**: {{TEAM_MEMBERS}}
+**Created**: {{DATE}}
+**Priority**: {{PRIORITY}}
+**Status**: Active
 
-## 📋 Progress
+## Overview
+
+<!-- Describe what this cycle aims to accomplish -->
+
+---
 
 <!-- FORGE_PHASE:Focus:Active -->
-### Phase 1: Focus 🎯 [Active]
-- [ ] Gather requirements
-- [ ] Define test scenarios (MANDATORY)
-- [ ] Create/Update PRD in specs/
-- [ ] Parallel Analysis (if complex):
-  - [ ] Technical feasibility (subagent)
-  - [ ] Security implications (subagent)
-  - [ ] Performance impact (subagent)
-- [ ] Design architecture
-- [ ] Identify risks
+## Phase 1: Focus 🎯
+
+**Purpose**: Define what you're building and why.
+
+### Required Outputs
+- [ ] Problem statement and target users defined
+- [ ] Testable success criteria written
+- [ ] System Context diagram (C4 L1) created
+- [ ] Clear boundaries on what you WON'T build
+
+### Notes
+
+<!-- Document Focus phase work here -->
+
+---
 
 <!-- FORGE_PHASE:Orchestrate:Pending -->
-### Phase 2: Orchestrate 📝 [Pending]
-- [ ] Break down tasks
-- [ ] Assign priorities
-- [ ] Plan dependencies
+## Phase 2: Orchestrate 📋
 
-<!-- FORGE_PHASE:Refine:Pending -->
-### Phase 3: Refine 🔨 [Pending]
-- [ ] Implement features
-  - [ ] Consider parallel implementation for independent components
-- [ ] Write tests
-  - [ ] Consider parallel test types (unit, integration, e2e)
-- [ ] Code review
+**Purpose**: Break the work into session-sized pieces.
 
-<!-- FORGE_PHASE:Generate:Pending -->
-### Phase 4: Generate 🚀 [Pending]
-- [ ] Build artifacts
-- [ ] Prepare deployment
-- [ ] Update documentation
-
-<!-- FORGE_PHASE:Evaluate:Pending -->
-### Phase 5: Evaluate 📊 [Pending]
-- [ ] Measure success metrics
-- [ ] Gather stakeholder feedback
-- [ ] Conduct retrospective
-- [ ] Document learnings
-- [ ] Update knowledge base
-- [ ] Plan improvements
-
-## 📝 Notes
-
-### Requirements
-*Claude will help fill this section*
-
-### Test Scenarios [MANDATORY - Must be completed in Focus phase]
-*Link to test scenarios: [Not yet created]*
-<!-- Test scenarios MUST be defined before any code is written -->
-<!-- Use templates/test-scenarios.md as a guide -->
-<!-- NO IMPLEMENTATION WITHOUT TEST SCENARIOS -->
-
-### PRD Reference
-*Link to PRD: [Not yet created]*
-<!-- PRDs are stored in specs/ directory -->
-<!-- Naming convention: prd-{{feature-name}}.md -->
-
-### Architecture Decisions
-*To be determined during Focus phase*
-
-### Parallel Task Opportunities
-*Identify tasks that can be executed in parallel using subagents*
-<!-- Use templates/parallel-tasks.md for complex features -->
-<!-- Consider parallel execution for:
-     - Multi-aspect analysis (technical, security, performance)
-     - Independent component development
-     - Different test types (unit, integration, e2e)
-     - Documentation tasks (generation, auditing, formatting)
--->
+### Required Outputs
+- [ ] Container architecture (C4 L2) designed
+- [ ] Component architecture (C4 L3) designed
+- [ ] Dependency map created
+- [ ] Tasks sized for single AI sessions
 
 ### Tasks
-*To be created during Orchestrate phase*
 
-## 📊 Evaluation Results
+<!-- List tasks here -->
 
-### Success Metrics
-| Metric | Target | Actual | Status |
-|--------|--------|--------|--------|
-| *Define during Focus* | - | - | - |
+---
 
-### What Worked Well
-*To be filled during Evaluate phase*
+<!-- FORGE_PHASE:Refine:Pending -->
+## Phase 3: Refine ✏️
 
-### What Didn't Work
-*To be filled during Evaluate phase*
+**Purpose**: Define exactly what "done" looks like.
 
-### Key Learnings
-*To be filled during Evaluate phase*
+**CRITICAL**: No code in this phase - specifications only.
 
-### Recommendations for Next Cycle
-*To be filled during Evaluate phase*
+### Required Outputs
+- [ ] Acceptance criteria in Given-When-Then format
+- [ ] Interface specifications documented
+- [ ] Edge cases enumerated by category
+- [ ] Constraints vs criteria documented
 
-## 🤖 Next Action
-Ask Claude to analyze requirements for {{FEATURE}}
+### Acceptance Criteria
+
+<!-- For each task, use Given-When-Then format:
+Given [starting situation]
+When [action is taken]
+Then [expected outcome]
+-->
+
+### Interface Specifications
+
+<!-- Document inputs, outputs, and error contracts -->
+
+### Edge Cases
+
+| Category | Cases |
+|----------|-------|
+| Empty/null | |
+| Boundary | |
+| Invalid | |
+| Timing | |
+| Failure | |
+
+---
+
+<!-- FORGE_PHASE:Generate:Pending -->
+## Phase 4: Generate ⚡
+
+**Purpose**: AI writes code following TDD.
+
+### Process
+- [ ] RED: Write failing tests
+- [ ] GREEN: Minimal code to pass
+- [ ] REFACTOR: Improve while green
+
+### Rules
+- One task per AI session
+- Tests BEFORE implementation
+- 80% minimum coverage
+
+### Implementation Notes
+
+<!-- Document implementation progress here -->
+
+---
+
+<!-- FORGE_PHASE:Evaluate:Pending -->
+## Phase 5: Evaluate ✅
+
+**Purpose**: Verify output matches intent.
+
+### Verification Checklist
+- [ ] Criteria verified line-by-line
+- [ ] Edge cases tested
+- [ ] Security review completed
+- [ ] Integration tested
+
+### Disposition
+
+<!-- Choose one:
+- **Accept**: Meets all criteria - complete cycle
+- **Accept with issues**: Works but has minor issues - document and plan fixes
+- **Revise**: Doesn't meet criteria - back to Generate
+- **Reject**: Fundamental problems - back to Focus
+-->
+
+---
+
+## Learnings
+
+<!-- Capture learnings during and after the cycle -->

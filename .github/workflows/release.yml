@@ -127,8 +127,8 @@ jobs:
           PACKAGE_VERSION=$(node -p "require('./package.json').version")
           
           # Ensure we have the right file
-          if [ -f "forge-framework-${PACKAGE_VERSION}.tgz" ]; then
-            echo "✅ Package created: forge-framework-${PACKAGE_VERSION}.tgz"
+          if [ -f "neoforge-forge-framework-${PACKAGE_VERSION}.tgz" ]; then
+            echo "✅ Package created: neoforge-forge-framework-${PACKAGE_VERSION}.tgz"
           else
             echo "❌ Expected package file not found"
             ls -la *.tgz
@@ -139,7 +139,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: npm-package
-          path: "forge-framework-*.tgz"
+          path: "neoforge-forge-framework-*.tgz"
 
   changelog:
     name: Generate Changelog
@@ -204,6 +204,9 @@ jobs:
     name: Publish to npm
     needs: [validate, build, changelog]
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -220,31 +223,29 @@ jobs:
           name: npm-package
 
       - name: Publish to npm
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           # List downloaded files
           ls -la
-          
+
           # Find the package file
-          PACKAGE_FILE=$(find . -name "forge-framework-*.tgz" -type f | head -1)
+          PACKAGE_FILE=$(find . -name "neoforge-neoforge-forge-framework-*.tgz" -type f | head -1)
           echo "Found package: $PACKAGE_FILE"
-          
+
           # Determine npm tag
           if [[ "${{ needs.validate.outputs.release_type }}" == "prerelease" ]]; then
             NPM_TAG="beta"
           else
             NPM_TAG="latest"
           fi
-          
-          # Publish package with retry
+
+          # Publish package with retry (using OIDC trusted publishing)
           MAX_ATTEMPTS=3
           RETRY_DELAY=10
-          
+
           for i in $(seq 1 $MAX_ATTEMPTS); do
             echo "Publish attempt $i of $MAX_ATTEMPTS"
-            
-            if npm publish "$PACKAGE_FILE" --tag $NPM_TAG; then
+
+            if npm publish "$PACKAGE_FILE" --tag $NPM_TAG --provenance --access public; then
               echo "✅ Published to npm with tag: $NPM_TAG"
               break
             else
@@ -279,12 +280,12 @@ jobs:
           draft: false
           prerelease: ${{ needs.validate.outputs.release_type == 'prerelease' }}
           files: |
-            npm-package/forge-framework-${{ needs.validate.outputs.version }}.tgz
+            npm-package/neoforge-forge-framework-${{ needs.validate.outputs.version }}.tgz
             changelog/changelog.md
 
       - name: Notify success
         if: success()
         run: |
           echo "🎉 Release ${{ needs.validate.outputs.version }} published successfully!"
-          echo "npm: https://www.npmjs.com/package/forge-framework"
+          echo "npm: https://www.npmjs.com/package/@neoforge/forge-framework"
           echo "GitHub: https://github.com/${{ github.repository }}/releases/tag/${{ needs.validate.outputs.version }}"
