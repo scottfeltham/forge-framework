@@ -228,7 +228,7 @@ jobs:
           ls -la
 
           # Find the package file
-          PACKAGE_FILE=$(find . -name "neoforge-neoforge-forge-framework-*.tgz" -type f | head -1)
+          PACKAGE_FILE=$(find . -name "neoforge-forge-framework-*.tgz" -type f | head -1)
           echo "Found package: $PACKAGE_FILE"
 
           # Determine npm tag
