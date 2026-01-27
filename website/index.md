@@ -43,21 +43,49 @@ Each phase has validation gates. You can't skip ahead without completing the req
 
 ## Getting Started
 
-```bash
-# Install globally
-npm install -g @neoforge/forge-framework
+Choose your preferred integration:
 
-# Initialize in your project
-cd your-project
-forge init
-
-# Start your first IDD cycle
-forge new "user authentication"
-
-# Check progress
-forge status
-```
+### Option 1: Claude Code Skill (Recommended)
 {: .fs-5 }
+
+The simplest way to use FORGE. No server required - just install the skill.
+
+```bash
+# Clone the skill
+git clone https://github.com/neoforge-dev/forge-skill.git ~/.claude/skills/forge
+
+# That's it! Use /forge in Claude Code
+```
+
+Then in Claude Code:
+```
+/forge new "user authentication"
+/forge status
+/forge phase next
+```
+
+### Option 2: MCP Server
+{: .fs-5 }
+
+For IDE integrations and multi-tool workflows.
+
+```bash
+# Install the MCP server
+npm install -g @neoforge/forge-mcp
+
+# Add to your Claude Desktop config
+# See MCP Integration docs for setup
+```
+
+### Option 3: CLI (Legacy)
+{: .fs-5 }
+
+Standalone CLI for non-Claude workflows.
+
+```bash
+npm install -g @neoforge/forge-framework
+forge init && forge new "feature"
+```
 
 ---
 
@@ -85,26 +113,33 @@ Architect, Developer, Tester, DevOps, Reviewer - each with domain expertise.
 
 ## Quick Example
 
-```bash
-# Start an IDD cycle
-forge new "payment processing"
-
-# FORGE guides you through:
-# 1. Focus   - Define the problem and success criteria
-# 2. Orchestrate - Design architecture and break into tasks
-# 3. Refine  - Write acceptance criteria (no code yet!)
-# 4. Generate - AI implements via TDD
-# 5. Evaluate - Verify implementation matches intent
-```
-
-The conversation might look like:
+Using the Claude Code skill:
 
 ```
-You: Let's implement payment processing
-Claude: I'll start with the Focus phase. What payment providers
-        do you need to support? What are your success criteria?
-You: Stripe only. Success = can charge a card and handle failures.
-Claude: Got it. Let me define the acceptance criteria...
+You: /forge new "payment processing"
+
+Claude: Starting Focus phase. Let me ask some questions:
+        - What payment providers do you need?
+        - What are your success criteria?
+        - Any security requirements?
+
+You: Stripe only. Success = charge cards and handle failures gracefully.
+
+Claude: Got it. Moving to Orchestrate phase...
+        [Creates architecture diagram]
+        [Breaks into session-sized tasks]
+
+Claude: Ready for Refine phase. Writing acceptance criteria...
+        Given a valid card, when charged, then return success
+        Given an invalid card, when charged, then return error with code
+
+Claude: Acceptance criteria approved. Starting Generate phase...
+        [Writes failing test first - RED]
+        [Implements minimal code - GREEN]
+        [Refactors - REFACTOR]
+
+Claude: All tests passing. Ready for Evaluate phase.
+        Does this match your intent?
 ```
 
 ---
