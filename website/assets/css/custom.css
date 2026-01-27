@@ -556,21 +556,31 @@ pre code {
 /* Tables */
 [data-theme="dark"] table {
   border-color: var(--forge-border);
+  background-color: var(--forge-background);
 }
 
 [data-theme="dark"] th {
-  background-color: var(--forge-background-secondary);
-  color: var(--forge-text-primary);
+  background-color: var(--forge-background-secondary) !important;
+  color: var(--forge-text-primary) !important;
   border-color: var(--forge-border);
 }
 
 [data-theme="dark"] td {
+  background-color: var(--forge-background) !important;
   border-color: var(--forge-border);
-  color: var(--forge-text-secondary);
+  color: var(--forge-text-secondary) !important;
+}
+
+[data-theme="dark"] tr {
+  background-color: var(--forge-background) !important;
 }
 
 [data-theme="dark"] tr:nth-child(even) {
-  background-color: var(--forge-background-secondary);
+  background-color: var(--forge-background-secondary) !important;
+}
+
+[data-theme="dark"] tr:nth-child(even) td {
+  background-color: var(--forge-background-secondary) !important;
 }
 
 /* Blockquotes */
