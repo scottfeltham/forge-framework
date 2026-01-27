@@ -48,13 +48,11 @@ Choose your preferred integration:
 ### Option 1: Claude Code Skill (Recommended)
 {: .fs-5 }
 
-The simplest way to use FORGE. No server required - just install the skill.
+The simplest way to use FORGE. No server required - works directly in Claude Code.
 
 ```bash
-# Clone the skill
-git clone https://github.com/neoforge-dev/forge-skill.git ~/.claude/skills/forge
-
-# That's it! Use /forge in Claude Code
+# Clone the skill to your Claude skills directory
+git clone https://github.com/scottfeltham/forge-skill.git ~/.claude/skills/forge
 ```
 
 Then in Claude Code:
@@ -64,28 +62,37 @@ Then in Claude Code:
 /forge phase next
 ```
 
+[View forge-skill on GitHub](https://github.com/scottfeltham/forge-skill){: .forge-btn .forge-btn--secondary }
+
 ### Option 2: MCP Server
 {: .fs-5 }
 
-For IDE integrations and multi-tool workflows.
+For IDE integrations (VS Code, Cursor) and multi-tool workflows.
 
-```bash
-# Install the MCP server
-npm install -g @neoforge/forge-mcp
-
-# Add to your Claude Desktop config
-# See MCP Integration docs for setup
+```json
+// Add to claude_desktop_config.json
+{
+  "mcpServers": {
+    "forge": {
+      "command": "npx",
+      "args": ["-y", "@neoforge/forge-mcp"]
+    }
+  }
+}
 ```
+
+[View forge-mcp on GitHub](https://github.com/scottfeltham/forge-mcp){: .forge-btn .forge-btn--secondary }
 
 ### Option 3: CLI (Legacy)
 {: .fs-5 }
 
-Standalone CLI for non-Claude workflows.
+Standalone CLI for non-Claude workflows. Consider using the skill or MCP server instead.
 
 ```bash
 npm install -g @neoforge/forge-framework
-forge init && forge new "feature"
 ```
+
+[View forge-framework on GitHub](https://github.com/scottfeltham/forge-framework){: .forge-btn .forge-btn--secondary }
 
 ---
 
