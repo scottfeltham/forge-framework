@@ -1,0 +1,36 @@
+---
+layout: default
+---
+
+<!-- Theme detection script (prevent FOUC) -->
+<script>
+  (function() {
+    const storedTheme = localStorage.getItem('forge-theme');
+    const systemPreference = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    const theme = storedTheme || systemPreference;
+    document.documentElement.setAttribute('data-theme', theme);
+  })();
+</script>
+
+<!-- Custom CSS and JS -->
+<link rel="stylesheet" href="{{ '/assets/css/custom.css' | relative_url }}">
+<script src="{{ '/assets/js/theme.js' | relative_url }}"></script>
+
+<!-- Page content -->
+{{ content }}
+
+<!-- Initialize theme system -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add fade-in animation to main content
+    const mainContent = document.querySelector('.main-content') || document.getElementById('main-content');
+    if (mainContent) {
+      mainContent.classList.add('forge-fade-in');
+    }
+  });
+
+  // Listen for theme changes
+  window.addEventListener('themechange', function(e) {
+    console.log('Theme changed to:', e.detail.theme);
+  });
+</script>
