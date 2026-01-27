@@ -2,14 +2,14 @@
 layout: forge
 title: FORGE Framework
 nav_order: 1
-description: A conversational AI-driven development framework
+description: Intent-Driven Development - Express intent clearly, let AI implement correctly
 permalink: /
 ---
 
-# AI-Driven Development, Radically Simple
+# Intent-Driven Development
 {: .fs-9 }
 
-A minimal, concise CLI that unlocks unlimited potential through natural dialogue.
+Express your intent clearly. Let AI implement it correctly.
 {: .fs-6 .fw-300 }
 
 [Get started now](#getting-started){: .forge-btn .forge-btn--large }
@@ -17,79 +17,117 @@ A minimal, concise CLI that unlocks unlimited potential through natural dialogue
 
 ---
 
+## What is Intent-Driven Development?
+
+**Intent-Driven Development (IDD)** is a methodology where you focus on expressing *what* you want and *why*, while AI handles the *how*. Instead of writing code line by line, you define clear intent through structured phases, and AI implements it correctly.
+
+The key insight: **AI can write code. Humans should define intent.**
+
+---
+
+## The FORGE Cycle
+
+FORGE guides you through 5 validated phases:
+
+| Phase | Purpose | Output |
+|-------|---------|--------|
+| **Focus** 🎯 | Define what & why | Problem statement, success criteria |
+| **Orchestrate** 📋 | Plan the architecture | C4 diagrams, task breakdown |
+| **Refine** ✏️ | Specify "done" before code | Acceptance criteria, interfaces |
+| **Generate** ⚡ | AI writes code via TDD | Tested, working implementation |
+| **Evaluate** ✅ | Verify intent was met | Accepted or revision needed |
+
+Each phase has validation gates. You can't skip ahead without completing the requirements.
+
+---
+
 ## Getting Started
 
 ```bash
-# Install globally and auto-configure Claude Code subagents
-npm install -g forge-framework
-
-# Verify installation
-forge --version  # Should show 2.0.0
-```
-{: .fs-5 }
-
-## Why FORGE?
-
-### 🧠 AI-First Design
-Built from the ground up for AI interpretation. No complex APIs, just natural conversation.
-
-### ⚡ Radical Simplicity  
-A concise, minimal CLI. All intelligence lives in AI agents, not in the framework.
-
-### 🔄 5-Phase Cycle
-Focus → Orchestrate → Refine → Generate → Evaluate. Structure that enables freedom.
-
-### 🤖 Claude Code Subagents
-Auto-configured specialists: Architect, Developer, Tester, DevOps, Reviewer, Analyzer. Each with isolated context and domain expertise.
-
-### 📝 Markdown Everything
-All state, config, and docs in human-readable markdown. Transparency through simplicity.
-
-### 🚀 Zero Configuration
-AI detects your project and configures itself. No hardcoded framework detection.
-
-## Quick Example
-
-```bash
-# Install FORGE globally (auto-configures 6 Claude Code subagents)
-npm install -g forge-framework
+# Install globally
+npm install -g @neoforge/forge-framework
 
 # Initialize in your project
 cd your-project
 forge init
 
-# Start building with specialized AI agents
+# Start your first IDD cycle
 forge new "user authentication"
 
-# Check your progress
+# Check progress
 forge status
+```
+{: .fs-5 }
 
-# Move through validated phases
-forge phase next
+---
+
+## Why Intent-Driven Development?
+
+### 🎯 Clarity Before Code
+Define success criteria *before* implementation. Know exactly what "done" looks like.
+
+### 🧠 AI as Implementer
+You provide intent and constraints. AI handles implementation details via TDD.
+
+### ✅ Validated Phases
+Can't skip steps. Each phase must pass validation before advancing.
+
+### 🔄 Structured Iteration
+When output doesn't match intent, refine and regenerate with clear feedback.
+
+### 📝 Everything in Markdown
+All state, specs, and learnings in human-readable files. Full transparency.
+
+### 🤖 Specialized Agents
+Architect, Developer, Tester, DevOps, Reviewer - each with domain expertise.
+
+---
+
+## Quick Example
+
+```bash
+# Start an IDD cycle
+forge new "payment processing"
+
+# FORGE guides you through:
+# 1. Focus   - Define the problem and success criteria
+# 2. Orchestrate - Design architecture and break into tasks
+# 3. Refine  - Write acceptance criteria (no code yet!)
+# 4. Generate - AI implements via TDD
+# 5. Evaluate - Verify implementation matches intent
 ```
 
-Then have a conversation with your AI assistant:
+The conversation might look like:
 
 ```
-You: Let's implement user authentication
-Claude: I'll use the forge-architect to design the authentication system...
+You: Let's implement payment processing
+Claude: I'll start with the Focus phase. What payment providers
+        do you need to support? What are your success criteria?
+You: Stripe only. Success = can charge a card and handle failures.
+Claude: Got it. Let me define the acceptance criteria...
 ```
 
-## The FORGE Philosophy
+---
 
-> "Software development is fundamentally a creative human endeavor. 
-> Tools should amplify creativity, not constrain it through complexity."
+## The IDD Philosophy
 
-FORGE embodies radical simplicity - the framework stays minimal while AI handles all complexity through natural conversation.
+> "The bottleneck in AI-assisted development isn't code generation.
+> It's expressing intent clearly enough for AI to implement correctly."
 
-## About the project
+FORGE exists to solve this. It provides just enough structure to capture intent precisely, then gets out of the way while AI does the implementation.
 
-FORGE Framework was created by [Scott Feltham](https://github.com/scottfeltham) to enable AI-driven development through natural conversation.
+**Less code. More clarity. Better software.**
+
+---
+
+## About
+
+FORGE Framework was created by [Scott Feltham](https://github.com/scottfeltham) to enable Intent-Driven Development with AI assistants.
 
 ### License
 
-FORGE Framework is distributed by an [MIT license](https://github.com/scottfeltham/forge-framework/blob/main/LICENSE).
+Distributed under the [MIT license](https://github.com/scottfeltham/forge-framework/blob/main/LICENSE).
 
 ### Contributing
 
-When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
+Discuss changes via issue or email before submitting PRs.

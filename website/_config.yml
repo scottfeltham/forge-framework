@@ -4,8 +4,8 @@
 title: FORGE Framework
 email: scott@neoforge.co
 description: >-
-  A conversational AI-driven development framework that puts AI at the center 
-  of software development. A concise CLI that unlocks unlimited potential.
+  Intent-Driven Development (IDD) - Express your intent clearly, let AI
+  implement it correctly. A structured methodology for AI-assisted development.
 baseurl: "/forge-framework" # the subpath of your site, e.g. /blog
 url: "https://scottfeltham.github.io" # the base hostname & protocol
 twitter_username: scottfeltham
@@ -100,7 +100,7 @@ kramdown:
       line_numbers: false
 
 # SEO
-tagline: AI-driven development through natural conversation
+tagline: Intent-Driven Development - Express intent clearly, let AI implement correctly
 author:
   name: Scott Feltham
   url: https://github.com/scottfeltham
