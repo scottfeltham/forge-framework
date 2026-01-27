@@ -447,3 +447,263 @@ pre code {
   white-space: nowrap;
   border: 0;
 }
+
+/* ============================================================================
+   Just the Docs Dark Mode Overrides
+   ============================================================================ */
+
+/* Sidebar */
+[data-theme="dark"] .side-bar {
+  background-color: var(--forge-background-secondary);
+  border-right-color: var(--forge-border);
+}
+
+[data-theme="dark"] .site-title {
+  color: var(--forge-text-primary);
+}
+
+[data-theme="dark"] .site-header {
+  background-color: var(--forge-background-secondary);
+  border-bottom-color: var(--forge-border);
+}
+
+/* Navigation */
+[data-theme="dark"] .nav-list-link {
+  color: var(--forge-text-secondary);
+}
+
+[data-theme="dark"] .nav-list-link:hover,
+[data-theme="dark"] .nav-list-link.active {
+  color: var(--forge-text-primary);
+  background-color: var(--forge-background-tertiary);
+}
+
+[data-theme="dark"] .nav-list-expander {
+  color: var(--forge-text-muted);
+}
+
+[data-theme="dark"] .nav-category {
+  color: var(--forge-text-muted);
+}
+
+/* Main content area */
+[data-theme="dark"] .main {
+  background-color: var(--forge-background);
+}
+
+[data-theme="dark"] .main-content-wrap {
+  background-color: var(--forge-background);
+}
+
+[data-theme="dark"] .main-content {
+  background-color: var(--forge-background);
+}
+
+[data-theme="dark"] .main-header {
+  background-color: var(--forge-background);
+  border-bottom-color: var(--forge-border);
+}
+
+/* Search */
+[data-theme="dark"] .search-input {
+  background-color: var(--forge-background-secondary);
+  border-color: var(--forge-border);
+  color: var(--forge-text-primary);
+}
+
+[data-theme="dark"] .search-input::placeholder {
+  color: var(--forge-text-muted);
+}
+
+[data-theme="dark"] .search-results {
+  background-color: var(--forge-background-secondary);
+  border-color: var(--forge-border);
+  box-shadow: var(--forge-shadow-lg);
+}
+
+[data-theme="dark"] .search-result {
+  border-bottom-color: var(--forge-border);
+}
+
+[data-theme="dark"] .search-result:hover {
+  background-color: var(--forge-background-tertiary);
+}
+
+[data-theme="dark"] .search-result-title {
+  color: var(--forge-text-primary);
+}
+
+[data-theme="dark"] .search-result-doc-title {
+  color: var(--forge-text-muted);
+}
+
+[data-theme="dark"] .search-result-preview {
+  color: var(--forge-text-secondary);
+}
+
+/* Breadcrumbs */
+[data-theme="dark"] .breadcrumb-nav-list-item {
+  color: var(--forge-text-muted);
+}
+
+/* Footer */
+[data-theme="dark"] .site-footer {
+  background-color: var(--forge-background-secondary);
+  border-top-color: var(--forge-border);
+  color: var(--forge-text-muted);
+}
+
+/* Tables */
+[data-theme="dark"] table {
+  border-color: var(--forge-border);
+}
+
+[data-theme="dark"] th {
+  background-color: var(--forge-background-secondary);
+  color: var(--forge-text-primary);
+  border-color: var(--forge-border);
+}
+
+[data-theme="dark"] td {
+  border-color: var(--forge-border);
+  color: var(--forge-text-secondary);
+}
+
+[data-theme="dark"] tr:nth-child(even) {
+  background-color: var(--forge-background-secondary);
+}
+
+/* Blockquotes */
+[data-theme="dark"] blockquote {
+  border-left-color: var(--forge-primary);
+  color: var(--forge-text-secondary);
+  background-color: var(--forge-background-secondary);
+}
+
+/* Horizontal rules */
+[data-theme="dark"] hr {
+  border-color: var(--forge-border);
+}
+
+/* Labels and badges */
+[data-theme="dark"] .label {
+  background-color: var(--forge-background-tertiary);
+  color: var(--forge-text-primary);
+}
+
+/* Aux nav (GitHub link) */
+[data-theme="dark"] .aux-nav-list-item a {
+  color: var(--forge-text-secondary);
+}
+
+[data-theme="dark"] .aux-nav-list-item a:hover {
+  color: var(--forge-text-primary);
+}
+
+/* Syntax highlighting overrides for dark mode */
+[data-theme="dark"] .highlight {
+  background-color: var(--forge-background-secondary);
+}
+
+[data-theme="dark"] .highlight pre {
+  background-color: var(--forge-background-secondary);
+}
+
+[data-theme="dark"] .highlighter-rouge .highlight {
+  background-color: var(--forge-background-secondary);
+}
+
+/* Rouge syntax colors for dark mode */
+[data-theme="dark"] .highlight .c,
+[data-theme="dark"] .highlight .cm,
+[data-theme="dark"] .highlight .c1,
+[data-theme="dark"] .highlight .cs {
+  color: #6b7280;
+}
+
+[data-theme="dark"] .highlight .k,
+[data-theme="dark"] .highlight .kc,
+[data-theme="dark"] .highlight .kd,
+[data-theme="dark"] .highlight .kn,
+[data-theme="dark"] .highlight .kp,
+[data-theme="dark"] .highlight .kr,
+[data-theme="dark"] .highlight .kt {
+  color: #c792ea;
+}
+
+[data-theme="dark"] .highlight .s,
+[data-theme="dark"] .highlight .s1,
+[data-theme="dark"] .highlight .s2,
+[data-theme="dark"] .highlight .sb,
+[data-theme="dark"] .highlight .sc,
+[data-theme="dark"] .highlight .sd,
+[data-theme="dark"] .highlight .se,
+[data-theme="dark"] .highlight .sh,
+[data-theme="dark"] .highlight .si,
+[data-theme="dark"] .highlight .sx,
+[data-theme="dark"] .highlight .sr,
+[data-theme="dark"] .highlight .ss {
+  color: #c3e88d;
+}
+
+[data-theme="dark"] .highlight .na,
+[data-theme="dark"] .highlight .nb,
+[data-theme="dark"] .highlight .nc,
+[data-theme="dark"] .highlight .no,
+[data-theme="dark"] .highlight .nd,
+[data-theme="dark"] .highlight .ni,
+[data-theme="dark"] .highlight .ne,
+[data-theme="dark"] .highlight .nf,
+[data-theme="dark"] .highlight .nl,
+[data-theme="dark"] .highlight .nn,
+[data-theme="dark"] .highlight .nt,
+[data-theme="dark"] .highlight .nv {
+  color: #82aaff;
+}
+
+[data-theme="dark"] .highlight .m,
+[data-theme="dark"] .highlight .mf,
+[data-theme="dark"] .highlight .mh,
+[data-theme="dark"] .highlight .mi,
+[data-theme="dark"] .highlight .mo {
+  color: #f78c6c;
+}
+
+[data-theme="dark"] .highlight .o,
+[data-theme="dark"] .highlight .ow {
+  color: #89ddff;
+}
+
+[data-theme="dark"] .highlight .p {
+  color: #89ddff;
+}
+
+/* Back to top button */
+[data-theme="dark"] .back-to-top {
+  background-color: var(--forge-background-secondary);
+  border-color: var(--forge-border);
+  color: var(--forge-text-secondary);
+}
+
+[data-theme="dark"] .back-to-top:hover {
+  background-color: var(--forge-background-tertiary);
+  color: var(--forge-text-primary);
+}
+
+/* Anchor links */
+[data-theme="dark"] .anchor-heading svg {
+  color: var(--forge-text-muted);
+}
+
+[data-theme="dark"] .anchor-heading:hover svg {
+  color: var(--forge-primary);
+}
+
+/* Mobile menu button */
+[data-theme="dark"] .site-button {
+  color: var(--forge-text-secondary);
+}
+
+[data-theme="dark"] .site-button:hover {
+  background-color: var(--forge-background-tertiary);
+}
