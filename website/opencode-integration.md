@@ -26,16 +26,21 @@ This guide covers setup, what works immediately, and how to translate Claude Cod
 
 ### 1. Install the FORGE Skill
 
-OpenCode reads `.claude/skills/` natively. If you already have FORGE set up for Claude Code, the skill is discovered automatically:
+OpenCode reads `.claude/skills/` natively. Install the skill locally in your project or globally:
 
 ```bash
-# Existing Claude Code skill path - OpenCode reads this
-ls .claude/skills/forge/SKILL.md
+# Option A: Local install (per-project)
+cp -r forge-skill/.claude/skills/forge/ .claude/skills/forge/
+
+# Option B: Global install (shared across projects)
+ln -s /path/to/forge-skill/.claude/skills/forge ~/.claude/skills/forge
 
 # OpenCode also searches these paths:
 # .opencode/skills/forge/SKILL.md
 # .agents/skills/forge/SKILL.md
 ```
+
+The skill's tool commands automatically resolve the install location at runtime — local project installs take priority over global installs.
 
 ### 2. Configure the MCP Server (Optional)
 
@@ -235,11 +240,12 @@ This stacks with the MCP server's command safety checks if you're using `forge-m
 
 The simplest integration - just the FORGE skill with Python tools:
 
-1. Copy `forge-skill/.claude/skills/forge/` into your project
+1. Install the skill locally or globally (see Quick Start above)
 2. OpenCode discovers and loads the skill automatically
-3. All `uv run` commands work identically
+3. Tool commands resolve the install path at runtime
 
 ```
+# Local install layout
 your-project/
   .claude/skills/forge/     # OpenCode reads this
     SKILL.md
@@ -250,6 +256,13 @@ your-project/
       forge_status.py
       forge_learn.py
   CLAUDE.md                  # OpenCode reads this as fallback
+
+# Global install layout
+~/.claude/skills/forge/     # Shared across all projects
+  SKILL.md
+  tools/
+    forge_init.py
+    ...
 ```
 
 No `opencode.json` needed for this approach.
