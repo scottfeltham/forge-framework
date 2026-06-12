@@ -1,6 +1,6 @@
 # FORGE Orchestrator Cooperation Protocol
 
-This document defines how every hat agent cooperates with the `forge-orchestrator` (see `forge-team/agents/orchestrator.md`). All base hats and specialized variants must honor this protocol so the orchestrator can compose them into a full F-O-R-G-E cycle.
+This document defines how every hat agent cooperates with the `forge-orchestrator` — the agent that composes hats into a full F-O-R-G-E cycle. All base hats and specialized variants must honor this protocol.
 
 ## 1. You are dispatchable
 
@@ -21,19 +21,19 @@ FORGE runs in machine-led mode by default on the collaboration spectrum. This me
 
 - You do **not** stop at phase boundaries to wait for human approval. You return a disposition to the orchestrator and the orchestrator decides what happens next.
 - You do **not** require the user to confirm routine work. You only escalate on specific triggers.
-- You **do** escalate up the spectrum when any of the escalation triggers in `agent-team.yaml` fire — the orchestrator will then involve the human.
+- You **do** escalate up the spectrum when any of the project's configured escalation triggers fire — the orchestrator will then involve the human.
 
 If your prompt still contains legacy phrasing about "require_approval" or "wait for human" at phase boundaries, treat that as superseded. Humans review at Evaluate-phase disposition and on escalation triggers, not at every phase boundary.
 
 ## 3. NO CODE in Refine
 
-If the current phase is `refine`, you must not write implementation code, only specifications. `forge-team/hooks/pre_tool_use.py` will block Write/Edit/MultiEdit on non-spec paths during Refine — if you trip the block, you have drifted. Return `disposition: revise` and explain what you were trying to do.
+If the current phase is `refine`, you must not write implementation code, only specifications. Projects may enforce this with a PreToolUse hook that blocks Write/Edit/MultiEdit on non-spec paths during Refine — if you trip such a block, you have drifted. Return `disposition: revise` and explain what you were trying to do.
 
 Spec/doc paths that remain writable during Refine: `.forge/`, `specs/`, `docs/`, `ai_docs/`, `CLAUDE.md`.
 
 ## 4. Validation gates in Generate and Evaluate
 
-When you finish work in Generate or Evaluate, `forge-team/hooks/subagent_stop.py` runs the configured validation commands (lint, typecheck, tests). If any fail, the hook blocks phase advancement and feeds the failure output back to you. Fix the failures or return `disposition: escalate` with the failing output in `notes:`.
+When you finish work in Generate or Evaluate, the project's validation hooks (where configured) run the configured validation commands (lint, typecheck, tests). If any fail, the hook blocks phase advancement and feeds the failure output back to you. Fix the failures or return `disposition: escalate` with the failing output in `notes:`.
 
 ## 5. Disposition reporting format
 
@@ -74,7 +74,7 @@ To escalate: set `disposition: escalate`, populate `escalation_trigger:` with th
 
 ## 7. Accountability — every step is traceable
 
-FORGE's third pillar is Accountability. `forge-team/hooks/post_tool_use.py` records every tool invocation to `.forge/audit.sqlite`. You do not need to log anything yourself, but:
+FORGE's third pillar is Accountability. Projects may configure a PostToolUse hook that records every tool invocation to `.forge/audit.sqlite` — where present, you do not need to log anything yourself. Either way:
 
 - Commit artifacts at phase boundaries (the orchestrator will prompt you)
 - Do not amend the audit trail (append-only)
@@ -96,7 +96,7 @@ The orchestrator is responsible for dispatching the learner. You are responsible
 
 ## 9. Use the harness
 
-FORGE's standing rule: **do not build tools that already exist. Use Claude Code's native capabilities and stock MCP servers.** Prefer `Task`, `Read`, `Write`, `Edit`, `Glob`, `Grep`, `Bash`, and whichever stock MCP servers are listed in `agent-team.yaml` under `mcp.allowed_servers`. Cross-cycle memory is `mcp__memory` (stock); audit queries are `mcp__sqlite` (stock); metrics come from the forge-observatory endpoints. If you find yourself wishing for a custom tool, first verify no stock equivalent exists, and if none does, escalate — don't paper over the gap with a one-off script.
+FORGE's standing rule: **do not build tools that already exist. Use Claude Code's native capabilities and stock MCP servers.** Prefer `Task`, `Read`, `Write`, `Edit`, `Glob`, `Grep`, `Bash`, and whichever stock MCP servers the project allows. Cross-cycle memory is `mcp__memory` (stock); audit queries are `mcp__sqlite` (stock); metrics come from the forge-observatory endpoints. If you find yourself wishing for a custom tool, first verify no stock equivalent exists, and if none does, escalate — don't paper over the gap with a one-off script.
 
 ## 10. Minimum viable hat
 

@@ -4,12 +4,10 @@
 # who they are, what they focus on, how they handle notifications and
 # integrations.
 #
-# It is DISTINCT from `forge-team/agent-team.yaml`, which describes the
+# It is DISTINCT from any agent team configuration, which describes the
 # AGENT team (orchestrator + hat sub-agents + policies). Both can coexist —
 # the agent team config tells the orchestrator how to run cycles; this file
 # tells humans how they work together around those cycles.
-#
-# See ../forge-team/agent-team.yaml for the agent team configuration.
 
 project: team-project
 description: Multi-developer collaborative project

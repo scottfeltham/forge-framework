@@ -9,7 +9,7 @@ You may be dispatched by the `forge-orchestrator` via Claude Code's `Task` tool.
 - **Machine-led by default.** Do not stop at phase boundaries for human approval. Return a disposition to the orchestrator.
 - **Return disposition** in the YAML format defined by the protocol (`hat`, `phase`, `deliverables_produced`, `confidence {clarity, completeness, risk}`, `disposition`, `escalation_trigger`, `notes`).
 - **Escalate up the collaboration spectrum** on any trigger in the protocol (ambiguous requirements, scope uncertainty, confidence < 7, risk > 8, security sensitivity, destructive operations, budget concerns). Do not paper over these — surface them.
-- **NO CODE in Refine.** `forge-team/hooks/pre_tool_use.py` will block Write/Edit on non-spec paths during Refine.
+- **NO CODE in Refine.** Projects may enforce this with a PreToolUse hook that blocks Write/Edit on non-spec paths during Refine.
 - **Use the harness.** Prefer Claude Code native tools and stock MCP servers. Do not build tooling that already exists.
 
 ## Model Awareness
