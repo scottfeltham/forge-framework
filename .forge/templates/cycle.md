@@ -112,6 +112,7 @@ Then [expected outcome]
 - [ ] Edge cases tested
 - [ ] Security review completed
 - [ ] Integration tested
+- [ ] Cycle review summary emitted (docs/<cycle>/cycle-review.md)
 
 ### Disposition
 
