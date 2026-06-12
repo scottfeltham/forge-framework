@@ -1,8 +1,20 @@
-# FORGE Framework Configuration - Team Mode Example
+# FORGE Framework — HUMAN Team Configuration (Example)
+#
+# This file describes the HUMAN team collaborating on a FORGE project:
+# who they are, what they focus on, how they handle notifications and
+# integrations.
+#
+# It is DISTINCT from `forge-team/agent-team.yaml`, which describes the
+# AGENT team (orchestrator + hat sub-agents + policies). Both can coexist —
+# the agent team config tells the orchestrator how to run cycles; this file
+# tells humans how they work together around those cycles.
+#
+# See ../forge-team/agent-team.yaml for the agent team configuration.
+
 project: team-project
 description: Multi-developer collaborative project
 
-# Team collaboration mode
+# Team collaboration mode (for humans, not agents)
 mode: collaborative
 
 # AI preferences
@@ -53,9 +65,13 @@ team:
   # Workflow configuration
   workflow:
     parallel_features: true      # Allow multiple active cycles
-    phase_handoffs: true        # Enable phase ownership tracking
-    require_approval: true      # Phase completion needs approval
-    merge_strategy: manual      # How to handle conflicts
+    phase_handoffs: true         # Enable phase ownership tracking
+    require_approval: false      # Default: machine-led. Humans review at Evaluate
+                                 # disposition and on escalation triggers, not at
+                                 # every phase boundary. Set to `true` for human-led
+                                 # projects (e.g., learning the methodology, high-risk
+                                 # domains) per FORGE's collaboration spectrum.
+    merge_strategy: manual       # How to handle conflicts
     
   # Communication
   notifications:
