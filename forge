@@ -17,9 +17,9 @@ const getTemplatesPath = () => {
   if (fs.existsSync(localTemplatesPath)) {
     return localTemplatesPath;
   }
-  
-  // Use templates relative to forge script location
-  return path.join(process.cwd(), '.forge/templates');
+
+  // Fall back to templates shipped alongside the forge script
+  return path.join(__dirname, 'templates');
 };
 
 // Secure slug creation with validation

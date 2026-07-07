@@ -73,6 +73,24 @@ try {
     }
   }
   
+  // Test 0: standalone invocation from a bare directory (no pre-copied
+  // templates) must work via the __dirname fallback in getTemplatesPath()
+  test('forge init works standalone in a bare directory', () => {
+    const bareDir = fs.mkdtempSync(path.join(os.tmpdir(), 'forge-bare-'));
+    try {
+      execSync(`node "${path.join(originalCwd, 'forge')}" init`, {
+        cwd: bareDir, stdio: 'pipe', encoding: 'utf8'
+      });
+      if (!fs.existsSync(path.join(bareDir, 'forge.yaml'))) throw new Error('forge.yaml not created');
+      execSync(`node "${path.join(originalCwd, 'forge')}" new "bare feature"`, {
+        cwd: bareDir, stdio: 'pipe', encoding: 'utf8'
+      });
+      if (!fs.existsSync(path.join(bareDir, '.forge/current.md'))) throw new Error('.forge/current.md not created');
+    } finally {
+      fs.rmSync(bareDir, { recursive: true, force: true });
+    }
+  });
+
   // Test 1: forge init
   test('forge init creates configuration', () => {
     runCommand('./forge init');
