@@ -9,6 +9,12 @@ This file provides persistent context for Claude and other AI assistants working
 **Tech Stack**: Node.js, JavaScript
 **Started**: 2024
 
+**Position in the FORGE family**: standalone conversational CLI with its own
+state format (`forge.yaml` + `.forge/current.md`, header-based phases). The
+canonical FORGE implementation is forge-skill + forge-kit, which use
+`.forge/cycles/` with `FORGE_PHASE` markers. Do not assume state written
+here is readable by the other FORGE tools, or vice versa.
+
 ## Architecture Patterns
 
 ### Overall Architecture

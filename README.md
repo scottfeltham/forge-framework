@@ -2,6 +2,15 @@
 
 A conversational AI-driven development framework that puts AI at the center of software development. A concise CLI under 200 lines that unlocks unlimited potential through natural dialogue.
 
+> **Where this fits in the FORGE family**: this CLI is a standalone
+> conversational product with its own state format (`forge.yaml` +
+> `.forge/current.md`). The canonical FORGE implementation - the one whose
+> `.forge/cycles/` state the wider tooling (forge-skill, forge-mcp,
+> observatory, TUI) reads and writes - is
+> [forge-skill](https://github.com/scottfeltham/forge-skill). Use this CLI
+> when you want the lightweight conversational workflow; use the skill when
+> you want the shared state format and phase enforcement.
+
 > **💡 Best Used With**: FORGE is designed for AI-powered development tools like Claude Code, Cursor, Continue, and other AI coding assistants. While it can be used standalone, it shines when paired with AI that understands context and guides you through structured workflows.
 
 [![npm version](https://img.shields.io/npm/v/forge-framework.svg)](https://www.npmjs.com/package/forge-framework)
