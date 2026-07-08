@@ -128,11 +128,11 @@ These scenarios MUST be defined before any implementation begins:
 ## Timeline
 
 ### Phases
-1. **Focus** (Current): Requirements and design
-2. **Orchestrate**: Task breakdown and planning
-3. **Refine**: Implementation and testing
-4. **Generate**: Deployment preparation
-5. **Evaluate**: Success measurement
+1. **Focus** (Current): Problem, users, testable success criteria
+2. **Orchestrate**: Architecture, dependencies, session-sized tasks
+3. **Refine**: Acceptance criteria, interfaces, edge cases (no code)
+4. **Generate**: TDD implementation (RED-GREEN-REFACTOR)
+5. **Evaluate**: Verify against criteria, disposition decision
 
 ### Estimated Duration
 {{DURATION_ESTIMATE}}
