@@ -11,6 +11,9 @@ const [,, cmd, ...args] = process.argv;
 
 // Helpers
 const log = console.log;
+// Log an error and mark the process as failed (exit code 1) so agents and
+// scripts can distinguish failure from success without parsing output
+const fail = (...msgs) => { msgs.forEach(m => log(m)); process.exitCode = 1; };
 const getTemplatesPath = () => {
   // Check if running locally (with .forge directory)
   const localTemplatesPath = path.join(process.cwd(), '.forge', 'templates');
@@ -328,7 +331,7 @@ ai: {primary: claude, model: sonnet}`);
   },
 
   new(name) {
-    if (!name) return log('Usage: forge new <feature>');
+    if (!name) return fail('Usage: forge new <feature>');
     
     try {
       const slug = createSlug(name);
@@ -357,8 +360,8 @@ ai: {primary: claude, model: sonnet}`);
         log(`✨ Started: ${name}\n📋 Phase: Focus\n🤖 Claude will guide you`);
       }
     } catch (error) {
-      log(`❌ Error creating cycle: ${error.message}`);
-      log('💡 Feature names should contain only letters, numbers, spaces, hyphens, and underscores');
+      fail(`❌ Error creating cycle: ${error.message}`,
+        '💡 Feature names should contain only letters, numbers, spaces, hyphens, and underscores');
     }
   },
 
@@ -418,7 +421,7 @@ ai: {primary: claude, model: sonnet}`);
         }
         return;
       } else {
-        log(`❌ Team cycle not found: ${cycleName}`);
+        fail(`❌ Team cycle not found: ${cycleName}`);
         log('Available cycles:');
         const cycles = fs.readdirSync('.forge/current').filter(f => f.endsWith('.md'));
         cycles.forEach(c => log(`  • ${c}`));
@@ -498,7 +501,7 @@ ai: {primary: claude, model: sonnet}`);
     } else if (exists('.forge/current.md')) {
       cyclePath = '.forge/current.md';
     } else {
-      return log('No cycle to complete');
+      return fail('No cycle to complete');
     }
     
     // Check for --force flag
@@ -510,7 +513,7 @@ ai: {primary: claude, model: sonnet}`);
       const validation = validateCycleCompletion(content);
       
       if (!validation.isComplete) {
-        log('⚠️  Cycle has incomplete phases!\n');
+        fail('⚠️  Cycle has incomplete phases!\n');
         log('Incomplete phases:', validation.incompletePhases.join(', '));
         
         if (validation.incompleteTasks.length > 0) {
@@ -568,7 +571,7 @@ ai: {primary: claude, model: sonnet}`);
   phase(action) {
     const current = '.forge/current.md';
     if (!exists(current)) {
-      return log('No active cycle. Run: forge new <feature>');
+      return fail('No active cycle. Run: forge new <feature>');
     }
     
     const content = fs.readFileSync(current, 'utf8');
@@ -603,7 +606,7 @@ ai: {primary: claude, model: sonnet}`);
         const forceSkip = args.includes('--force');
         
         if (!activePhase) {
-          return log('❌ No active phase found. Cannot determine current phase.');
+          return fail('❌ No active phase found. Cannot determine current phase.');
         }
         
         const currentPhaseName = activePhase.name;
@@ -619,7 +622,7 @@ ai: {primary: claude, model: sonnet}`);
         const validation = validatePhaseTransition(content, currentPhaseName, forceSkip);
         
         if (!validation.canTransition) {
-          log(`⚠️  Cannot advance from ${currentPhaseName} phase. Phase is not complete:`);
+          fail(`⚠️  Cannot advance from ${currentPhaseName} phase. Phase is not complete:`);
           
           if (validation.incompleteItems.length > 0) {
             log('\n   Incomplete items:');
@@ -652,7 +655,7 @@ ai: {primary: claude, model: sonnet}`);
         const forceComplete = args.includes('--force');
         
         if (!activePhase) {
-          return log('❌ No active phase found to complete.');
+          return fail('❌ No active phase found to complete.');
         }
         
         const currentPhaseName = activePhase.name;
@@ -662,7 +665,7 @@ ai: {primary: claude, model: sonnet}`);
           const validation = validatePhaseTransition(content, currentPhaseName, false);
           
           if (!validation.canTransition) {
-            log(`⚠️  Cannot complete ${currentPhaseName} phase. Items are incomplete:`);
+            fail(`⚠️  Cannot complete ${currentPhaseName} phase. Items are incomplete:`);
             
             if (validation.incompleteItems.length > 0) {
               formatIncompleteItems(validation.incompleteItems, 3).forEach(msg => log(msg));
@@ -696,6 +699,7 @@ ai: {primary: claude, model: sonnet}`);
     };
     
     if (!action || !subcommands[action]) {
+      if (action) process.exitCode = 1; // unknown subcommand is an error; bare usage is help
       log('Usage: forge phase [status|next|complete]');
       log('  status   - Show detailed phase progress');
       log('  next     - Advance to next phase sequentially (--force to skip validation)');
@@ -706,7 +710,7 @@ ai: {primary: claude, model: sonnet}`);
   },
 
   mcp(action = 'list') {
-    if (!mcpServers) return log('MCP registry not found');
+    if (!mcpServers) return fail('MCP registry not found');
     
     const subcommands = {
       list: () => {
@@ -769,7 +773,12 @@ if (cmd === '--version' || cmd === '-v') {
   const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'), 'utf8'));
   log(`forge v${pkg.version}`);
 } else if (commands[cmd]) {
-  commands[cmd](...args);
+  try {
+    commands[cmd](...args);
+  } catch (error) {
+    log(`❌ ${error.message}`);
+    process.exitCode = 1;
+  }
 } else {
   log(`🔨 FORGE Framework
 
